@@ -43,6 +43,19 @@ The entry window is **07:00–16:00 UTC = 13:30–22:30 Myanmar.**
 | 07:00–16:00 | 13:30–22:30 | Execution window — watch for a setup |
 | 16:00 | 22:30 | Unfilled signals expire |
 
+### The engine runs TWICE a day, at the reference closes
+
+| Run | UTC | Myanmar | Produces |
+|---|---|---|---|
+| 1 | 07:00 | 13:30 | the London entry plan, from the completed Asian range |
+| 2 | 12:00 | 18:30 | the New York entry plan, from the completed London range |
+
+Each run reads exactly one range: London reads Asian, New York reads London. Nothing else.
+See `SESSION_FLOW_V1_SPEC.md` §5.
+
+RANGE and TREND entries are limits you can place the moment the run finishes. A SWEEP entry
+depends on a candle that has not printed yet — see §5.3a, unsigned.
+
 ### At 07:05, check the system
 
 ```powershell
@@ -63,8 +76,8 @@ python sspf.py analyze --symbol XAUUSD
 ```
 
 Use the **logical** symbol names. `XAUUSD` maps to the broker string `XAUUSD.crp` via
-`symbols.XAUUSD.broker_symbol`, so suffix changes never touch the strategy or the journal. Re-run after each M15 close during the
-window — a setup can appear at any of the eight execution candles.
+`symbols.XAUUSD.broker_symbol`, so suffix changes never touch the strategy or the journal. The engine is run at the reference close, not continuously. If the session is RANGE and you are
+watching for a sweep, re-run when a candle closes back inside the boundary.
 
 Add `--trading-date YYYY-MM-DD` to reconstruct a past day. Historical runs never produce an
 accepted signal, because G15 requires the live time to be inside the window.

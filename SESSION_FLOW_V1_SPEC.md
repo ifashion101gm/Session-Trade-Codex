@@ -244,7 +244,65 @@ range is locked, not while it is being built. On a chart where the reference box
 projected forward, the sweep candle will appear *under* the box; on a chart where the box stops
 at the session close, it will appear to the right of it. Both are the same event.
 
-### 5.3 Window provenance
+### 5.3 Desk timing — the engine runs twice a day  **[TRADER]**
+
+Recorded 2026-08-15 on the trader's instruction.
+
+The engine is run **at the close of each reference session**, when that session's data is
+complete. It is not run continuously through the execution window.
+
+| Run | UTC | Myanmar | Input is complete | Output |
+|---|---|---|---|---|
+| **1** | **07:00** | 13:30 | Asian session, 28 closed M15 bars | the **London** entry plan |
+| **2** | **12:00** | 18:30 | London session, 20 closed M15 bars | the **New York** entry plan |
+
+At each run the reference range is final and immutable. The engine produces one plan — bias,
+classification, setup, entry, stop, TP1, TP2 — and the trader places the order for the execution
+session that follows.
+
+### 5.3a Open question — when is a SWEEP entry knowable?  **[UNSIGNED]**
+
+Two of the three setups are fully determined the moment the reference session closes, because
+their entry is a level derived from the completed range:
+
+| Setup | Entry | Known at the reference close? |
+|---|---|---|
+| RANGE | session top / bottom | **yes** — place the limit immediately |
+| TREND | midpoint | **yes** — place the limit immediately |
+| **SWEEP** | **sweep candle body** | **no** — see below |
+
+A sweep is a breach of the reference boundary that closes back inside (§2.1). Under §5.2 that
+breach happens during the **execution** window, so the sweep candle does not exist yet at the
+reference close. Its body — and therefore the entry, the stop and both targets — cannot be
+computed at run time.
+
+**This is confirmed against the benchmark, not assumed.** For 2022-10-03:
+
+```
+Asian high 0.98344, made by the 05:45Z candle   O 0.98103  C 0.98256  -> body high 0.98256
+confirmed-truth entry                                                     0.98342
+  = body high of the 15:15Z candle — a LONDON candle, eight hours after the Asian close
+```
+
+The confirmed entry is not the body of any Asian candle. So a single 07:00 run cannot produce it.
+
+Three ways to resolve this; the trader decides:
+
+1. **Two-part run.** 07:00 produces the plan and the RANGE/TREND limit. If the session is RANGE,
+   the desk then watches for a sweep during London and takes the sweep entry when it prints,
+   superseding the range limit. The engine runs once; the sweep is a monitored trigger.
+2. **Re-run on sweep.** The engine is re-run when a candle closes back inside the boundary, to
+   compute the sweep ticket. More than two runs per day, but every ticket is engine-produced.
+3. **Sweep is read inside the reference session.** "SWEEP DURING SESSION" refers to the reference
+   session — the session's extreme was made by a candle that closed back inside, and that
+   candle's body is the entry. Fully knowable at 07:00. **This contradicts the 2022-10-03
+   benchmark**, whose entry is a London candle, so it cannot be adopted without re-deriving the
+   benchmarks.
+
+Until this is signed, `scripts/run_flowchart.py` scans the execution window for the sweep, which
+matches the benchmark but not a strict two-runs-a-day desk.
+
+### 5.4 Window provenance
 
 The three-decision logic and the setups are **[DIAGRAM]**. The clock is not: session boundaries
 and candle counts are operational configuration. Leg 1's `00:00–07:00 / 28 bars` was determined
