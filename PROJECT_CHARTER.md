@@ -1,6 +1,6 @@
 # Session Trade Codex — Project Charter
 
-Project: **ASIAN_SESSION_V1** (supersedes SSPF v2.2)
+Project: **SESSION_FLOW_V1** (supersedes ASIAN_SESSION_V1, which superseded SSPF v2.2)
 Owner: Aung · Status: demo / shadow only · Charter date: 2026-08-11 · Config hash `2530b751134fbf6e`
 
 ---
@@ -102,7 +102,13 @@ The software's authority ends at the word "proposed"; everything after that is t
 
 ## 4. Strategy in brief
 
-Full rules are in `STRATEGY_SPEC.md`; §0 of that document is the source of truth.
+Full rules are in `SESSION_FLOW_V1_SPEC.md`. The source of truth is the trader's strategy
+diagram (*Episode 18 — Asian Session Trading*, 1BullBear). `STRATEGY_SPEC.md` is superseded and
+retained for its analysis only.
+
+Every rule in the active contract carries a provenance tag — **[DIAGRAM]**, **[BENCHMARK]** or
+**[UNSIGNED]**. A rule with no tag is a defect. Two decisions (§4-A bias, §4-B range test) are
+unsigned and the contract cannot execute until they are resolved.
 
 ```
 Build Asian range (22:00-07:00 UTC, 36 M15)  ->  lock high / low / range

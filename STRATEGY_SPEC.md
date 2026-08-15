@@ -3,6 +3,15 @@
 Strategy ID: **`ASIAN_SESSION_V1`** · Contract version: **1.0** · Spec date: **2026-08-11**
 Active config hash: **`2530b751134fbf6e`**
 
+> **SUPERSEDED 2026-08-15 by `SESSION_FLOW_V1_SPEC.md`.** The trader has ruled that the
+> strategy diagram (*Episode 18 — Asian Session Trading*, 1BullBear) is the sole source of
+> strategy rules. Every filter this contract accumulated — sweep buffer, stop buffer, touch
+> tolerance, rejection quality, structural-stop rejection, midpoint zone, confirmation candle,
+> opposite-quartile cancellation, the `UNCERTAIN` state — is absent from the diagram and has been
+> removed. This document is retained as the record of what was tried and what each removed rule
+> was doing; §7 and §10 in particular remain the best analysis of the sweep geometry.
+> **Do not collect new evidence under this contract.**
+
 **§0 is the source of truth.** It is the trader's specification. The engine implements it; it does
 not extend, optimise, or improve it. Any divergence between code and §0 is a defect, even when the
 divergence looks better. Where §0 is silent, the engine stands aside and returns `NO_TRADE`.

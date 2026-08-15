@@ -100,16 +100,20 @@ def detect(lv, ex, er_max):
                                 sl=e + lv["R"], tp1=lv["lo"], tp2=e - TP2_R * lv["R"])
         return dict(setup=None, reason="RANGE limit never touched")
 
-    # TREND SETUP — unconfirmed limit at the midpoint (D4)
-    e = lv["mid"]
+    # TREND SETUP — limit at the middle of the range, exactly as the diagram
+    # states. If price never trades there, the order does not fill. There is no
+    # fallback: the diagram supplies none.
     long_ = lv["bias"] == "BULL"
+    R = lv["R"]
+    mk = lambda e, b, note: dict(
+        setup="TREND", dir="LONG" if long_ else "SHORT", bar=b, entry=e, note=note,
+        sl=e - R if long_ else e + R,
+        tp1=e + 4 * R if long_ else e - 4 * R,
+        tp2=e + TP2_R * R if long_ else e - TP2_R * R)
     for b in ex:
-        if b["l"] <= e <= b["h"]:
-            return dict(setup="TREND", dir="LONG" if long_ else "SHORT", bar=b, entry=e,
-                        sl=e - lv["R"] if long_ else e + lv["R"],
-                        tp1=e + 4 * lv["R"] if long_ else e - 4 * lv["R"],
-                        tp2=e + TP2_R * lv["R"] if long_ else e - TP2_R * lv["R"])
-    return dict(setup=None, reason="midpoint never touched")
+        if b["l"] <= lv["mid"] <= b["h"]:
+            return mk(lv["mid"], b, "midpoint")
+    return dict(setup=None, reason="UNFILLED — midpoint never retraced")
 
 
 def main() -> int:
@@ -155,7 +159,7 @@ def main() -> int:
         tot += r
         print(f"{D:%Y-%m-%d} {tag:<7}{lv['bias']:<6}{sess:<8}{s['setup']:<7}{s['dir']:<6}"
               f"{s['entry']:>9.5f}{s['sl']:>9.5f}{s['tp1']:>9.5f}{s['tp2']:>9.5f}"
-              f"{r:>+9.3f}R  {k}")
+              f"{r:>+9.3f}R  {k}" + (f"  [{s['note']}]" if s.get('note') else ""))
     n = len(rows)
     print(f"\n{fired}/{n} leg-runs produced an entry ({fired/n*100:.0f}%)   "
           f"net {tot:+.3f}R   mean {tot/fired if fired else 0:+.3f}R/trade")

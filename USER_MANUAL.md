@@ -1,6 +1,6 @@
-# User Manual — ASIAN_SESSION_V1
+# User Manual — SESSION_FLOW_V1
 
-How to run Session Trade Codex day to day. For the rules it applies see `STRATEGY_SPEC.md` §0;
+How to run Session Trade Codex day to day. For the rules it applies see `SESSION_FLOW_V1_SPEC.md`;
 for what it needs to run see `RESOURCES.md`.
 
 **Before you start:** this tool applies *your* strategy and recommends; you execute. It cannot
@@ -41,7 +41,7 @@ The entry window is **07:00–16:00 UTC = 13:30–22:30 Myanmar.**
 | 22:00 | 04:30 | Asian session starts building (previous calendar day) |
 | 07:00 | 13:30 | **Range locks.** High and low are frozen and never change |
 | 07:00–16:00 | 13:30–22:30 | Execution window — watch for a setup |
-| 09:00 | 15:30 | Unfilled signals expire |
+| 16:00 | 22:30 | Unfilled signals expire |
 
 ### At 07:05, check the system
 
