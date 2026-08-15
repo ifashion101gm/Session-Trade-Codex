@@ -32,22 +32,27 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import session_flow as SF  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
-MASTER = ROOT / "data" / "eurusd_m15_2022_10.master.csv"
-PIP = 0.0001
-POINT = 0.00001
+DATA = ROOT / "data"
 LEGS = SF.LEGS
 
 
-def load_master():
-    bars = []
-    with open(MASTER, newline="", encoding="utf-8") as fh:
+def load_master(path: Path):
+    """Load a master CSV. POINT is inferred from the price precision in the file,
+    so 5-digit FX, 3-digit JPY and 2-digit gold all work without a lookup table."""
+    bars, digits = [], 0
+    with open(path, newline="", encoding="utf-8") as fh:
         for r in csv.DictReader(fh):
+            for k in ("open", "high", "low", "close"):
+                d = len(r[k].split(".")[1]) if "." in r[k] else 0
+                digits = max(digits, d)
             bars.append({"t": dt.datetime.strptime(r["timestamp"], "%Y-%m-%d %H:%M:%S"),
                          "o": float(r["open"]), "h": float(r["high"]),
                          "l": float(r["low"]), "c": float(r["close"]),
                          "sp": int(r["spread"]) if r["spread"] else 0})
     bars.sort(key=lambda b: b["t"])
-    return bars
+    point = 10 ** (-digits)
+    pip = point * 10 if digits >= 3 else point
+    return bars, point, pip
 
 
 def simulate(p, lv, ex, forward, slip_pips):
@@ -76,21 +81,14 @@ def simulate(p, lv, ex, forward, slip_pips):
                 mfe=mfe, partial=partial, pr=pr, R=R)
 
 
-def net_of(s, slip_pips):
-    cost_price = (s["fill"]["sp"] + s["exit"]["sp"]) * POINT + slip_pips * PIP
+def net_of(s, slip_pips, point, pip):
+    cost_price = (s["fill"]["sp"] + s["exit"]["sp"]) * point + slip_pips * pip
     return s["gross"] - cost_price / s["R"], cost_price / s["R"]
 
 
-def main() -> int:
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--slippage", type=float, default=0.2)
-    ap.add_argument("--er-max", type=float, default=0.35)
-    a = ap.parse_args()
-    bars = load_master()
+def run_symbol(bars, point, pip, sym, a):
+    trades, unfilled = [], 0
     d0, d1 = bars[0]["t"], bars[-1]["t"]
-
-    trades = []
-    unfilled = 0
     D = dt.datetime(d0.year, d0.month, d0.day)
     while D <= d1:
         if D.weekday() < 5:
@@ -106,13 +104,36 @@ def main() -> int:
                 if s is None:
                     unfilled += 1
                     continue
-                net, cost = net_of(s, a.slippage)
-                trades.append(dict(date=D, leg=tag, setup=p["setup"], dir=p["dir"],
+                net, cost = net_of(s, a.slippage, point, pip)
+                trades.append(dict(date=D, sym=sym, leg=tag, setup=p["setup"], dir=p["dir"],
                                    outcome=s["outcome"], gross=s["gross"], net=net,
-                                   cost=cost, mfe=s["mfe"]))
+                                   cost=cost, mfe=s["mfe"], d0=d0, d1=d1))
         D += dt.timedelta(days=1)
+    return trades, unfilled
 
-    print(f"BACKTEST · SESSION_FLOW_V1 · EURUSD M15 · {d0:%Y-%m-%d} to {d1:%Y-%m-%d}")
+
+def main() -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--slippage", type=float, default=0.2)
+    ap.add_argument("--er-max", type=float, default=0.35)
+    ap.add_argument("--dataset", help="stem under data/, e.g. eurusd_m15_2022_10; omit to pool all")
+    a = ap.parse_args()
+    masters = ([DATA / f"{a.dataset}.master.csv"] if a.dataset
+               else sorted(DATA.glob("*.master.csv")))
+    masters = [m for m in masters if m.exists()]
+    if not masters:
+        print("no *.master.csv under data/ — run build_dataset.py first"); return 1
+    trades, unfilled = [], 0
+    for M in masters:
+        sym = M.name.split("_")[0].upper()
+        bars, point, pip = load_master(M)
+        trades_s, unf = run_symbol(bars, point, pip, sym, a)
+        trades += trades_s; unfilled += unf
+    d0 = min(t["d0"] for t in trades); d1 = max(t["d1"] for t in trades)
+
+
+    print(f"BACKTEST · SESSION_FLOW_V1 · M15 · {d0:%Y-%m-%d} to {d1:%Y-%m-%d}")
+    print(f"symbols: {', '.join(sorted({t[chr(39)+chr(39)] if False else t['sym'] for t in trades}))}")
     print(f"sweep read in the reference session · ER<={a.er_max} · slippage {a.slippage}p round turn")
     print(f"costs from the master CSV spread column · STOP_FIRST · in-sample\n")
 
@@ -129,6 +150,9 @@ def main() -> int:
         print(f"{label:<22}{len(sel):>4}{gg:>+10.3f}{nn:>+10.3f}{nn/len(sel):>+11.3f}{w/len(sel)*100:>6.0f}%")
 
     block("ALL", trades)
+    print()
+    for sym in sorted({t["sym"] for t in trades}):
+        block(f"  {sym}", [t for t in trades if t["sym"] == sym])
     print()
     for leg in ("A->L", "L->NY"):
         block(f"  leg {leg}", [t for t in trades if t["leg"] == leg])
