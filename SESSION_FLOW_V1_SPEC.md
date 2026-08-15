@@ -151,26 +151,52 @@ midpoint = low + 0.50 x range
 
 ### 2.1 SWEEP — "sweep during session?"  **[DIAGRAM]**
 
-A sweep is a breach of a session boundary that closes back inside:
+> **CORRECTED 2026-08-15.** "During session" means the **REFERENCE** session, not the execution
+> session. Earlier drafts scanned the execution window; that made the question unanswerable at
+> the reference close and contradicted the desk workflow (§5.3). The trader's ruling: all three
+> questions are answered from the completed reference session.
+
+The question is whether the session's own extreme was **rejected** — did the candle that made it
+close its body back inside the range?
 
 ```
-short : candle.high > high  and  candle.close < high
-long  : candle.low  < low   and  candle.close > low
+bias BEAR -> examine the candle that made the session HIGH
+bias BULL -> examine the candle that made the session LOW
 
-entry = sweep candle body  =  max(open, close) short / min(open, close) long
-SL    = entry ± R
-TP1   = the opposite session boundary   -> close 75%, stop to breakeven
-TP2   = entry ∓ 5R
+body = max(open, close) bear / min(open, close) bull
+swept  if  body < high   (bear)   /   body > low   (bull)
 ```
 
-No minimum breach depth, no rejection-quality test, no requirement that the candle opened
-inside, and no structural check on the stop. The diagram states none of these.
+If the body sits back inside, the extreme was a wick — liquidity taken and rejected. If the body
+reaches the extreme, price held there into the close and there was no rejection.
 
-**Bias gates the eligible side.**  **[BENCHMARK]** — a bearish session may only sell a sweep of
-the high; a bullish session may only buy a sweep of the low. This is not in the diagram. It is
-forced by `eurusd-2022-10-03-asian-to-london-short-sweep`: on that session a long sweep of the
-low qualifies at 14:00Z, an hour before the confirmed 15:15Z short. Without the bias gate the
-engine returns a trade the trader's own confirmed truth does not contain.
+```
+SWEEP    entry = that candle's body edge
+         SL    = entry ± R
+         TP1   = the opposite session boundary  -> close 75%, stop to breakeven
+         TP2   = entry ∓ 5R
+```
+
+**Bias selects which extreme is examined** **[BENCHMARK]** — a bearish session looks at the high,
+a bullish session at the low. Not stated in the diagram; required to make the question single-valued.
+
+**Everything is fixed at the reference close.** The entry is a resting limit. Nothing is watched.
+
+#### Verified against the golden case
+
+```
+2022-10-03  ASIAN 00:00-07:00   high 0.98344  low 0.97843  range 50.1p  R 12.525p
+            bias close_loc 0.265 -> BEAR      ER 0.088 -> RANGE
+            extreme made 05:45Z   O 0.98103  H 0.98344  L 0.98079  C 0.98256
+            body 0.98256 < high 0.98344      -> SWEPT
+
+            entry 0.98256   stop 0.9838125   TP1 0.97843 (3.30R)   TP2 0.9762975
+            filled 08:30Z · TP1 09:30Z · TP5 09:45Z · +3.723R blended
+```
+
+The 5R target **is reached**, at 09:45Z. Under the previous execution-window reading the same day
+returned −1.000R with the target missed by 16.4 pips. This reading reproduces the trader's
+example; that one could not.
 
 ### 2.2 RANGE — "session top / bottom"  **[DIAGRAM]**
 
