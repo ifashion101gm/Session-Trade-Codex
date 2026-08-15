@@ -48,14 +48,30 @@ All internal calculation is UTC. Myanmar time (UTC+6:30) is display only.
 
 | Phase | UTC | Myanmar | Action |
 |---|---|---|---|
-| Asian range construction | 22:00–07:00 | 04:30–13:30 | Observe and build |
+| Asian range construction | 00:00–07:00 | 06:30–13:30 | Observe and build |
 | Range locked | 07:00 | 13:30 | Freeze high and low |
 | London execution window | 07:00–16:00 | 13:30–22:30 | Detect eligible setup |
-| End of entry window | 16:00 | 22:30 | Cancel unfilled signals |
+| End of **entry** window | 16:00 | 22:30 | Cancel unfilled signals |
+| End of **position hold** | see §1 (unsigned) | — | Force-close anything still open |
 
-Half-open intervals: `22:00 <= t < 07:00` and `07:00 <= t < 16:00`.
-The Asian session crosses midnight; **the trading date is the date the session ends.**
-At M15 that is **36** session candles and **36** execution candles.
+Half-open intervals: `00:00 <= t < 07:00` and `07:00 <= t < 16:00`.
+At M15 that is **28** session candles and **36** execution candles.
+
+> **CORRECTED 2026-08-15 — session window was 22:00–07:00 / 36 candles.**
+> Determined empirically against a VT Markets MT5 export
+> (`data/eurusd_m15_2022_10.master.csv`, offset UTC+3). An exhaustive window search
+> showed that **only `00:00–07:00` reproduces the confirmed-truth levels** for
+> 2022-10-03 (high 0.98344, low 0.97843, range 50.1p). Under the previous window the
+> contract rejected its own golden case at `G4_SESSION_DATA` on candle count. See §10.
+>
+> **`config/strategy.yaml` must be changed to match** — `session_start_utc: "00:00"`,
+> `session_candles: 28`. That changes the config hash and starts a new evidence set (§11).
+> Until it is changed, the config and this specification disagree and the config wins.
+
+**Entry cutoff and position lifetime are different clocks.** The 16:00 boundary cancels
+*unfilled signals*. It says nothing about a position already open. §0.9 defines no time-based
+exit, so a position runs to its stop or its target unless `position_hold_end_utc` is signed
+in §1. An engine that force-closes at 16:00 is inventing a rule — see §10.2.
 
 ### 0.3 Levels — immutable at 07:00
 
@@ -299,9 +315,14 @@ Intervals are **half-open by bar-open time** (`interval_semantics: left_closed_r
 `candle_timestamp_semantics: bar_open_time`):
 
 ```
-Asian     :  22:00 <= bar_open_time < 07:00
-Execution :  07:00 <= bar_open_time < 09:00
+Asian     :  00:00 <= bar_open_time < 07:00      28 bars
+Execution :  07:00 <= bar_open_time < 16:00      36 bars
 ```
+
+> **CORRECTED 2026-08-15.** This block previously read `22:00 <= t < 07:00` and
+> `07:00 <= t < 09:00`. The execution line contradicted §0.2, `config/strategy.yaml`
+> (`execution_end_utc: "16:00"`, `post_session_candles: 36`) and the running engine.
+> `09:00` appears to be `sweep_window_hours: 9` mistaken for a clock time.
 
 The 07:00 bar belongs to the execution window only. Because MT5 `copy_rates_range` may include
 the closing timestamp, the window is **re-applied after retrieval** (`engine.filter_window`)
@@ -344,8 +365,8 @@ Verified by executing the engine, not by reading the code.
 
 | §0 rule | Implementation | Verdict |
 |---|---|---|
-| Asian 22:00–07:00, ends on trading date | `session_bounds` → 2026-08-10T22:00Z → 2026-08-11T07:00Z, 9h | ✅ |
-| 36 session / 8 execution M15 candles | enforced and cross-checked at config load | ✅ |
+| Asian 00:00–07:00, ends on trading date | `session_bounds`, 7h — **corrected, see §0.2** | ⚠️ code still on 22:00 |
+| 28 session / 36 execution M15 candles | cross-checked at config load; **config still says 36 / 36** | ⚠️ pending config change |
 | Levels and quartiles | `lock_asian_levels`, pinned by test | ✅ |
 | Levels immutable after lock | post-lock candle with a 1.10–1.20 range leaves levels unchanged | ✅ |
 | ER = net move ÷ range | `lock_asian_levels` | ✅ |
@@ -411,6 +432,126 @@ that is a parameter decision, not a code fix.
 | Q2 | Retain USDJPY with symbol-specific limits. | retained and configured |
 | Q3 | Approve the provisional grid for the Stage 2 baseline only. | fingerprinted sign-off recorded; optimization remains disabled |
 | Q4 | Retain the broker-specific `XAUUSD.crp` symbol. | exact `.crp` mapping enforced |
+
+---
+
+## 9. Open decision — position hold policy
+
+§0.9 defines management as: open with the original stop → 75% off at the target → stop to
+breakeven → remainder to 5R. **It defines no time-based exit for an open position.** §0.2's
+16:00 boundary cancels *unfilled signals* only.
+
+The engine currently force-closes at the execution-window boundary and books the result as
+`END_WINDOW`. That behaviour has no basis in §0 and must either be removed or specified.
+
+| Option | Meaning | Measured on 2022-10-03 leg 1 |
+|---|---|---|
+| A — no time exit | position runs to stop or target | **−1.000R** |
+| B — hold to 16:00 | force-close at the entry cutoff (current engine) | **+2.076R** |
+| C — hold to 18:00 | | **+3.178R** |
+| D — hold to 22:00 | matches the prior V2 workflow | **+1.110R** |
+
+An undocumented rule that happens to help is still undocumented. **Sign one option**, add
+`position_hold_end_utc` to §1, and treat the change as a new contract version under §11.
+
+---
+
+## 10. Golden case — EURUSD 2022-10-03 Asian → London
+
+`benchmarks/truth_source_setups.json` → `eurusd-2022-10-03-asian-to-london-short-sweep`,
+status `USER_CONFIRMED_TRUTH`. Runner: `scripts/validate_golden_oct3.py`.
+Fixture: `data/eurusd_m15_2022_10_utc.csv` (`sha256[:16] 658199e50c2846b8`), offset UTC+3.
+
+### 10.1 Signal conformance — 10/10
+
+| Field | Confirmed truth | Engine | |
+|---|---|---|---|
+| Reference high / low | 0.98344 / 0.97843 | 0.98344 / 0.97843 | ✅ |
+| Range | 50.1 pips | 50.1 pips | ✅ |
+| Classification | RANGE | ER 0.088 → RANGE | ✅ |
+| Setup / direction | SWEEP / SHORT | SWEEP / SHORT | ✅ |
+| Signal time | 15:15Z | 15:15Z | ✅ |
+| Entry (body high) | 0.98342 | 0.98342 | ✅ |
+| Stop (25% of range) | 0.9846725 | 0.9846725 | ✅ |
+| Partial target | 0.97843 | 0.97843 | ✅ |
+| 5R target | 0.9771575 | 0.9771575 | ✅ |
+
+The detector also rejected the 15:00Z candidate on §0.6's rejection-quality filter and took
+15:15Z — the confirmed signal time. **§0.3, §0.5, §0.6 and §0.9 are verified against real
+broker data.**
+
+### 10.2 Outcome divergence is feed-dependent, not an engine defect
+
+Truth records `TP5_HIT +5.0R` on an EIGHTCAP feed. On the VT Markets fixture the trade reached a
+maximum favourable excursion of **3.69R**, **missed the partial target by 3.8 pips**, never moved
+to breakeven, and stopped out on 4 Oct.
+
+> **The gap between +5.0R and −1.0R on this trade is under four pips of feed difference.**
+> Benchmarks must name their feed. Outcomes must not be transferred between brokers.
+
+The acceptance test therefore asserts the **signal**, not the outcome. It passes today.
+
+### 10.3 Leg 2 — London → New York, and why §0 refuses it
+
+The companion benchmark (`…-london-to-new-york-short-sweep`, outcome `STOP_LOSS`) is **not**
+reproducible under this contract, for two independent reasons:
+
+- **Classifier.** London ER = 0.396. §0.5's `<= 0.35` gives `BEARISH_TREND`; the benchmark was
+  generated under the prior *"path efficiency ≤ 55%"* rule, which gives `RANGE`. Different
+  statistic, different threshold.
+- **Sweep buffer.** The 14:15Z candle breaches the London high by **0.4 pips** against a required
+  `0.02 × 74.7p = 1.49p`. §0.6 rejects it as noise.
+
+Prior artifacts using a smaller buffer produced entry 0.98181 and **−1.037R**, matching the
+benchmark on both entry and outcome. **§0's buffer filtered out a losing trade.** On 2022-10-03
+the source strategy took +5R then −1R for +4R net; §0 as written takes leg 1 and refuses leg 2.
+
+Leg 2 is a superseded benchmark, not a conformance failure. Re-derive it before using it as a gate.
+
+### 10.4 §7's feasible band, confirmed
+
+With the §1 provisional values, and given the sweep candle must open and close inside the
+boundary so `entry = body_low > ref_low`:
+
+```
+sweep      : candle.low < ref_low - 0.02 × range
+structural : entry - 0.25 × range < candle.low - 0.02 × range
+           → feasible entry band = ( ref_low , ref_low + 0.21 × range )
+```
+
+**21% of the range, sitting directly above the boundary.** §7's prediction is exact.
+
+Measured funnel, 159 live runs 10–14 Aug 2026: 55 rejected before classification, 45 `UNCERTAIN`,
+40 `*_TREND`, **19 `RANGE`**. Setups A and B were eligible on 12% of runs *before any buffer was
+consulted*. **The binding constraint is upstream of the sweep band** — review §0.5's thresholds
+before §1's buffers.
+
+---
+
+## 11. Evidence transfer policy
+
+Referenced by the header. **Evidence does not transfer across a change to any of the following:**
+
+| Changed | Why evidence dies |
+|---|---|
+| Session or execution window | different reference range → different levels, R, entry, targets |
+| Classification metric or threshold | different setup population |
+| Entry model | different fills |
+| Partial or final target | different R accounting |
+| Risk fraction | 1R changes meaning in currency terms |
+| Any §1 parameter | different qualification band |
+| Position hold policy (§9) | different exit distribution |
+
+**Mechanism.** Every artifact carries `config_hash`. Changing any of the above changes the hash,
+which starts a new evidence set. Stage 1 reconciliations, Stage 2 samples and golden-case results
+are valid only under the hash that produced them.
+
+**Superseded hashes:** `fddb7465a73fd724`, `92279f3d42d32fc3` (SSPF v2.2), `6683a3625e51eb09`.
+**Current:** `2530b751134fbf6e` — *pending the §0.2 config correction, which will supersede it.*
+
+Do not pool results across hashes. A profitable version must not be inferred from a mixture of
+versions, and a losing one must not be re-tuned until it passes — that is a new version, and it
+restarts validation.
 
 ---
 
