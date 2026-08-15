@@ -1,0 +1,53 @@
+{
+  "generator": "scripts/build_dataset.py",
+  "generator_version": "1.0",
+  "built_utc": "2026-08-15T17:56:08Z",
+  "source_file": "GBPUSD_M15_202210030000_202210212345.csv",
+  "source_sha256": "17d59506aa5c62f5eb4cb0b94a8575fd9d1e7cd746ea755c2b74aff7f0404b43",
+  "server_offset_hours": 3.0,
+  "timezone": "UTC (server stamps shifted by -offset)",
+  "rows": 1440,
+  "utc_start": "2022-10-02 21:00:00",
+  "utc_end": "2022-10-21 20:45:00",
+  "master": {
+    "file": "gbpusd_m15_2022_10.master.csv",
+    "columns": [
+      "timestamp",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume",
+      "spread"
+    ],
+    "sha256": "917d4a58041b4bf89206ef52732f9af1eac138fd5444795b519e74d19511a286"
+  },
+  "views": {
+    "gbpusd_m15_2022_10_utc.csv": {
+      "purpose": "engine \u2014 asian_session_backtester.py, validate_golden_oct3.py",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "spread"
+      ],
+      "derived_from": "gbpusd_m15_2022_10.master.csv",
+      "sha256": "66a2f14ec9b437987424154c19fbb68fb27293045da0f69cda13296c654fd1df"
+    },
+    "gbpusd_m15_2022_10_audit.csv": {
+      "purpose": "tooling \u2014 .claude/skills/market-data-quality/scripts/audit_ohlcv.py",
+      "columns": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "derived_from": "gbpusd_m15_2022_10.master.csv",
+      "sha256": "d6c2518181be14fd7e962ffbd5e836fc158fdadd1f3f0c8742672f220a607cb2"
+    }
+  }
+}

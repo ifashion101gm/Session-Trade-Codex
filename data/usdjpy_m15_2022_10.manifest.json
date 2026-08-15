@@ -1,0 +1,53 @@
+{
+  "generator": "scripts/build_dataset.py",
+  "generator_version": "1.0",
+  "built_utc": "2026-08-15T17:56:09Z",
+  "source_file": "USDJPY_M15_202210030000_202210212345.csv",
+  "source_sha256": "b704afdf4f6ce5379b8fc0a6092bb92741f3484b5286fd66c30436e37b7038d7",
+  "server_offset_hours": 3.0,
+  "timezone": "UTC (server stamps shifted by -offset)",
+  "rows": 1440,
+  "utc_start": "2022-10-02 21:00:00",
+  "utc_end": "2022-10-21 20:45:00",
+  "master": {
+    "file": "usdjpy_m15_2022_10.master.csv",
+    "columns": [
+      "timestamp",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume",
+      "spread"
+    ],
+    "sha256": "73a0c27eaf712ed266f70c42fe08acb7336dd9736f7bc51c65f98e556ff85036"
+  },
+  "views": {
+    "usdjpy_m15_2022_10_utc.csv": {
+      "purpose": "engine \u2014 asian_session_backtester.py, validate_golden_oct3.py",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "spread"
+      ],
+      "derived_from": "usdjpy_m15_2022_10.master.csv",
+      "sha256": "7fd9cfc7a4bd80d0ac7b5ec2aeb71d5fa5c1c22014bac986d47775fe1ea688e1"
+    },
+    "usdjpy_m15_2022_10_audit.csv": {
+      "purpose": "tooling \u2014 .claude/skills/market-data-quality/scripts/audit_ohlcv.py",
+      "columns": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "derived_from": "usdjpy_m15_2022_10.master.csv",
+      "sha256": "5dba72329eef99b701f4ac6ead32453715234e02956a45682f5cf5ae17f28af9"
+    }
+  }
+}
