@@ -1,5 +1,9 @@
 # SESSION_CASCADE_V1 — Strategy Specification
 
+> **SUPERSEDED 2026-08-15.** Written against a previous contract. The active contract is
+> `SESSION_FLOW_V1` — see **`STATUS.md`** for current state and `SESSION_FLOW_V1_SPEC.md`
+> for the rules. Retained for its analysis; do not act on its parameters.
+
 Strategy ID: **`SESSION_CASCADE_V1`** · Contract version: **1.0-draft** · Spec date: **2026-08-15**
 Config hash: **not yet assigned** — assigned on first config load after §9 sign-off.
 

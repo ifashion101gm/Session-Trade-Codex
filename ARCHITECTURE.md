@@ -1,5 +1,9 @@
 # Architecture — ASIAN_SESSION_V1
 
+> **SUPERSEDED 2026-08-15.** Written against a previous contract. The active contract is
+> `SESSION_FLOW_V1` — see **`STATUS.md`** for current state and `SESSION_FLOW_V1_SPEC.md`
+> for the rules. Retained for its analysis; do not act on its parameters.
+
 Describes the code as it exists on 2026-08-11, implementing **ASIAN_SESSION_V1 v1.0**. For the rules the code implements see
 `STRATEGY_SPEC.md`; for known defects see `AUDIT_REPORT.md`.
 

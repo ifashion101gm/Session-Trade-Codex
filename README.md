@@ -1,4 +1,20 @@
-# Session Trade Codex — ASIAN_SESSION_V1
+# Session Trade Codex
+
+> **Start with [`STATUS.md`](STATUS.md)** — current contract, current evidence, open decisions.
+> Most other documents in this folder predate the 2026-08-15 corrections.
+
+| | |
+|---|---|
+| Active contract | **`SESSION_FLOW_V1`** — [`SESSION_FLOW_V1_SPEC.md`](SESSION_FLOW_V1_SPEC.md) |
+| Engine | `scripts/session_flow.py` |
+| Desk report | `scripts/engine_report.py` — runs at 07:00 and 12:00 UTC |
+| Backtest | `scripts/backtest_session_flow.py` |
+| Data contract | [`data/README.md`](data/README.md) |
+| Adding symbols | [`EXPORT_INSTRUCTIONS.md`](EXPORT_INSTRUCTIONS.md) |
+
+Analysis only. No order-mutating call exists in this codebase.
+
+---
 
 A local, read-only MetaTrader 5 assistant that applies **the trader's own** Asian Session strategy.
 It builds the 22:00–07:00 UTC Asian range, classifies the session, watches the 07:00–16:00 UTC

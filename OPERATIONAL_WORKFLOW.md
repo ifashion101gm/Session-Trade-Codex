@@ -1,5 +1,9 @@
 # ASIAN_SESSION_V1 Operational Workflow
 
+> **SUPERSEDED 2026-08-15.** Written against a previous contract. The active contract is
+> `SESSION_FLOW_V1` — see **`STATUS.md`** for current state and `SESSION_FLOW_V1_SPEC.md`
+> for the rules. Retained for its analysis; do not act on its parameters.
+
 The supported daily workflow. It describes what the application actually implements.
 
 All times are UTC. Myanmar time (UTC+6:30) is shown for convenience only.

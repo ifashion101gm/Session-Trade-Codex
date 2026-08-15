@@ -82,10 +82,16 @@ candle_timestamp_semantics: bar_open_time
 
 # --- time model (UTC internally; Myanmar time is display only) --------------
 # The Asian session starts on the prior calendar day and ends on trading_date.
-# Levels lock at 07:00, followed by the 07:00–16:00 London entry window.
-session_start_utc: "22:00"
+# CORRECTED 2026-08-15: the Asian window is 00:00-07:00 / 28 bars, not 22:00-07:00
+# / 36. Determined by exhaustive search against the trader's own MT5 export: only
+# 00:00-07:00 reproduces the confirmed-truth levels for 2022-10-03 (0.98344 /
+# 0.97843 / 50.1p). Under the old window the contract rejected its own golden case
+# at G4_SESSION_DATA on candle count. See SESSION_FLOW_V1_SPEC.md and STRATEGY_SPEC.md S10.
+# This changes the config hash and starts a new evidence set.
+# Levels lock at 07:00, followed by the 07:00-16:00 London entry window.
+session_start_utc: "00:00"
 session_end_utc: "07:00"
-session_candles: 36
+session_candles: 28
 execution_start_utc: "07:00"
 execution_end_utc: "16:00"
 post_session_candles: 36

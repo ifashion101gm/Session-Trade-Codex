@@ -1,5 +1,9 @@
 # Configuration Reference — ASIAN_SESSION_V1
 
+> **SUPERSEDED 2026-08-15.** Written against a previous contract. The active contract is
+> `SESSION_FLOW_V1` — see **`STATUS.md`** for current state and `SESSION_FLOW_V1_SPEC.md`
+> for the rules. Retained for its analysis; do not act on its parameters.
+
 Two files drive behaviour. `config/strategy.yaml` is validated on load: unknown keys, missing
 keys, and internally inconsistent values all raise rather than being silently accepted.
 
