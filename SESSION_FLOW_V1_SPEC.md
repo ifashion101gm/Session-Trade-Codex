@@ -24,9 +24,25 @@ No rule enters this contract without a source. Three tags, and only three:
 |---|---|
 | **[DIAGRAM]** | Stated in the diagram. Not open to interpretation. |
 | **[BENCHMARK]** | Not in the diagram; forced by `benchmarks/truth_source_setups.json`. |
+| **[TRADER]** | Not in the diagram; stated directly by the trader and dated. |
 | **[UNSIGNED]** | Diagram silent, no benchmark forces it. **Requires the trader's decision.** |
 
 Anything the engine does that carries none of these tags is a defect.
+
+---
+
+## 0.1 The shape of a trading day  **[TRADER]**
+
+Two entries per symbol per day, no more. Each runs the diagram once, against exactly one range:
+
+```
+   ASIAN  00:00-07:00        LONDON  07:00-16:00        NEW YORK  12:00-18:00
+   └── builds the range ──>  entry 1 reads it
+                             └── builds the range ────>  entry 2 reads it
+```
+
+**The London entry checks the Asian range and nothing else. The New York entry checks the
+London range and nothing else.** Full statement in §5.
 
 ---
 
@@ -183,19 +199,58 @@ breakeven. Until this is signed, the runner is held at breakeven to 5R and the t
 
 ---
 
-## 5. Sessions and legs
+## 5. Two entries per day. Each leg reads exactly one range.  **[TRADER]**
 
-The diagram is written for one reference session feeding one execution session. The project runs
-two legs:
+Recorded 2026-08-15 on the trader's instruction.
 
 ```
-LEG 1   reference ASIAN  00:00-07:00 UTC   ->  execution LONDON   07:00-16:00 UTC
-LEG 2   reference LONDON 07:00-12:00 UTC   ->  execution NEW YORK 12:00-18:00 UTC
+LONDON entry     ──reads──>  the ASIAN range      and nothing else
+NEW YORK entry   ──reads──>  the LONDON range     and nothing else
 ```
 
-Windows and candle counts are operational configuration, not strategy. Leg 1's Asian window is
-`00:00-07:00 / 28 bars`, determined empirically — only that window reproduces the confirmed-truth
-levels for 2022-10-03. See `STRATEGY_SPEC.md` §10.
+**Maximum two entries per symbol per day — one per leg.**
+
+| | Leg 1 | Leg 2 |
+|---|---|---|
+| Entry is taken during | **London** | **New York** |
+| The only range it reads | **Asian** | **London** |
+| Reference window (UTC) | `00:00 – 07:00` | `07:00 – 12:00` |
+| Execution window (UTC) | `07:00 – 16:00` | `12:00 – 18:00` |
+| Reference bars (M15) | 28 | 20 |
+
+### 5.1 What each leg may not do
+
+- **The London entry never reads the London range.** That range is still forming while the entry
+  is live; using it would be look-ahead.
+- **The New York entry never reads the Asian range.** The Asian levels are leg 1's business and
+  are discarded when leg 2 begins.
+- **No leg reads another leg's levels, setup, direction or result.** Each leg runs the diagram
+  from scratch on its own reference session.
+- **Neither leg is conditional on the other.** Leg 2 runs whether or not leg 1 traded, subject
+  only to the desk-level risk gates in §7.
+
+### 5.2 Consequence for the sweep
+
+A sweep is always a breach of **the leg's own reference range**, detected during **the leg's own
+execution window**:
+
+| Leg | Boundary swept | Detected during |
+|---|---|---|
+| 1 | Asian high or Asian low | London, 07:00–16:00 |
+| 2 | London high or London low | New York, 12:00–18:00 |
+
+The sweep candle therefore sits **outside** the reference session in time — it happens after the
+range is locked, not while it is being built. On a chart where the reference box is drawn
+projected forward, the sweep candle will appear *under* the box; on a chart where the box stops
+at the session close, it will appear to the right of it. Both are the same event.
+
+### 5.3 Window provenance
+
+The three-decision logic and the setups are **[DIAGRAM]**. The clock is not: session boundaries
+and candle counts are operational configuration. Leg 1's `00:00–07:00 / 28 bars` was determined
+empirically — only that window reproduces the confirmed-truth levels for 2022-10-03
+(`STRATEGY_SPEC.md` §10). Leg 2's `07:00–12:00 / 20 bars` is carried from the trader's earlier
+`SESSION_TRADING_SOURCE_WORKFLOW_V2` and is **[UNSIGNED]**.
 
 ---
 
