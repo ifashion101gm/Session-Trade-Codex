@@ -1,0 +1,8 @@
+{
+  "description": "Sell-side range expansion that closes outside and is not a sweep.",
+  "asian_session_fixture": "bullish_sweep_pass.json",
+  "execution_window": [
+    {"time": "2026-08-11T08:00:00Z", "open": 1.164, "high": 1.1642, "low": 1.163, "close": 1.1635, "tick_volume": 10}
+  ],
+  "expected": {"session_type": "RANGE", "setup": "NONE", "status": "NO_TRADE"}
+}

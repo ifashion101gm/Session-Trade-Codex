@@ -1,0 +1,7 @@
+{
+  "description": "A stale, expanded quote fails closed before setup evaluation.",
+  "asian_session_fixture": "bullish_sweep_pass.json",
+  "execution_window": [],
+  "tick": {"bid": 1.164, "ask": 1.165, "time": 1786437600, "broker_offset_hours": 0},
+  "expected": {"session_type": "UNCERTAIN", "setup": "NONE", "status": "NO_TRADE", "reason_code": "BROKER_CLOCK_UNVERIFIED"}
+}

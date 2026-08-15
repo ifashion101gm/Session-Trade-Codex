@@ -1,0 +1,13 @@
+name: verify-datasets
+on: [push, pull_request]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.11' }
+      - name: Verify dataset masters and generated views
+        run: python scripts/verify_datasets.py
+      - name: Golden case — EURUSD 2022-10-03 Asian to London
+        run: python scripts/validate_golden_oct3.py

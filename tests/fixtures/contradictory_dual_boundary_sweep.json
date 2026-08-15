@@ -1,0 +1,8 @@
+{
+  "description": "One candle takes both Asian boundaries and is rejected as directionally contradictory.",
+  "asian_session_fixture": "bullish_sweep_pass.json",
+  "execution_window": [
+    {"time": "2026-08-11T08:00:00Z", "open": 1.166, "high": 1.169, "low": 1.163, "close": 1.166, "tick_volume": 10}
+  ],
+  "expected": {"session_type": "RANGE", "setup": "NONE", "status": "NO_TRADE"}
+}

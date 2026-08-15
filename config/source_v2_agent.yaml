@@ -1,0 +1,123 @@
+mode: analysis_only
+strategy_id: SESSION_USER_RESOLVED_V2_AGENT
+contract_version: "2.2-backtest"
+activation_status: BLOCKED_FROM_EXECUTION_PENDING_WORKFLOW_AND_APPROVAL
+
+provenance:
+  classification: USER_SUPPLIED_AGENT_CONTRACT
+  claimed_strategy: "1BullBear Asian Session Liquidity Strategy SOURCE_V2"
+  primary_source_verification: NOT_INDEPENDENTLY_VERIFIED
+  inherited_engine: SESSION_USER_RESOLVED_V2
+
+session:
+  timezone: Europe/London
+  asian_start_local: "00:00"
+  asian_end_local: "08:00"
+  required_m15_candles: 32
+  readiness_gate_local: "07:50"
+  entry_start_local: "08:00"
+  final_actionable_candle_close_local: "09:30"
+  signal_expiry_local: "09:30"
+  actionable_completed_m15_closes: ["08:15", "08:30", "08:45", "09:00", "09:15", "09:30"]
+  supplied_count_claim: 7
+  deterministic_count: 6
+  count_conflict_status: RESOLVED_BY_EXPLICIT_TIMESTAMPS
+
+classification:
+  range: "abs(asian_close - asian_open) <= 0.50 * asian_range"
+  trend: "abs(asian_close - asian_open) > 0.50 * asian_range"
+
+bias:
+  timeframe: H1
+  completed_candle_lookback: 48
+  pivot: FRACTAL_3_CANDLE
+  equality_tolerance_pips: 2
+  bullish: HH_AND_HL
+  bearish: LH_AND_LL
+  uncertain: NO_TRADE_ALL_SETUPS
+
+setups:
+  maximum_per_symbol_session: 1
+  priority: [SWEEP, RANGE, TREND]
+  sweep:
+    allowed_session: RANGE
+    bullish: "low < asian_low AND close > asian_low"
+    bearish: "high > asian_high AND close < asian_high"
+    double_sweep_before_entry: NO_TRADE
+    entry: M15_CONFIRMATION_CLOSE
+  range:
+    allowed_session: RANGE
+    precondition: NO_SWEEP
+    entry: ASIAN_TOP_OR_BOTTOM
+    direction: ALIGNED_WITH_H1_BIAS
+  trend:
+    allowed_session: TREND
+    entry: EXACT_ASIAN_MIDPOINT_TOUCH
+    direction: ALIGNED_WITH_H1_BIAS
+
+risk:
+  risk_percent_equity: 1.0
+  customized_fixed_r_allowed: true
+  stop_distance: "0.25 * asian_range"
+  initial_target_r: 5.0
+  maximum_spread_fraction_of_stop: 0.15
+  abort_on_excess_spread: true
+  unresolved_custom_fixed_r_selection: true
+
+management:
+  profile: VISUAL_SETUP_SPECIFIC
+  SWEEP:
+    partial_objective: OPPOSITE_ASIAN_BOUNDARY
+    partial_close_percent: 75
+    runner_stop: BREAKEVEN
+    runner_target_r: 5
+  RANGE:
+    partial_objective: OPPOSITE_ASIAN_BOUNDARY
+    partial_close_percent: 75
+    runner_stop: BREAKEVEN
+    runner_target_r: 5
+  TREND:
+    partial_target_r: 4
+    partial_close_percent: 75
+    runner_stop_after_partial: BREAKEVEN
+    trailing: M15_FRACTAL_3_CANDLE
+    update_on: COMPLETED_M15_CLOSE
+    ratchet_only: true
+
+execution_permissions:
+  calculate_signals: true
+  calculate_hypothetical_volume: true
+  submit_orders: false
+  modify_orders: false
+  close_positions: false
+
+execution_blockers:
+  - autonomous order lifecycle and reconciliation states are unspecified
+  - customized fixed R versus 1 percent sizing selection is unspecified
+  - primary-source claims are not independently verified
+  - demo and live execution governance approvals are absent
+
+workflow:
+  precedence_rule: "Section 2 hard entry expiry overrides contradictory Section 4 display times"
+  pre_session: CONNECTION_EQUITY_AND_DATA_VERIFICATION
+  lock: FREEZE_ASIAN_LEVELS
+  evaluate: COMPLETED_M15_ONLY
+  signal_flow: [IDENTIFY, SPREAD_GATE, RISK_GATE, GENERATE_JSON_TICKET]
+  expiry: EXPIRE_UNUSED_SIGNALS_AND_TICKETS
+  post_trade: RECONCILE_AND_JOURNAL
+  contradictory_supplied_workflow:
+    claimed_seventh_close_local: "09:45"
+    claimed_expiry_local: "10:00"
+    status: EXCLUDED_FROM_CANONICAL_BACKTEST
+
+ticket_schema:
+  agent_id: Codex-TradeAgent-V2
+  contract_version: SOURCE_V2_VISUAL_SPECIFIC
+  required_sections: [session_metrics, h1_bias, setup_type, execution_params, gates_passed]
+
+strict_errors:
+  unclosed_candle: NO_TRADE
+  asian_levels_mutation_after_lock: FATAL_SESSION_INVALIDATION
+  uncertain_h1: NO_TRADE_0R
+  excessive_spread: NO_TRADE_0R
+  discretionary_override: FORBIDDEN

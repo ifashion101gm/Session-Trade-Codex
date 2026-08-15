@@ -1,0 +1,80 @@
+mode: historical_research_only
+production_engine_changes_allowed: false
+strategy_id: SSPF_V2_3_RESEARCH
+contract_version: "2.3-research"
+atr_range_bounds:
+  period: 14
+  minimum_multiplier: 0.20
+  maximum_multiplier: 1.10
+  enabled_symbols: [XAUUSD]
+backtest_lifecycle:
+  entry_window_end_utc: "11:00"
+  position_hold_end_utc: "20:00"
+  end_of_day_exit: CLOSE_AT_LAST_COMPLETED_M15_CLOSE
+  setup_priority: [SWEEP, TREND_CONTINUATION, RANGE_REJECTION]
+dom_gate:
+  minimum_limit_order_density: 2.5
+  require_cvd_reversal: true
+  missing_dom_policy: REJECT
+execution:
+  submit_orders: false
+  modify_orders: false
+  close_positions: false
+volume_profile:
+  bins: 40
+  value_area_fraction: 0.70
+  volume_source: M15_TICK_VOLUME_PROXY
+dynamic_stop:
+  atr_period: 14
+  spread_source: CURRENT_CONFIGURED_CEILING_PROXY
+  multipliers:
+    EURUSD: 0.35
+    GBPUSD: 0.35
+    USDJPY: 0.35
+    XAUUSD: 1.20
+promotion:
+  minimum_sessions: 100
+  require_walk_forward: true
+  require_sealed_out_of_sample: true
+  require_cost_stress: true
+  optimization_allowed_in_production: false
+refined_hybrid:
+  strategy_id: SSPF_V2_3_REFINED_RESEARCH
+  execution_window_utc: ["08:00", "11:00"]
+  maximum_hold_utc: "20:00"
+  efficiency_trend_threshold: 0.65
+  shallow_retrace_efficiency_threshold: 0.70
+  dynamic_bounds:
+    EURUSD: {minimum_atr_multiplier: 0.20, maximum_atr_multiplier: 1.25}
+    GBPUSD: {minimum_atr_multiplier: 0.20, maximum_atr_multiplier: 1.25}
+    USDJPY: {minimum_atr_multiplier: 0.20, maximum_atr_multiplier: 1.25}
+    XAUUSD: {minimum_atr_multiplier: 0.20, maximum_atr_multiplier: 1.10}
+  stop_buffer:
+    spread_multiplier: 1.5
+    daily_atr_fraction: 0.05
+  setup_priority: [SWEEP, TREND_CONTINUATION, RANGE_REJECTION]
+  missing_h4_policy: REJECT_IF_M15_UNCERTAIN
+production_candidate:
+  strategy_id: SSPF_V2_3_PRODUCTION_CANDIDATE
+  approval_status: APPROVED_FOR_EXTENDED_READ_ONLY_BACKTEST
+  execution_window_utc: ["08:00", "11:00"]
+  maximum_hold_utc: "20:00"
+  efficiency_trend_threshold: 0.65
+  shallow_retrace_efficiency_threshold: 0.70
+  minimum_rejection_wick_ratio: 0.40
+  dynamic_bounds:
+    EURUSD: {minimum_atr_multiplier: 0.20, maximum_atr_multiplier: 1.10}
+    GBPUSD: {minimum_atr_multiplier: 0.20, maximum_atr_multiplier: 1.10}
+    USDJPY: {minimum_atr_multiplier: 0.20, maximum_atr_multiplier: 1.10}
+    XAUUSD: {minimum_atr_multiplier: 0.20, maximum_atr_multiplier: 1.10}
+  stop_buffer:
+    spread_multiplier: 1.5
+    daily_atr_fraction: 0.05
+  setup_priority: [SWEEP, TREND_CONTINUATION, RANGE_REJECTION]
+  uncertain_policy: REJECT
+  m5_confirmation_allowed: false
+  h4_override_allowed: false
+  asset_filters:
+    GBPUSD:
+      minimum_efficiency_ratio: 0.75
+      rejection_reason: GATE_ASSET_FAIL_GBPUSD_EFFICIENCY_BELOW_0_75

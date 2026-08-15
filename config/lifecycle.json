@@ -1,0 +1,27 @@
+{
+  "lifecycle_version": "2.0.0",
+  "strategy_id": "ASIAN_SESSION_V1",
+  "contract_version": "1.0",
+  "analysis": {
+    "require_demo_account": true,
+    "require_exact_config_hash": true,
+    "require_all_gates_in_ticket": true,
+    "require_disclaimer": true,
+    "require_reason_codes": true,
+    "require_config_snapshot": true,
+    "require_plan_values_in_ticket": true,
+    "minimum_schema_version": 2
+  },
+  "profitability": {
+    "minimum_total_trades": 50,
+    "minimum_out_of_sample_trades": 30,
+    "minimum_expectancy_r": 0.1,
+    "minimum_profit_factor": 1.2,
+    "minimum_bootstrap_confidence": 0.9,
+    "maximum_drawdown_r": 10.0,
+    "bootstrap_resamples": 2000,
+    "accepted_samples": ["out_of_sample", "forward_demo"],
+    "require_per_setup_breakdown": true,
+    "setups": ["SWEEP", "RANGE_REJECTION", "TREND_CONTINUATION"]
+  }
+}

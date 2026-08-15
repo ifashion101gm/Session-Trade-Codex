@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Live state — not evidence. Rebuilt/rewritten every session.
+data/*.sqlite3
+data/*.sqlite3-journal
+data/*.pre_audit_migration_*.sqlite3
+
+# Raw broker exports, which live at the repo root. The master CSV + manifest
+# record their sha256, so the export itself does not need to be tracked.
+#
+# NOTE: these patterns are ROOT-ANCHORED with a leading slash on purpose. This
+# filesystem is case-insensitive, so an unanchored `EURUSD_M15_*.csv` also
+# matches `data/eurusd_m15_2022_10.master.csv` and would silently exclude the
+# generated fixtures that the whole pipeline exists to protect.
+/EURUSD_M15_*.csv
+/GBPUSD_M15_*.csv
+/USDJPY_M15_*.csv
+/XAUUSD_M15_*.csv
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.swp
+.idea/
+.vscode/

@@ -1,0 +1,59 @@
+mode: historical_research_only
+strategy_id: SESSION_SOURCE_V1
+contract_version: "1.0-research"
+
+# Provenance is intentionally part of the executable research preset.
+provenance:
+  source:
+    episode: "1BullBear Episode 18: Asian Session Trading"
+    evidence: "user-supplied decision-tree and chart screenshots"
+    rules:
+      setups: [SWEEP, RANGE, TREND]
+      entries:
+        SWEEP: SWEEP_CANDLE_BODY
+        RANGE: SESSION_TOP_OR_BOTTOM
+        TREND: SESSION_MIDPOINT
+      stop_range_fraction: 0.25
+      final_target_r: 5.0
+      management:
+        SWEEP: "close 75% at session-range objective; remainder to breakeven"
+        RANGE: "close 75% at session-range objective; remainder to breakeven"
+        TREND: "close 75% at 4R; move remainder to breakeven and target 5R"
+  interpretation:
+    session_window_utc: "22:00-07:00 (explicit user revision, 2026-08-15)"
+    execution_window_utc: "07:00-16:00"
+    range_trend_classifier: "explicit user revision: net move/range ER 0.35 plus 0.65/0.35 close location"
+    sweep_body_execution: "sweep candle close"
+    session_range_objective: "4R (one full Asian range from entry)"
+    intrabar_collision: STOP_FIRST
+  unresolved_source_terms:
+    - exact Episode 18 reference-range window (official 1BullBear study note shows the broad Asian session as 00:00-08:00 UTC)
+    - Bias Trend
+    - exact Range Session definition
+    - exact Sweep During Session definition
+    - exact price within sweep candle body
+  supporting_primary_sources:
+    episode_url: "https://www.youtube.com/watch?v=3LmDFTwG2AM"
+    official_study_note: "https://api.1bullbear.com/api/files/apj1xs1p86gdx2v/y0lrzqxl1b1hy28/1_bullbear_study_note_5jzzzPBT2o.pdf?download=1"
+  excluded_enhancements:
+    - fixed minimum and maximum range gates
+    - rejection-strength gate
+    - structural-clearance gate
+
+session_start_utc: "22:00"
+session_end_utc: "07:00"
+execution_start_utc: "07:00"
+execution_end_utc: "16:00"
+timeframe: M15
+stop_range_fraction: 0.25
+final_target_r: 5.0
+partial_target_r: 4.0
+partial_close_percent: 75.0
+classification_interpretation:
+  efficiency_ratio_threshold: 0.35
+  close_location_trend: 0.65
+symbols:
+  EURUSD: EURUSD
+  GBPUSD: GBPUSD
+  USDJPY: USDJPY
+  XAUUSD: XAUUSD.crp
