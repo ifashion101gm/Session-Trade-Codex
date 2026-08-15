@@ -31,6 +31,67 @@ Anything the engine does that carries none of these tags is a defect.
 
 ---
 
+## 0.0 Benchmark primacy  **[TRADER]**
+
+Recorded 2026-08-15 on the trader's instruction.
+
+> **The trader's worked example entries are the single source of truth. The engine must
+> reproduce them. Where it does not, the strategy is refined — not the example.**
+
+This outranks §0's provenance tags. A rule that is `[DIAGRAM]`-sourced but produces a
+different entry from a confirmed example is wrong and must change.
+
+**Scope — and it is not unlimited.** A benchmark fixes what the *strategy* must decide:
+setup, direction, entry, stop, targets, and the session levels they derive from. It cannot
+fix what *price* subsequently did. No rule change can make the market trade at a price it
+never traded at. When a benchmark's recorded outcome is unreachable from its own recorded
+entry on the trader's own data, the defect is in the benchmark record or the data — not in
+the strategy — and it must be resolved before that benchmark can gate anything.
+
+### 0.0a Status of the 2022-10-03 benchmark
+
+`eurusd-2022-10-03-asian-to-london-short-sweep` · `USER_CONFIRMED_TRUTH` · records
+`outcome: TP5_HIT, target_r: 5.0`.
+
+**The engine reproduces the entry exactly — 10/10 fields.** Session high, low, range,
+classification, setup, direction, signal time, entry, stop, both targets. There is nothing to
+refine in the decision path.
+
+**The recorded outcome is not reachable from the recorded entry.** Verified against
+`data/eurusd_m15_2022_10.master.csv`, the trader's own MT5 export:
+
+```
+Asian high 0.98344   low 0.97843   range 50.1p   R = 12.525p   5R = 62.6p
+
+a 5R short on 3 Oct required entry by ................ 08:30 UTC
+the first candle to exceed the Asian high is at ...... 15:00 UTC
+                                                       ---------
+                                                       6h 30m too late
+```
+
+Every London bar was tested as a hypothetical short entry. Only 08:15Z and 08:30Z reach 5R,
+and at those times price is 13–16 pips *below* the Asian high — no sweep of that boundary has
+occurred or can occur. After the 15:00Z sweep the lowest price is 0.97881; the 5R target is
+0.97716, **16.4 pips further than price went**, and the stop is taken on 4 Oct at 05:45Z.
+
+**Therefore no refinement of the sweep rule can satisfy this benchmark.** Not the breach
+depth, not the reclaim test, not the rejection-quality filter, not the entry model, not the
+bias gate. The gap is not in the rules; the price series does not contain the move.
+
+**Resolution required before this benchmark may gate the contract.** One of:
+
+| # | Possibility | How to confirm |
+|---|---|---|
+| 1 | The chart is a **different date**. Only 3 Oct matches `A = 50.2` (50.1p) across the fixture, but the fixture is one instrument over 15 days. | read the date off the chart |
+| 2 | The chart is a **different instrument or feed** whose 3 Oct differs materially after 09:45. | read the symbol and broker off the chart |
+| 3 | **`5.0 R` is the target's label, not the realised result.** TradingView prints the R-multiple of wherever the target is dragged, filled or not. | check whether the position closed at the target or elsewhere |
+| 4 | The **export is incomplete** in the London/NY portion. The Asian portion matches the chart to 0.1 pip, so any gap is after 07:00. | compare the 09:00–16:00 bars against the chart |
+
+Until one is confirmed, `outcome` on this benchmark is **UNVERIFIED** and only its *entry*
+fields are usable as a gate. The entry fields pass today.
+
+---
+
 ## 0.1 The shape of a trading day  **[TRADER]**
 
 Two entries per symbol per day, no more. Each runs the diagram once, against exactly one range:
