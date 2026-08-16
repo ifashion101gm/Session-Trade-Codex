@@ -16,7 +16,7 @@ each row when known.
 |---|---|---|---|---|---|---|---|---|---|---|
 | 1 | 2022-10-03 | **50.2p** | BEAR | SWEEP | SHORT | 0.98342 | 0.9846725 | 0.9771575 | 5R | ✅ |
 | 2 | 2022-10-04 | **43.2p** | BULL | — | LONG | — | — | — | R:R 5.00 | ✅ |
-| 3 | 2022-10-05 | | | | | | | | | |
+| 3 | 2022-10-05 | **31.1p** | BULL | TREND | LONG | — | — | — | — | ✅ |
 | 4 | 2022-10-06 | | | | | | | | | |
 | 5 | 2022-10-07 | | | | | | | | | |
 | 6 | 2022-10-10 | | | | | | | | | |
@@ -52,7 +52,7 @@ each row when known.
 
 ---
 
-**Recorded: 4 of 30.**
+**Recorded: 5 of 30.**
 
 ## Notes taken from the charts, not computed
 
@@ -61,6 +61,10 @@ each row when known.
 - **#2 · 2022-10-04 London** — reference range annotated `A = 43.2`. Long: target box above,
   stop box below. Label shows `Risk/Reward Ratio 5.00`. Entry, stop and target prices not
   legible at the supplied resolution.
+- **#3 · 2022-10-05 London** — reference range annotated `A = 31.1`. Trader states **TREND,
+  LONG**. Target box above, stop box below. A `Target` label sits at the top of the target box
+  and an `Open PNL` label with a `Risk/Reward Ratio` sits at the entry; prices not legible at
+  the supplied resolution.
 - **#16 · 2022-10-03 New York** — from `truth_source_setups.json`, `USER_CONFIRMED_TRUTH`.
 - **#17 · 2022-10-04 New York** — trader states **BULL, TREND**. Long: target box above, stop
   box below. Chart shows both the Asian box (`A = 43.2`) and the London box, with two position
