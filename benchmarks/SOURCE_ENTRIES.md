@@ -35,7 +35,7 @@ each row when known.
 | # | Date | Ref range | Bias | Setup | Dir | Entry | Stop | Target | Result | Chart |
 |---|---|---|---|---|---|---|---|---|---|---|
 | 16 | 2022-10-03 | 74.7p | BEAR | SWEEP | SHORT | 0.98181 | 0.9836775 | 0.9724725 | STOP_LOSS | ✅ |
-| 17 | 2022-10-04 | | | | | | | | | |
+| 17 | 2022-10-04 | | BULL | TREND | LONG | — | — | — | — | ✅ |
 | 18 | 2022-10-05 | | | | | | | | | |
 | 19 | 2022-10-06 | | | | | | | | | |
 | 20 | 2022-10-07 | | | | | | | | | |
@@ -52,7 +52,7 @@ each row when known.
 
 ---
 
-**Recorded: 3 of 30.**
+**Recorded: 4 of 30.**
 
 ## Notes taken from the charts, not computed
 
@@ -62,6 +62,10 @@ each row when known.
   stop box below. Label shows `Risk/Reward Ratio 5.00`. Entry, stop and target prices not
   legible at the supplied resolution.
 - **#16 · 2022-10-03 New York** — from `truth_source_setups.json`, `USER_CONFIRMED_TRUTH`.
+- **#17 · 2022-10-04 New York** — trader states **BULL, TREND**. Long: target box above, stop
+  box below. Chart shows both the Asian box (`A = 43.2`) and the London box, with two position
+  tools — the London entry and this New York entry. Reference range label and price levels not
+  legible at the supplied resolution.
 
 ## What to capture per chart
 

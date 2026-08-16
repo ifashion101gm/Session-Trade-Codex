@@ -477,6 +477,28 @@
       "source": "trader chart screenshot, recorded 2026-08-15",
       "feed": "chart appears EIGHTCAP; project fixture is VT Markets",
       "note": "Entry, stop and target not legible at the supplied resolution."
+    },
+    {
+      "id": "eurusd-2022-10-04-london-to-new-york-long",
+      "status": "TRADER_CHART",
+      "symbol": "EURUSD",
+      "timeframe": "M15",
+      "date": "2022-10-04",
+      "timezone": "UTC",
+      "reference_session": "LONDON",
+      "execution_session": "NEW_YORK",
+      "bias": "BULL",
+      "session_state": "TREND",
+      "setup": "TREND",
+      "direction": "LONG",
+      "reference_range_pips": null,
+      "entry": null,
+      "stop": null,
+      "target_5r": null,
+      "outcome": null,
+      "source": "trader chart screenshot, recorded 2026-08-15",
+      "feed": "chart appears EIGHTCAP; project fixture is VT Markets",
+      "note": "Trader states BULL / TREND. Price levels not legible at the supplied resolution."
     }
   ]
 }
