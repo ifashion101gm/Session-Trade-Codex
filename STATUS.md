@@ -73,42 +73,58 @@ result               -1.000R                   +3.723R
 
 ## Current evidence
 
-`scripts/backtest_session_flow.py` — EURUSD M15, 2–21 Oct 2022, costs from the master
-CSV spread column, 0.2p slippage, `STOP_FIRST`.
+`scripts/backtest_session_flow.py` — EURUSD, GBPUSD, USDJPY M15, 2–21 Oct 2022, costs from
+the master CSV spread column, 0.2p slippage, `STOP_FIRST`.
 
 ```
-ALL              24 trades   net +8.761R   +0.365R/trade   win 25%
+ALL              63 trades   net +27.124R   +0.431R/trade   win 29%
 
-  leg A->L       13          +14.666R      +1.128R         38%
-  leg L->NY      11           -5.905R      -0.537R          9%
+  EURUSD         24          +8.761R        +0.365R         25%
+  GBPUSD         18         +11.774R        +0.654R         33%
+  USDJPY         21          +6.589R        +0.314R         29%
 
-  SWEEP           6          +10.591R      +1.765R         50%
-  TREND          18           -1.830R      -0.102R         17%
+  leg A->L       33         +19.599R        +0.594R         30%
+  leg L->NY      30          +7.525R        +0.251R         27%
 
-  SWEEP A->L      4          +12.618R      +3.155R         75%   <- carries everything
+  SWEEP A->L     15         +11.069R        +0.738R         33%
+  TREND A->L     18          +8.530R        +0.474R         28%
+  TREND L->NY    23          +6.891R        +0.300R         26%
+  SWEEP L->NY     7          +0.634R        +0.091R         29%
 ```
 
 ```
-95% CI on net R/trade   [-0.619, +1.349]   ** SPANS ZERO **
-profit factor            1.478
-max drawdown             4.063R
-cost drag                0.019R per trade  (immaterial)
+95% CI on net R/trade   [-0.149, +1.010]   ** SPANS ZERO **
+profit factor            1.590
+max drawdown            11.071R
+cost drag                0.021R per trade  (immaterial)
 ```
 
-**Against `config/lifecycle.json` Stage-2 thresholds: 3 of 4 pass. The failure is
-`trades >= 50` (have 24), and it is the one that matters.**
+**All three symbols positive independently. All four setup-by-leg cells positive.** GBPUSD
+and USDJPY had no part in any threshold choice.
 
-**Verdict: research candidate — needs more evidence.** In-sample, one instrument,
-fifteen days, four trades carrying the result.
+**Against `config/lifecycle.json` Stage-2 thresholds: 3 of 4 pass.**
+`trades >= 50` now passes (63). The failure is **`max drawdown <= 10R`** at 11.071R — a new
+failure that appeared with the larger sample.
+
+**Verdict: research candidate — needs more evidence.** In-sample, fifteen days, CI spans
+zero. ~114 trades are needed for the interval to exclude zero at this effect size.
 
 ### Stress
 
 | Test | Result |
 |---|---|
-| Slippage 0.2 → 2.0 pips | +0.365R → +0.203R per trade — **robust** |
-| ER threshold 0.25 → 0.45 | +0.115R → +0.425R → +0.243R — **sharp peak, not robust** |
+| Slippage 0.2 → 2.0 pips | +0.431R → +0.273R per trade — **robust** |
+| ER threshold 0.25 → 0.45 | +0.418 / +0.281 / **+0.431** / +0.415 / +0.281 — **flat** |
+| Leave-one-symbol-out | +0.341R to +0.489R — **no symbol carries it** |
 
-The ER sensitivity is why §4-B must be signed before more numbers accumulate.
+The ER surface was a sharp peak on one symbol and is flat on three. That was a small-sample
+artifact.
+
+### Retracted
+
+An earlier reading of the EURUSD-only sample suggested dropping the New York leg (it lost
+5.905R over 11 trades). Across three symbols leg 2 nets **+7.525R over 30 trades**. The
+suggestion was wrong and is withdrawn.
 
 ---
 
@@ -148,20 +164,19 @@ diagram. None is a measurement of the current contract.
 
 ## Data
 
-One dataset. `data/README.md` has the column contract.
+Three datasets, all 1,440 M15 bars, 2022-10-02 21:00 .. 2022-10-21 20:45 UTC, offset +3.
+`data/README.md` has the column contract.
 
 ```
-eurusd_m15_2022_10   1,440 M15 bars   2022-10-02 21:00 .. 2022-10-21 20:45 UTC   offset +3
-  master  d9c1549b8f0a9bf8
-  _utc    658199e50c2846b8
-  _audit  be7502f34eb83a24
+eurusd_m15_2022_10   master d9c1549b8f0a9bf8
+gbpusd_m15_2022_10   master 917d4a58041b4bf8
+usdjpy_m15_2022_10   master 73a0c27eaf712ed2
 ```
 
 `scripts/verify_datasets.py` runs as a pre-commit hook and in CI; it exits non-zero on drift.
 
-**Next: GBPUSD, USDJPY, XAUUSD (`XAUUSD.crp`) for the same period** — see
-`EXPORT_INSTRUCTIONS.md`. That takes the sample from 24 to roughly 100 trades and answers
-whether `SWEEP A→L` is real or four lucky days.
+**Next: XAUUSD (`XAUUSD.crp`) for the same period, then a second month sealed as
+out-of-sample** — see `EXPORT_INSTRUCTIONS.md` and `ROADMAP.md`.
 
 ---
 
