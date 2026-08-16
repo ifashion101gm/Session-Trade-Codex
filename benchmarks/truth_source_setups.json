@@ -460,19 +460,23 @@
     },
     {
       "id": "eurusd-2022-10-04-asian-to-london-long",
-      "status": "TRADER_CHART \u2014 entry fields not yet reconstructed",
+      "status": "TRADER_CHART",
       "symbol": "EURUSD",
       "timeframe": "M15",
       "date": "2022-10-04",
       "timezone": "UTC",
       "reference_session": "ASIAN",
       "execution_session": "LONDON",
-      "chart_reference_range_pips": 43.2,
+      "reference_range_pips": 43.2,
       "direction": "LONG",
-      "chart_risk_reward": 5.0,
+      "risk_reward": 5.0,
+      "entry": null,
+      "stop": null,
+      "target_5r": null,
+      "outcome": null,
       "source": "trader chart screenshot, recorded 2026-08-15",
-      "feed": "UNRECORDED \u2014 chart appears to be EIGHTCAP; fixture is VT Markets",
-      "engine_note": "Engine on 00:00-07:00 gives range 66.0p, TREND LONG, midpoint 0.98390, UNFILLED. Engine on 00:00-06:00 gives range 43.0p, RANGE session, SWEEP LONG 0.98099, UNFILLED. The 43.2p annotation matches a 06:00 end, not 07:00. Chart appears filled; engine says unfilled under both windows. See SESSION_FLOW_V1_SPEC.md 5.5."
+      "feed": "chart appears EIGHTCAP; project fixture is VT Markets",
+      "note": "Entry, stop and target not legible at the supplied resolution."
     }
   ]
 }
