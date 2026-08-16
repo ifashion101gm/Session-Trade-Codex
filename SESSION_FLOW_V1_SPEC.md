@@ -389,6 +389,43 @@ Three ways to resolve this; the trader decides:
 Until this is signed, `scripts/run_flowchart.py` scans the execution window for the sweep, which
 matches the benchmark but not a strict two-runs-a-day desk.
 
+### 5.5 OPEN — the reference window may end at 06:00, not 07:00  **[UNSIGNED]**
+
+Recorded 2026-08-15 from two trader charts.
+
+| Chart | Annotation | Engine @ 07:00 end | Engine @ 06:00 end |
+|---|---|---|---|
+| 2022-10-03 | `A = 50.2` | 50.1p ✅ | 50.1p ✅ |
+| 2022-10-04 | `A = 43.2` | **66.0p ❌** | **43.0p ✅** |
+
+An exhaustive window search confirms this is the end time, not the start: **every** window
+ending at 06:00 gives Oct 3 = 50.1p and Oct 4 = 43.0p; **every** window ending at 07:00 gives
+Oct 4 = 66.0p. The start time cannot be determined from these two days, because both
+extremes fall inside 02:00–06:00.
+
+**Consequences if adopted.** On 2022-10-04 the whole plan changes:
+
+```
+00:00-07:00   H 0.98720  L 0.98060  66.0p   ER 0.561 -> TREND    TREND LONG  @ 0.98390
+00:00-06:00   H 0.98490  L 0.98060  43.0p   ER 0.242 -> RANGE    SWEEP LONG  @ 0.98099
+```
+
+Different range, different classification, different setup, different entry. Oct 3 is
+unaffected — its extremes are made before 06:00, so both windows give the same levels, which
+is why the original correction to 00:00–07:00 was not caught by the golden case.
+
+**Not adopted yet. Two open problems:**
+
+1. **The residual.** 43.0 vs 43.2 and 50.1 vs 50.2 are each 0.1–0.2 pip out. That is within
+   plausible feed difference, but it is not an exact match, and two data points is thin.
+2. **The chart appears filled; the engine says UNFILLED under both windows.** A buy limit at
+   0.98099 (06:00 reading) or 0.98390 (07:00 reading) is never reached — London's low is
+   0.98527. Neither window explains a filled long on 2022-10-04.
+
+**Resolution needs a third chart** with a legible reference range, ideally on a day whose
+06:00 and 07:00 ranges differ. Until then the contract stays on `00:00–07:00 / 28 bars` and
+this section records the discrepancy rather than acting on it.
+
 ### 5.4 Window provenance
 
 The three-decision logic and the setups are **[DIAGRAM]**. The clock is not: session boundaries
