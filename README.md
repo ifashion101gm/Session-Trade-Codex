@@ -11,6 +11,7 @@
 | Backtest | `scripts/backtest_session_flow.py` |
 | Data contract | [`data/README.md`](data/README.md) |
 | Adding symbols | [`EXPORT_INSTRUCTIONS.md`](EXPORT_INSTRUCTIONS.md) |
+| What to do next | [`ROADMAP.md`](ROADMAP.md) |
 
 Analysis only. No order-mutating call exists in this codebase.
 

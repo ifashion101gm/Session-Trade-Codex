@@ -179,7 +179,11 @@ whether `SWEEP A→L` is real or four lucky days.
 
 ---
 
-## What to do next, in order
+## What to do next
+
+See **[`ROADMAP.md`](ROADMAP.md)** for the full sequence and the reasoning.
+
+In short:
 
 1. **Sign §4-A and §4-B.** Every number produced from here inherits whichever reading is
    left in place, and §4-B moves the result by more than the result itself.
