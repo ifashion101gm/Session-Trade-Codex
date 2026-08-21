@@ -1,0 +1,22 @@
+file,video_ts,date_axis,A_label,direction,pnl_type,pnl_value,rr_label,target_pips,stop_pips,boxes,caption,notes
+799,12:52,Mon 03 Oct '22,50.2,SHORT,Closed P&L,0.00238,1,23.8,,1,,first Oct-3 frame
+800,13:31,Mon 03 Oct '22,,SHORT,Open P&L,0.00268,5,83.5,,1,,
+801,15:12,Mon 03 Oct '22,50.2,SHORT,Open P&L,0.00261,,16.2,,2,,Asian + London boxes
+802,15:51,Mon 03 Oct '22,50.2,SHORT,Open P&L,0.00261,2.85,16.2,,2,,
+803,16:05,Mon 03 Oct '22,50.2,SHORT,Open P&L,0.00281,4.77,85.4,,2,,"NY leg, R~18.7p"
+805,18:50,Tue 04 Oct '22,43.2,LONG,Open P&L,0.00032,1.80,25.3,12.5,2,Timmy / 25 percent,
+806,18:56,Tue 04 Oct '22,43.2,LONG,Open P&L,0.00022,4.9,84.8,12.4,2,25 percent stop-loss ... reward 5r,
+808,,Wed 05 Oct '22,31.1,LONG,Closed P&L,-0.00099,3.8,38.4,8.5,2,o stop loss diary no subscribe,CLOSED AT A LOSS
+810,22:23,Wed 05 Oct '22,31.1,SHORT,Open P&L,0.00339,1.11,16.7,,2,Tommy General,
+811,22:28,Wed 05 Oct '22,31.1,SHORT,Open P&L,0.00339,4.22,83.3,,2,75 5r,
+813,,Thu 06 Oct '22,23.3,LONG,Open P&L,0.00120,2.92,53.6,,2,,"red box: -0.00383 -4.3, 1 bar 15m"
+815,,Fri 07 Oct '22,26.4,SHORT,Open P&L,0.00374,5.04,38.3,,2,,
+816,,~Oct 07-10,25.4,,Open P&L,0.00157,5.06,45.3,,2,5r / Detroit D Channel missing,+5R label on an earlier trade
+817,,Mon 10 Oct '22,37.1,SHORT,Open P&L,0.00234,4.13,61.8,,2,,
+819,,Tue 11 Oct '22,51.6,LONG,Closed P&L,-0.00108,3,,,2,,"brown stop band, teal target above"
+822,,Thu 13 Oct '22,28.6,SHORT,,,,,,3,,two yellow stop bands; A=63.7 on an earlier box
+826,43:55,Fri 14 Oct '22,46.5,SHORT,Open P&L,0.00157,,64.4,,2,,-2R label on an earlier trade
+830,47:20,Mon 17 Oct '22,23.3,LONG,Open P&L,0.00087,1.56,18.9,12.0,2,,TWO -1R labels on earlier trades
+834,,Wed 19 Oct '22,,SHORT,Open P&L,0.00272,5.01,72.9,,1,,
+838,55:40,Thu 20 Oct '22,34.4,LONG,Open P&L,0.00405,5.10,43.7,8.6,2,,+5R label
+840,57:10,Fri 21 Oct '22,,,,,,,,2,,+5R on an earlier trade; 2 stop bands

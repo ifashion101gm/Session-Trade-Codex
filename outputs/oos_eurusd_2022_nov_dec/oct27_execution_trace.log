@@ -1,0 +1,145 @@
+SINGLE-DAY EXECUTION TRACE — EURUSD M15 — 2022-12-27
+Data inspection window: 2022-12-26 22:00 UTC to 2022-12-27 23:45 UTC
+07:00 LOCK | Asian High=1.06676 Low=1.06351 Range=32.5 pips SL distance=8.1 pips Close=1.06451
+Session type=RANGE | Momentum filter disabled=False | Bias=BULLISH | M15 structure=BULLISH | New-entry cutoff=18:00 UTC | Entry mode=limit
+
+[00] 2022-12-27 07:00 UTC | O=1.06452 H=1.06487 L=1.06382 C=1.06471 | GATES circuit=OPEN cooldown=CLEAR spread=1.00p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=True close_sweep_high=False
+
+[01] 2022-12-27 07:15 UTC | O=1.06471 H=1.06580 L=1.06471 C=1.06561 | GATES circuit=OPEN cooldown=CLEAR spread=0.68p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[02] 2022-12-27 07:30 UTC | O=1.06558 H=1.06560 L=1.06447 C=1.06503 | GATES circuit=OPEN cooldown=CLEAR spread=0.65p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=True close_sweep_high=False
+
+[03] 2022-12-27 07:45 UTC | O=1.06502 H=1.06555 L=1.06500 C=1.06517 | GATES circuit=OPEN cooldown=CLEAR spread=0.62p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[04] 2022-12-27 08:00 UTC | O=1.06517 H=1.06555 L=1.06493 C=1.06505 | GATES circuit=OPEN cooldown=CLEAR spread=0.60p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[05] 2022-12-27 08:15 UTC | O=1.06505 H=1.06550 L=1.06480 C=1.06526 | GATES circuit=OPEN cooldown=CLEAR spread=0.58p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[06] 2022-12-27 08:30 UTC | O=1.06524 H=1.06552 L=1.06518 C=1.06549 | GATES circuit=OPEN cooldown=CLEAR spread=0.55p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[07] 2022-12-27 08:45 UTC | O=1.06549 H=1.06641 L=1.06525 C=1.06604 | GATES circuit=OPEN cooldown=CLEAR spread=0.53p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[08] 2022-12-27 09:00 UTC | O=1.06607 H=1.06620 L=1.06515 C=1.06617 | GATES circuit=OPEN cooldown=CLEAR spread=0.50p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[09] 2022-12-27 09:15 UTC | O=1.06617 H=1.06696 L=1.06576 C=1.06661 | GATES circuit=OPEN cooldown=CLEAR spread=0.48p(model) | SIGNAL low_sweep=False high_sweep=True close_sweep_low=False close_sweep_high=False
+    SIGNAL T1: SWEEP SHORT | LIMIT entry=1.06676 SL=1.06757 TP5=1.06270 partial=1.06351
+    FILL T1: spread=0.47p limit=1.62p PASS | order active
+    PROGRESS T1: bar H/L=1.06696/1.06576 vs SL=1.06757 TP=1.06270; close=+0.18R
+
+[10] 2022-12-27 09:30 UTC | O=1.06663 H=1.06670 L=1.06617 C=1.06630 | GATES circuit=OPEN cooldown=CLEAR spread=0.45p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=1.06670/1.06617 vs SL=1.06757 TP=1.06270; close=+0.57R
+
+[11] 2022-12-27 09:45 UTC | O=1.06630 H=1.06663 L=1.06613 C=1.06657 | GATES circuit=OPEN cooldown=CLEAR spread=0.43p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=1.06663/1.06613 vs SL=1.06757 TP=1.06270; close=+0.23R
+
+[12] 2022-12-27 10:00 UTC | O=1.06657 H=1.06691 L=1.06624 C=1.06627 | GATES circuit=OPEN cooldown=CLEAR spread=0.40p(model) | SIGNAL low_sweep=False high_sweep=True close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=1.06691/1.06624 vs SL=1.06757 TP=1.06270; close=+0.60R
+
+[13] 2022-12-27 10:15 UTC | O=1.06627 H=1.06686 L=1.06614 C=1.06662 | GATES circuit=OPEN cooldown=CLEAR spread=0.43p(model) | SIGNAL low_sweep=False high_sweep=True close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=1.06686/1.06614 vs SL=1.06757 TP=1.06270; close=+0.17R
+
+[14] 2022-12-27 10:30 UTC | O=1.06662 H=1.06669 L=1.06566 C=1.06580 | GATES circuit=OPEN cooldown=CLEAR spread=0.45p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=1.06669/1.06566 vs SL=1.06757 TP=1.06270; close=+1.18R
+
+[15] 2022-12-27 10:45 UTC | O=1.06580 H=1.06582 L=1.06527 C=1.06546 | GATES circuit=OPEN cooldown=CLEAR spread=0.48p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=1.06582/1.06527 vs SL=1.06757 TP=1.06270; close=+1.60R
+
+[16] 2022-12-27 11:00 UTC | O=1.06545 H=1.06574 L=1.06498 C=1.06503 | GATES circuit=OPEN cooldown=CLEAR spread=0.50p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=1.06574/1.06498 vs SL=1.06757 TP=1.06270; close=+2.13R
+
+[17] 2022-12-27 11:15 UTC | O=1.06503 H=1.06514 L=1.06483 C=1.06488 | GATES circuit=OPEN cooldown=CLEAR spread=0.53p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=1.06514/1.06483 vs SL=1.06757 TP=1.06270; close=+2.31R
+
+[18] 2022-12-27 11:30 UTC | O=1.06488 H=1.06500 L=1.06444 C=1.06444 | GATES circuit=OPEN cooldown=CLEAR spread=0.55p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=1.06500/1.06444 vs SL=1.06757 TP=1.06270; close=+2.86R
+
+[19] 2022-12-27 11:45 UTC | O=1.06444 H=1.06462 L=1.06318 C=1.06349 | GATES circuit=OPEN cooldown=CLEAR spread=0.58p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=True
+    PROGRESS T1: bar H/L=1.06462/1.06318 vs SL=1.06757 TP=1.06270; close=+4.02R
+
+[20] 2022-12-27 12:00 UTC | O=1.06351 H=1.06352 L=1.06192 C=1.06236 | GATES circuit=OPEN cooldown=CLEAR spread=1.00p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=1.06352/1.06192 vs SL=1.06757 TP=1.06270; close=+5.42R
+    EXIT T1: TP5_HIT gross=+4.25R net=+4.17R
+
+[21] 2022-12-27 12:15 UTC | O=1.06238 H=1.06324 L=1.06236 C=1.06289 | GATES circuit=LOCKED cooldown=CLEAR spread=0.62p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[22] 2022-12-27 12:30 UTC | O=1.06289 H=1.06370 L=1.06252 C=1.06352 | GATES circuit=LOCKED cooldown=CLEAR spread=0.65p(model) | SIGNAL low_sweep=True high_sweep=False close_sweep_low=False close_sweep_high=False
+    SUPPRESSED RAW LIQUIDITY TRIGGER: CIRCUIT_BREAKER
+
+[23] 2022-12-27 12:45 UTC | O=1.06354 H=1.06367 L=1.06248 C=1.06275 | GATES circuit=LOCKED cooldown=CLEAR spread=0.68p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[24] 2022-12-27 13:00 UTC | O=1.06275 H=1.06296 L=1.06155 C=1.06156 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[25] 2022-12-27 13:15 UTC | O=1.06156 H=1.06210 L=1.06116 C=1.06210 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[26] 2022-12-27 13:30 UTC | O=1.06210 H=1.06289 L=1.06139 C=1.06272 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[27] 2022-12-27 13:45 UTC | O=1.06278 H=1.06293 L=1.06246 C=1.06258 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[28] 2022-12-27 14:00 UTC | O=1.06259 H=1.06422 L=1.06241 C=1.06384 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=True high_sweep=False close_sweep_low=False close_sweep_high=False
+    SUPPRESSED RAW LIQUIDITY TRIGGER: CIRCUIT_BREAKER
+
+[29] 2022-12-27 14:15 UTC | O=1.06385 H=1.06545 L=1.06353 C=1.06491 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[30] 2022-12-27 14:30 UTC | O=1.06491 H=1.06522 L=1.06460 C=1.06495 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[31] 2022-12-27 14:45 UTC | O=1.06495 H=1.06507 L=1.06421 C=1.06499 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=True close_sweep_high=False
+    SUPPRESSED RAW LIQUIDITY TRIGGER: CIRCUIT_BREAKER
+
+[32] 2022-12-27 15:00 UTC | O=1.06498 H=1.06521 L=1.06471 C=1.06482 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[33] 2022-12-27 15:15 UTC | O=1.06485 H=1.06539 L=1.06461 C=1.06511 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[34] 2022-12-27 15:30 UTC | O=1.06509 H=1.06565 L=1.06493 C=1.06544 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[35] 2022-12-27 15:45 UTC | O=1.06542 H=1.06605 L=1.06528 C=1.06529 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[36] 2022-12-27 16:00 UTC | O=1.06528 H=1.06532 L=1.06460 C=1.06480 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[37] 2022-12-27 16:15 UTC | O=1.06480 H=1.06480 L=1.06397 C=1.06424 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[38] 2022-12-27 16:30 UTC | O=1.06424 H=1.06436 L=1.06336 C=1.06346 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[39] 2022-12-27 16:45 UTC | O=1.06346 H=1.06379 L=1.06335 C=1.06371 | GATES circuit=LOCKED cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=True high_sweep=False close_sweep_low=False close_sweep_high=False
+    SUPPRESSED RAW LIQUIDITY TRIGGER: CIRCUIT_BREAKER
+
+[40] 2022-12-27 17:00 UTC | O=1.06371 H=1.06395 L=1.06356 C=1.06383 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[41] 2022-12-27 17:15 UTC | O=1.06384 H=1.06414 L=1.06377 C=1.06401 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[42] 2022-12-27 17:30 UTC | O=1.06401 H=1.06515 L=1.06387 C=1.06475 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[43] 2022-12-27 17:45 UTC | O=1.06475 H=1.06489 L=1.06439 C=1.06488 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=True close_sweep_high=False
+    SUPPRESSED RAW LIQUIDITY TRIGGER: CIRCUIT_BREAKER
+
+[44] 2022-12-27 18:00 UTC | O=1.06488 H=1.06564 L=1.06476 C=1.06506 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[45] 2022-12-27 18:15 UTC | O=1.06506 H=1.06509 L=1.06441 C=1.06444 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[46] 2022-12-27 18:30 UTC | O=1.06444 H=1.06446 L=1.06377 C=1.06386 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[47] 2022-12-27 18:45 UTC | O=1.06386 H=1.06431 L=1.06378 C=1.06415 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[48] 2022-12-27 19:00 UTC | O=1.06415 H=1.06469 L=1.06405 C=1.06417 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=True
+    SUPPRESSED RAW LIQUIDITY TRIGGER: CIRCUIT_BREAKER
+
+[49] 2022-12-27 19:15 UTC | O=1.06417 H=1.06440 L=1.06396 C=1.06411 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[50] 2022-12-27 19:30 UTC | O=1.06411 H=1.06440 L=1.06401 C=1.06425 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[51] 2022-12-27 19:45 UTC | O=1.06428 H=1.06437 L=1.06383 C=1.06414 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[52] 2022-12-27 20:00 UTC | O=1.06413 H=1.06414 L=1.06399 C=1.06410 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[53] 2022-12-27 20:15 UTC | O=1.06410 H=1.06413 L=1.06389 C=1.06406 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[54] 2022-12-27 20:30 UTC | O=1.06406 H=1.06409 L=1.06379 C=1.06388 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[55] 2022-12-27 20:45 UTC | O=1.06389 H=1.06403 L=1.06354 C=1.06390 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[56] 2022-12-27 21:00 UTC | O=1.06389 H=1.06423 L=1.06353 C=1.06423 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[57] 2022-12-27 21:15 UTC | O=1.06413 H=1.06423 L=1.06395 C=1.06402 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[58] 2022-12-27 21:30 UTC | O=1.06411 H=1.06412 L=1.06387 C=1.06407 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[59] 2022-12-27 21:45 UTC | O=1.06397 H=1.06414 L=1.06381 C=1.06383 | GATES circuit=LOCKED cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False

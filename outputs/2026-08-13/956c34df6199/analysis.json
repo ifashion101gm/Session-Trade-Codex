@@ -1,0 +1,370 @@
+{
+  "analysis_id": "956c34df6199",
+  "timestamp_utc": "2026-08-13T08:22:50.693228Z",
+  "trading_date": "2026-08-13",
+  "symbol": "GBPUSD",
+  "account": {
+    "login_masked": "****985",
+    "account_type": "demo",
+    "balance": 987.82,
+    "equity": 987.82,
+    "server": "VTMarkets-Demo",
+    "trade_allowed": true,
+    "expert_allowed": false,
+    "ping_ms": 253.36
+  },
+  "bid": 1.34791,
+  "ask": 1.34793,
+  "spread": 2.0000000000131024e-05,
+  "strategy_id": "SSPF_V2_2",
+  "contract_version": "2.2",
+  "schema_version": 2,
+  "timezone": "UTC",
+  "broker_utc_offset_hours": 3,
+  "asian_start": "2026-08-13T00:00:00Z",
+  "asian_end": "2026-08-13T08:00:00Z",
+  "asian_high": 1.35007,
+  "asian_low": 1.3474300000000001,
+  "asian_range": 0.0026399999999999757,
+  "midpoint": 1.3487500000000001,
+  "asian_open": 1.34972,
+  "asian_close": 1.34828,
+  "risk_unit": 0.0006599999999999939,
+  "lower_quartile": 1.34809,
+  "upper_quartile": 1.3494100000000002,
+  "efficiency_ratio": 0.5454545454545914,
+  "close_location": 0.3219696969696224,
+  "session_type": "BEARISH_TREND",
+  "setup": "NONE",
+  "direction": null,
+  "signal_time": null,
+  "signal_candle": null,
+  "entry": null,
+  "stop_loss": null,
+  "initial_risk": null,
+  "tp1_4r": null,
+  "tp2_5r": null,
+  "partial_close_percent": 75.0,
+  "risk_fraction": 0.005,
+  "volume": null,
+  "partial_volume": null,
+  "runner_volume": null,
+  "runner_below_minimum": false,
+  "estimated_cost_r": null,
+  "gross_tp2_r": null,
+  "net_tp1_r": null,
+  "net_tp2_r": null,
+  "broker_symbol": "GBPUSD",
+  "intended_risk_cash": null,
+  "actual_risk_cash": null,
+  "actual_risk_percent": null,
+  "risk_basis_cash": null,
+  "expiry_utc": "2026-08-13T11:00:00Z",
+  "gates": [
+    {
+      "name": "G1_ENVIRONMENT",
+      "passed": true,
+      "detail": "account=demo, server=VTMarkets-Demo, login=****985 via exact allowlist (gateway verified)"
+    },
+    {
+      "name": "G2_UNIVERSE",
+      "passed": true,
+      "detail": "symbol=GBPUSD"
+    },
+    {
+      "name": "G3_BROKER_CLOCK",
+      "passed": true,
+      "detail": "verified UTC+3:00, normalized tick age=6s"
+    },
+    {
+      "name": "G4_SESSION_DATA",
+      "passed": true,
+      "detail": "32 contiguous closed candles"
+    },
+    {
+      "name": "G5_RANGE_BOUNDS",
+      "passed": true,
+      "detail": "range=0.00264, allowed=[0.0018, 0.015]"
+    },
+    {
+      "name": "G6_SPREAD",
+      "passed": true,
+      "detail": "spread=2e-05, maximum=0.00035"
+    },
+    {
+      "name": "G7_SESSION_CLASSIFIED",
+      "passed": true,
+      "detail": "type=BEARISH_TREND, ER=0.5455, close_location=0.3220"
+    },
+    {
+      "name": "G8_SESSION_QUOTA",
+      "passed": true,
+      "detail": "taken=0, allowed=1"
+    },
+    {
+      "name": "G9_SETUP_DETECTED",
+      "passed": false,
+      "detail": "no qualifying setup in 1 closed execution candle(s)"
+    }
+  ],
+  "reason_codes": [
+    "TREND_SESSION",
+    "NO_QUALIFYING_SETUP"
+  ],
+  "warnings": [],
+  "session_candle_times": [
+    "2026-08-13T00:00:00Z",
+    "2026-08-13T00:15:00Z",
+    "2026-08-13T00:30:00Z",
+    "2026-08-13T00:45:00Z",
+    "2026-08-13T01:00:00Z",
+    "2026-08-13T01:15:00Z",
+    "2026-08-13T01:30:00Z",
+    "2026-08-13T01:45:00Z",
+    "2026-08-13T02:00:00Z",
+    "2026-08-13T02:15:00Z",
+    "2026-08-13T02:30:00Z",
+    "2026-08-13T02:45:00Z",
+    "2026-08-13T03:00:00Z",
+    "2026-08-13T03:15:00Z",
+    "2026-08-13T03:30:00Z",
+    "2026-08-13T03:45:00Z",
+    "2026-08-13T04:00:00Z",
+    "2026-08-13T04:15:00Z",
+    "2026-08-13T04:30:00Z",
+    "2026-08-13T04:45:00Z",
+    "2026-08-13T05:00:00Z",
+    "2026-08-13T05:15:00Z",
+    "2026-08-13T05:30:00Z",
+    "2026-08-13T05:45:00Z",
+    "2026-08-13T06:00:00Z",
+    "2026-08-13T06:15:00Z",
+    "2026-08-13T06:30:00Z",
+    "2026-08-13T06:45:00Z",
+    "2026-08-13T07:00:00Z",
+    "2026-08-13T07:15:00Z",
+    "2026-08-13T07:30:00Z",
+    "2026-08-13T07:45:00Z"
+  ],
+  "execution_candle_times": [
+    "2026-08-13T08:00:00Z"
+  ],
+  "config_hash": "10304d115519bcc1",
+  "config_snapshot": {
+    "mode": "analysis_only",
+    "strategy_id": "SSPF_V2_2",
+    "contract_version": "2.2",
+    "system": {
+      "engine_version": "v2.2",
+      "active_strategy": "SSPF_V2_2",
+      "supersede_legacy": true
+    },
+    "session_contract": {
+      "asian_start_utc": "00:00",
+      "asian_end_utc": "08:00",
+      "required_m15_candles": 32,
+      "sweep_window_hours": 3
+    },
+    "symbol_mapping": {
+      "EURUSD": "EURUSD",
+      "GBPUSD": "GBPUSD",
+      "USDJPY": "USDJPY",
+      "XAUUSD.crp": "XAUUSD"
+    },
+    "governance": {
+      "specification_status": "APPROVED_FOR_STAGE_2_BASELINE",
+      "implementation_authorized": true,
+      "backtest_authorized_after_schema_validation": true,
+      "demo_execution_authorized": false,
+      "live_execution_authorized": false,
+      "research_status": "PROVISIONAL_LOCKED_FOR_BASELINE",
+      "optimization_allowed": false,
+      "provisional_parameters": [
+        "efficiency_ratio_threshold",
+        "close_location_trend",
+        "sweep_buffer_fraction",
+        "stop_buffer_fraction",
+        "touch_tolerance_fraction",
+        "rejection_quality_fraction",
+        "symbol_range_limits",
+        "symbol_spread_limits"
+      ],
+      "parameter_signoff": {
+        "status": "APPROVED",
+        "config_hash": "fab2be6b329c4532",
+        "approved_by": "TRADER_STAGE_2_BASELINE_SIGN_OFF",
+        "approved_utc": "2026-08-12T18:48:00Z"
+      },
+      "promotion_requirements": [
+        "deterministic_unit_tests_pass",
+        "golden_cases_pass",
+        "no_lookahead_audit_pass",
+        "baseline_backtest_complete",
+        "transaction_cost_stress_pass",
+        "walk_forward_pass",
+        "sealed_out_of_sample_pass"
+      ]
+    },
+    "execution_permissions": {
+      "calculate_signals": true,
+      "calculate_hypothetical_volume": true,
+      "submit_orders": false,
+      "modify_orders": false,
+      "close_positions": false
+    },
+    "account_guard": {
+      "required_server": "VTMarkets-Demo",
+      "allowed_logins": [],
+      "require_demo_account": true,
+      "reject_suffix_only_matching": false,
+      "fallback_account_suffix": "985"
+    },
+    "timeframe": "M15",
+    "timeframe_seconds": 900,
+    "use_closed_candles_only": true,
+    "interval_semantics": "left_closed_right_open",
+    "candle_timestamp_semantics": "bar_open_time",
+    "session_start_utc": "00:00",
+    "session_end_utc": "08:00",
+    "session_candles": 32,
+    "execution_start_utc": "08:00",
+    "execution_end_utc": "11:00",
+    "post_session_candles": 12,
+    "live_data": {
+      "maximum_tick_age_seconds": 60,
+      "stale_tick_policy": "NO_GO"
+    },
+    "data_quality": {
+      "require_exact_candle_count": true,
+      "require_unique_timestamps": true,
+      "require_contiguous_intervals": true,
+      "reject_zero_ohlc": true,
+      "reject_non_monotonic_timestamps": true,
+      "reject_future_timestamps": true,
+      "missing_candle_policy": "REJECT_SESSION",
+      "duplicate_candle_policy": "REJECT_SESSION",
+      "zero_range_policy": "REJECT_SESSION"
+    },
+    "classification": {
+      "efficiency_ratio_threshold": 0.35,
+      "close_location_trend": 0.65,
+      "ambiguous_classification": "UNCERTAIN",
+      "trade_uncertain_sessions": false
+    },
+    "setups": {
+      "priority": [
+        "SWEEP",
+        "RANGE_REJECTION",
+        "TREND_CONTINUATION"
+      ],
+      "maximum_accepted_setups_per_session": 1,
+      "sweep": {
+        "enabled": true,
+        "session_types": [
+          "RANGE"
+        ],
+        "confirmation": "CLOSE_BACK_INSIDE",
+        "entry_price": "CONFIRMATION_CANDLE_CLOSE",
+        "require_structural_stop_clearance": true
+      },
+      "range_rejection": {
+        "enabled": true,
+        "session_types": [
+          "RANGE"
+        ],
+        "confirmation": "BOUNDARY_TOUCH_AND_DIRECTIONAL_CLOSE",
+        "entry_price": "CONFIRMATION_CANDLE_CLOSE",
+        "disallow_after_confirmed_sweep": true
+      },
+      "trend_continuation": {
+        "enabled": true,
+        "session_types": [
+          "BULLISH_TREND",
+          "BEARISH_TREND"
+        ],
+        "confirmation": "MIDPOINT_RETRACE_AND_DIRECTIONAL_CLOSE",
+        "entry_price": "CONFIRMATION_CANDLE_CLOSE"
+      }
+    },
+    "fixed_stop_policy": {
+      "distance_source": "ASIAN_RANGE",
+      "stop_range_fraction": 0.25,
+      "structural_clearance_required": true,
+      "on_clearance_failure": "REJECT_TRADE",
+      "widening_allowed": false
+    },
+    "midpoint_zone_low_fraction": 0.45,
+    "midpoint_zone_high_fraction": 0.55,
+    "sweep_buffer_fraction": 0.02,
+    "stop_buffer_fraction": 0.02,
+    "touch_tolerance_fraction": 0.05,
+    "rejection_quality_fraction": 0.5,
+    "management": {
+      "partial_target_r": 4.0,
+      "partial_close_percent": 75.0,
+      "move_stop_after_partial": "BREAKEVEN",
+      "breakeven_price_basis": "ACTUAL_WEIGHTED_ENTRY",
+      "final_target_r": 5.0,
+      "trailing_stop_enabled": false,
+      "intrabar_collision_policy": "STOP_FIRST",
+      "gap_fill_policy": "NEXT_AVAILABLE_MARKET_PRICE",
+      "partial_volume_rounding": "DOWN_TO_VOLUME_STEP",
+      "remainder_below_minimum_volume_policy": "CLOSE_FULL_AT_TP1"
+    },
+    "cost_model": {
+      "spread_source": "HISTORICAL_IF_AVAILABLE_ELSE_CONFIGURED",
+      "commission_per_lot_round_turn": 0.0,
+      "slippage_model": "CONFIGURED_POINTS",
+      "slippage_points": 1.0,
+      "financing_enabled": false,
+      "cost_model_signed_off": true,
+      "reject_if_cost_model_incomplete": false
+    },
+    "risk": {
+      "risk_basis": "LOWER_OF_BALANCE_EQUITY",
+      "risk_percent_per_trade": 0.5,
+      "percentage_scale": "PERCENT_NOT_DECIMAL",
+      "daily_risk_limit_percent": 2.0,
+      "daily_risk_measure": "OPEN_PLUS_REALIZED_LOSS_AND_PENDING_COMMITTED_RISK",
+      "daily_reset_timezone": "UTC",
+      "maximum_drawdown_percent": 15.0,
+      "drawdown_reference": "HIGH_WATERMARK_EQUITY",
+      "drawdown_action": "DISABLE_NEW_SIGNALS",
+      "maximum_trades_per_symbol_session": 1,
+      "maximum_open_positions_per_symbol": 1,
+      "maximum_portfolio_open_risk_percent": 2.0
+    },
+    "symbols": {
+      "EURUSD": {
+        "broker_symbol": "EURUSD",
+        "display_pip_size": 0.0001,
+        "minimum_range": 0.0015,
+        "maximum_range": 0.012,
+        "maximum_spread": 0.0003
+      },
+      "GBPUSD": {
+        "broker_symbol": "GBPUSD",
+        "display_pip_size": 0.0001,
+        "minimum_range": 0.0018,
+        "maximum_range": 0.015,
+        "maximum_spread": 0.00035
+      },
+      "USDJPY": {
+        "broker_symbol": "USDJPY",
+        "display_pip_size": 0.01,
+        "minimum_range": 0.15,
+        "maximum_range": 1.2,
+        "maximum_spread": 0.03
+      },
+      "XAUUSD": {
+        "broker_symbol": "XAUUSD.crp",
+        "display_pip_size": 0.01,
+        "minimum_range": 2.0,
+        "maximum_range": 25.0,
+        "maximum_spread": 0.6
+      }
+    }
+  },
+  "accepted": false,
+  "status": "NO_TRADE"
+}

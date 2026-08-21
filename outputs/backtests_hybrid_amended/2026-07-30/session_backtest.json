@@ -1,0 +1,256 @@
+{
+  "strategy_id": "SSPF_V2_2",
+  "contract_version": "2.2",
+  "config_hash": "8ce0fd901f3091e0",
+  "trading_date": "2026-07-30",
+  "generated_utc": "2026-08-13T09:51:32.919621+00:00",
+  "read_only": true,
+  "cost_basis": "GROSS_R; historical bid/ask spread unavailable in M15 OHLC",
+  "intrabar_collision_policy": "STOP_FIRST",
+  "symbols": {
+    "EURUSD": {
+      "broker_symbol": "EURUSD",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "status": "EVALUATED",
+      "session_type": "BEARISH_TREND",
+      "asian_high": 1.1468099999999999,
+      "asian_low": 1.14344,
+      "asian_range": 0.003369999999999873,
+      "range_model": "STATIC_SYMBOL_BOUNDS",
+      "range_minimum": 0.0015,
+      "range_maximum": 0.012,
+      "daily_atr_14": null,
+      "efficiency_ratio": 0.8694362017804776,
+      "close_location": 0.09792284866467474,
+      "setups_separate_research": [
+        {
+          "setup": "SWEEP",
+          "status": "NOT_ELIGIBLE",
+          "session_type": "BEARISH_TREND"
+        },
+        {
+          "setup": "TREND_CONTINUATION",
+          "status": "TRIGGERED",
+          "session_type": "BEARISH_TREND",
+          "direction": "SHORT",
+          "signal_time_utc": "2026-07-30T08:30:00Z",
+          "entry": 1.1451200000000001,
+          "stop_loss": 1.14596,
+          "partial_target": 1.14175,
+          "partial_target_r": 4.000000000000264,
+          "partial_target_label": "4R",
+          "runner_management": "TRAIL_TO_5R_OR_FURTHER",
+          "tp1_4r": 1.14175,
+          "tp2_5r": 1.14091,
+          "outcome": "STOP_LOSS",
+          "gross_r": -1.0,
+          "exit_time_utc": "2026-07-30T09:15:00Z"
+        },
+        {
+          "setup": "RANGE_REJECTION",
+          "status": "NOT_ELIGIBLE",
+          "session_type": "BEARISH_TREND"
+        }
+      ],
+      "setups": [
+        {
+          "setup": "TREND_CONTINUATION",
+          "status": "TRIGGERED",
+          "session_type": "BEARISH_TREND",
+          "direction": "SHORT",
+          "signal_time_utc": "2026-07-30T08:30:00Z",
+          "entry": 1.1451200000000001,
+          "stop_loss": 1.14596,
+          "partial_target": 1.14175,
+          "partial_target_r": 4.000000000000264,
+          "partial_target_label": "4R",
+          "runner_management": "TRAIL_TO_5R_OR_FURTHER",
+          "tp1_4r": 1.14175,
+          "tp2_5r": 1.14091,
+          "outcome": "STOP_LOSS",
+          "gross_r": -1.0,
+          "exit_time_utc": "2026-07-30T09:15:00Z"
+        }
+      ]
+    },
+    "GBPUSD": {
+      "broker_symbol": "GBPUSD",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "status": "EVALUATED",
+      "session_type": "BEARISH_TREND",
+      "asian_high": 1.33683,
+      "asian_low": 1.3333,
+      "asian_range": 0.003530000000000033,
+      "range_model": "STATIC_SYMBOL_BOUNDS",
+      "range_minimum": 0.0018,
+      "range_maximum": 0.015,
+      "daily_atr_14": null,
+      "efficiency_ratio": 0.8130311614730599,
+      "close_location": 0.1444759206798883,
+      "setups_separate_research": [
+        {
+          "setup": "SWEEP",
+          "status": "NOT_ELIGIBLE",
+          "session_type": "BEARISH_TREND"
+        },
+        {
+          "setup": "TREND_CONTINUATION",
+          "status": "INVALIDATED",
+          "session_type": "BEARISH_TREND",
+          "invalidation_time_utc": "2026-07-30T09:00:00Z"
+        },
+        {
+          "setup": "RANGE_REJECTION",
+          "status": "NOT_ELIGIBLE",
+          "session_type": "BEARISH_TREND"
+        }
+      ],
+      "setups": [
+        {
+          "setup": "NONE",
+          "status": "NO_SETUP",
+          "session_type": "BEARISH_TREND"
+        }
+      ]
+    },
+    "USDJPY": {
+      "broker_symbol": "USDJPY",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_high": 163.739,
+      "asian_low": 163.211,
+      "asian_range": 0.5279999999999916,
+      "range_model": "STATIC_SYMBOL_BOUNDS",
+      "range_minimum": 0.15,
+      "range_maximum": 1.2,
+      "daily_atr_14": null,
+      "efficiency_ratio": 0.8030303030303283,
+      "close_location": 0.9867424242424145,
+      "setups_separate_research": [
+        {
+          "setup": "SWEEP",
+          "status": "NOT_ELIGIBLE",
+          "session_type": "BULLISH_TREND"
+        },
+        {
+          "setup": "TREND_CONTINUATION",
+          "status": "INVALIDATED",
+          "session_type": "BULLISH_TREND",
+          "invalidation_time_utc": "2026-07-30T10:00:00Z"
+        },
+        {
+          "setup": "RANGE_REJECTION",
+          "status": "NOT_ELIGIBLE",
+          "session_type": "BULLISH_TREND"
+        }
+      ],
+      "setups": [
+        {
+          "setup": "NONE",
+          "status": "NO_SETUP",
+          "session_type": "BULLISH_TREND"
+        }
+      ]
+    },
+    "XAUUSD": {
+      "broker_symbol": "XAUUSD.crp",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "status": "EVALUATED",
+      "session_type": "BEARISH_TREND",
+      "asian_high": 4092.9,
+      "asian_low": 4028.41,
+      "asian_range": 64.49000000000024,
+      "range_model": "DAILY_ATR_14_DYNAMIC",
+      "range_minimum": 17.427714285714288,
+      "range_maximum": 95.85242857142859,
+      "daily_atr_14": 87.13857142857144,
+      "efficiency_ratio": 0.7087920607846158,
+      "close_location": 0.16281594045588405,
+      "setups_separate_research": [
+        {
+          "setup": "SWEEP",
+          "status": "NOT_ELIGIBLE",
+          "session_type": "BEARISH_TREND"
+        },
+        {
+          "setup": "TREND_CONTINUATION",
+          "status": "TRIGGERED",
+          "session_type": "BEARISH_TREND",
+          "direction": "SHORT",
+          "signal_time_utc": "2026-07-30T08:45:00Z",
+          "entry": 4060.655,
+          "stop_loss": 4076.7780000000002,
+          "partial_target": 3996.165,
+          "partial_target_r": 4.0,
+          "partial_target_label": "4R",
+          "runner_management": "TRAIL_TO_5R_OR_FURTHER",
+          "tp1_4r": 3996.165,
+          "tp2_5r": 3980.042,
+          "outcome": "STOP_LOSS",
+          "gross_r": -1.0,
+          "exit_time_utc": "2026-07-30T10:15:00Z"
+        },
+        {
+          "setup": "RANGE_REJECTION",
+          "status": "NOT_ELIGIBLE",
+          "session_type": "BEARISH_TREND"
+        }
+      ],
+      "setups": [
+        {
+          "setup": "TREND_CONTINUATION",
+          "status": "TRIGGERED",
+          "session_type": "BEARISH_TREND",
+          "direction": "SHORT",
+          "signal_time_utc": "2026-07-30T08:45:00Z",
+          "entry": 4060.655,
+          "stop_loss": 4076.7780000000002,
+          "partial_target": 3996.165,
+          "partial_target_r": 4.0,
+          "partial_target_label": "4R",
+          "runner_management": "TRAIL_TO_5R_OR_FURTHER",
+          "tp1_4r": 3996.165,
+          "tp2_5r": 3980.042,
+          "outcome": "STOP_LOSS",
+          "gross_r": -1.0,
+          "exit_time_utc": "2026-07-30T10:15:00Z"
+        }
+      ]
+    }
+  },
+  "trend_trailing_simulation": "Conservative proxy: after the 4R partial, runner stop is floored at breakeven and 5R is the modeled target; no tighter trail is assumed because the strategy does not specify one.",
+  "entry_window_end_utc": "2026-07-30T11:00:00+00:00",
+  "position_hold_end_utc": "2026-07-30T20:00:00+00:00",
+  "end_of_day_exit_policy": "CLOSE_AT_LAST_COMPLETED_M15_CLOSE",
+  "canonical_setup_priority": [
+    "SWEEP",
+    "TREND_CONTINUATION",
+    "RANGE_REJECTION"
+  ],
+  "broker_utc_offset_hours": 3
+}

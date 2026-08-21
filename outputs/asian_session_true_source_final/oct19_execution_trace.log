@@ -1,0 +1,137 @@
+SINGLE-DAY EXECUTION TRACE — EURUSD M15 — 2022-10-19
+Data inspection window: 2022-10-18 22:00 UTC to 2022-10-19 23:45 UTC
+07:00 LOCK | Asian High=0.98669 Low=0.98204 Range=46.5 pips SL distance=11.6 pips Close=0.98219
+Session type=RANGE | Momentum filter disabled=False | Bias=BEARISH | M15 structure=BEARISH | New-entry cutoff=18:00 UTC | Entry mode=limit
+
+[00] 2022-10-19 07:00 UTC | O=0.98222 H=0.98293 L=0.98155 C=0.98212 | GATES circuit=OPEN cooldown=CLEAR spread=1.00p(model) | SIGNAL low_sweep=True high_sweep=False close_sweep_low=False close_sweep_high=False
+    SIGNAL T1: SWEEP LONG | LIMIT entry=0.98204 SL=0.98088 TP5=0.98785 partial=0.98669
+    FILL T1: spread=1.00p limit=2.32p PASS | order active
+    PROGRESS T1: bar H/L=0.98293/0.98155 vs SL=0.98088 TP=0.98785; close=+0.07R
+
+[01] 2022-10-19 07:15 UTC | O=0.98211 H=0.98298 L=0.98198 C=0.98245 | GATES circuit=OPEN cooldown=CLEAR spread=0.68p(model) | SIGNAL low_sweep=True high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=0.98298/0.98198 vs SL=0.98088 TP=0.98785; close=+0.35R
+
+[02] 2022-10-19 07:30 UTC | O=0.98245 H=0.98369 L=0.98235 C=0.98351 | GATES circuit=OPEN cooldown=CLEAR spread=0.65p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=0.98369/0.98235 vs SL=0.98088 TP=0.98785; close=+1.26R
+
+[03] 2022-10-19 07:45 UTC | O=0.98350 H=0.98394 L=0.98329 C=0.98394 | GATES circuit=OPEN cooldown=CLEAR spread=0.62p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=0.98394/0.98329 vs SL=0.98088 TP=0.98785; close=+1.63R
+
+[04] 2022-10-19 08:00 UTC | O=0.98393 H=0.98393 L=0.98231 C=0.98300 | GATES circuit=OPEN cooldown=CLEAR spread=0.60p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=0.98393/0.98231 vs SL=0.98088 TP=0.98785; close=+0.83R
+
+[05] 2022-10-19 08:15 UTC | O=0.98300 H=0.98300 L=0.98123 C=0.98211 | GATES circuit=OPEN cooldown=CLEAR spread=0.58p(model) | SIGNAL low_sweep=True high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=0.98300/0.98123 vs SL=0.98088 TP=0.98785; close=+0.06R
+
+[06] 2022-10-19 08:30 UTC | O=0.98211 H=0.98336 L=0.98193 C=0.98303 | GATES circuit=OPEN cooldown=CLEAR spread=0.55p(model) | SIGNAL low_sweep=True high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=0.98336/0.98193 vs SL=0.98088 TP=0.98785; close=+0.85R
+
+[07] 2022-10-19 08:45 UTC | O=0.98303 H=0.98312 L=0.98167 C=0.98171 | GATES circuit=OPEN cooldown=CLEAR spread=0.53p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+    PROGRESS T1: bar H/L=0.98312/0.98167 vs SL=0.98088 TP=0.98785; close=-0.28R
+
+[08] 2022-10-19 09:00 UTC | O=0.98171 H=0.98241 L=0.98134 C=0.98208 | GATES circuit=OPEN cooldown=CLEAR spread=0.50p(model) | SIGNAL low_sweep=True high_sweep=False close_sweep_low=False close_sweep_high=True
+    PROGRESS T1: bar H/L=0.98241/0.98134 vs SL=0.98088 TP=0.98785; close=+0.03R
+
+[09] 2022-10-19 09:15 UTC | O=0.98209 H=0.98227 L=0.98077 C=0.98113 | GATES circuit=OPEN cooldown=CLEAR spread=0.48p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=True
+    PROGRESS T1: bar H/L=0.98227/0.98077 vs SL=0.98088 TP=0.98785; close=-0.78R
+    EXIT T1: STOP_LOSS gross=-1.00R net=-1.10R
+
+[10] 2022-10-19 09:30 UTC | O=0.98115 H=0.98179 L=0.98110 C=0.98117 | GATES circuit=OPEN cooldown=ACTIVE spread=0.45p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[11] 2022-10-19 09:45 UTC | O=0.98116 H=0.98187 L=0.98054 C=0.98185 | GATES circuit=OPEN cooldown=ACTIVE spread=0.43p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[12] 2022-10-19 10:00 UTC | O=0.98183 H=0.98211 L=0.98102 C=0.98111 | GATES circuit=OPEN cooldown=ACTIVE spread=0.40p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[13] 2022-10-19 10:15 UTC | O=0.98112 H=0.98133 L=0.97904 C=0.97911 | GATES circuit=OPEN cooldown=ACTIVE spread=0.43p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[14] 2022-10-19 10:30 UTC | O=0.97917 H=0.97981 L=0.97881 C=0.97935 | GATES circuit=OPEN cooldown=CLEAR spread=0.45p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[15] 2022-10-19 10:45 UTC | O=0.97935 H=0.97955 L=0.97809 C=0.97811 | GATES circuit=OPEN cooldown=CLEAR spread=0.48p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[16] 2022-10-19 11:00 UTC | O=0.97811 H=0.97836 L=0.97611 C=0.97621 | GATES circuit=OPEN cooldown=CLEAR spread=0.50p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[17] 2022-10-19 11:15 UTC | O=0.97620 H=0.97749 L=0.97592 C=0.97732 | GATES circuit=OPEN cooldown=CLEAR spread=0.53p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[18] 2022-10-19 11:30 UTC | O=0.97732 H=0.97747 L=0.97682 C=0.97683 | GATES circuit=OPEN cooldown=CLEAR spread=0.55p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[19] 2022-10-19 11:45 UTC | O=0.97683 H=0.97844 L=0.97677 C=0.97833 | GATES circuit=OPEN cooldown=CLEAR spread=0.58p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[20] 2022-10-19 12:00 UTC | O=0.97830 H=0.97838 L=0.97682 C=0.97773 | GATES circuit=OPEN cooldown=CLEAR spread=1.00p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[21] 2022-10-19 12:15 UTC | O=0.97775 H=0.97787 L=0.97694 C=0.97725 | GATES circuit=OPEN cooldown=CLEAR spread=0.62p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[22] 2022-10-19 12:30 UTC | O=0.97725 H=0.97767 L=0.97646 C=0.97755 | GATES circuit=OPEN cooldown=CLEAR spread=0.65p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[23] 2022-10-19 12:45 UTC | O=0.97756 H=0.97818 L=0.97726 C=0.97799 | GATES circuit=OPEN cooldown=CLEAR spread=0.68p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[24] 2022-10-19 13:00 UTC | O=0.97801 H=0.97849 L=0.97724 C=0.97783 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[25] 2022-10-19 13:15 UTC | O=0.97783 H=0.97909 L=0.97757 C=0.97830 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[26] 2022-10-19 13:30 UTC | O=0.97830 H=0.97961 L=0.97808 C=0.97839 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[27] 2022-10-19 13:45 UTC | O=0.97839 H=0.97850 L=0.97717 C=0.97739 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[28] 2022-10-19 14:00 UTC | O=0.97738 H=0.97848 L=0.97705 C=0.97846 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[29] 2022-10-19 14:15 UTC | O=0.97845 H=0.98020 L=0.97816 C=0.98007 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[30] 2022-10-19 14:30 UTC | O=0.98015 H=0.98027 L=0.97913 C=0.97948 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[31] 2022-10-19 14:45 UTC | O=0.97948 H=0.98020 L=0.97825 C=0.97904 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[32] 2022-10-19 15:00 UTC | O=0.97903 H=0.97946 L=0.97833 C=0.97842 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[33] 2022-10-19 15:15 UTC | O=0.97841 H=0.97887 L=0.97801 C=0.97831 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[34] 2022-10-19 15:30 UTC | O=0.97832 H=0.97849 L=0.97797 C=0.97807 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[35] 2022-10-19 15:45 UTC | O=0.97809 H=0.97893 L=0.97785 C=0.97790 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[36] 2022-10-19 16:00 UTC | O=0.97790 H=0.97793 L=0.97652 C=0.97734 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[37] 2022-10-19 16:15 UTC | O=0.97734 H=0.97812 L=0.97708 C=0.97734 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[38] 2022-10-19 16:30 UTC | O=0.97733 H=0.97817 L=0.97717 C=0.97750 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[39] 2022-10-19 16:45 UTC | O=0.97750 H=0.97752 L=0.97652 C=0.97660 | GATES circuit=OPEN cooldown=CLEAR spread=0.70p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[40] 2022-10-19 17:00 UTC | O=0.97661 H=0.97692 L=0.97574 C=0.97600 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[41] 2022-10-19 17:15 UTC | O=0.97600 H=0.97731 L=0.97599 C=0.97701 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[42] 2022-10-19 17:30 UTC | O=0.97700 H=0.97738 L=0.97648 C=0.97656 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[43] 2022-10-19 17:45 UTC | O=0.97655 H=0.97696 L=0.97627 C=0.97662 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[44] 2022-10-19 18:00 UTC | O=0.97662 H=0.97741 L=0.97634 C=0.97737 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[45] 2022-10-19 18:15 UTC | O=0.97736 H=0.97786 L=0.97721 C=0.97783 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[46] 2022-10-19 18:30 UTC | O=0.97783 H=0.97783 L=0.97702 C=0.97703 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[47] 2022-10-19 18:45 UTC | O=0.97703 H=0.97711 L=0.97646 C=0.97669 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[48] 2022-10-19 19:00 UTC | O=0.97669 H=0.97722 L=0.97657 C=0.97712 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[49] 2022-10-19 19:15 UTC | O=0.97711 H=0.97768 L=0.97659 C=0.97661 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[50] 2022-10-19 19:30 UTC | O=0.97661 H=0.97716 L=0.97647 C=0.97693 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[51] 2022-10-19 19:45 UTC | O=0.97693 H=0.97732 L=0.97657 C=0.97730 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[52] 2022-10-19 20:00 UTC | O=0.97726 H=0.97757 L=0.97707 C=0.97735 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[53] 2022-10-19 20:15 UTC | O=0.97735 H=0.97760 L=0.97726 C=0.97726 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[54] 2022-10-19 20:30 UTC | O=0.97726 H=0.97753 L=0.97722 C=0.97745 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[55] 2022-10-19 20:45 UTC | O=0.97745 H=0.97746 L=0.97718 C=0.97722 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[56] 2022-10-19 21:00 UTC | O=0.97713 H=0.97720 L=0.97694 C=0.97708 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[57] 2022-10-19 21:15 UTC | O=0.97709 H=0.97728 L=0.97709 C=0.97720 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[58] 2022-10-19 21:30 UTC | O=0.97726 H=0.97745 L=0.97720 C=0.97745 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False
+
+[59] 2022-10-19 21:45 UTC | O=0.97745 H=0.97746 L=0.97716 C=0.97730 | GATES circuit=OPEN cooldown=CLEAR spread=1.20p(model) | SIGNAL low_sweep=False high_sweep=False close_sweep_low=False close_sweep_high=False

@@ -1,0 +1,210 @@
+{
+  "monthly": [
+    {
+      "year_month": "2022-11",
+      "symbol": "EURUSD",
+      "executed_trades": 27,
+      "tp5_wins": 3,
+      "win_rate_percent": 11.11111111111111,
+      "profit_factor": 0.6612775896415064,
+      "max_drawdown_r": 9.478951563948106,
+      "gross_r": -5.57178135959852,
+      "net_r": -7.974146329899692,
+      "data_quality_failures": 1
+    },
+    {
+      "year_month": "2022-12",
+      "symbol": "EURUSD",
+      "executed_trades": 27,
+      "tp5_wins": 6,
+      "win_rate_percent": 22.22222222222222,
+      "profit_factor": 1.9007860162411145,
+      "max_drawdown_r": 6.6446556283851725,
+      "gross_r": 18.61870620382367,
+      "net_r": 15.958862240546686,
+      "data_quality_failures": 1
+    },
+    {
+      "year_month": "2023-01",
+      "symbol": "EURUSD",
+      "executed_trades": 24,
+      "tp5_wins": 5,
+      "win_rate_percent": 20.833333333333332,
+      "profit_factor": 1.4124190336929299,
+      "max_drawdown_r": 3.4460183011124883,
+      "gross_r": 10.223786114101484,
+      "net_r": 7.372868581755482,
+      "data_quality_failures": 1
+    },
+    {
+      "year_month": "2023-02",
+      "symbol": "EURUSD",
+      "executed_trades": 21,
+      "tp5_wins": 4,
+      "win_rate_percent": 19.047619047619047,
+      "profit_factor": 0.9366280757166524,
+      "max_drawdown_r": 7.942087777356078,
+      "gross_r": 1.539325842696635,
+      "net_r": -1.1337577360198956,
+      "data_quality_failures": 0
+    },
+    {
+      "year_month": "2023-03",
+      "symbol": "EURUSD",
+      "executed_trades": 20,
+      "tp5_wins": 6,
+      "win_rate_percent": 30.0,
+      "profit_factor": 2.6683816915847736,
+      "max_drawdown_r": 2.309036994523737,
+      "gross_r": 22.58417096590431,
+      "net_r": 20.2746632714655,
+      "data_quality_failures": 2
+    },
+    {
+      "year_month": "2023-04",
+      "symbol": "EURUSD",
+      "executed_trades": 18,
+      "tp5_wins": 3,
+      "win_rate_percent": 16.666666666666668,
+      "profit_factor": 1.1104800616214645,
+      "max_drawdown_r": 9.20692645132983,
+      "gross_r": 4.034276134122476,
+      "net_r": 1.6305919136274967,
+      "data_quality_failures": 0
+    },
+    {
+      "year_month": "2023-05",
+      "symbol": "EURUSD",
+      "executed_trades": 26,
+      "tp5_wins": 7,
+      "win_rate_percent": 26.923076923076923,
+      "profit_factor": 1.677249124825571,
+      "max_drawdown_r": 6.865993475079643,
+      "gross_r": 16.617256637168435,
+      "net_r": 13.045228199890278,
+      "data_quality_failures": 0
+    },
+    {
+      "year_month": "2023-06",
+      "symbol": "EURUSD",
+      "executed_trades": 20,
+      "tp5_wins": 4,
+      "win_rate_percent": 20.0,
+      "profit_factor": 0.987745624943186,
+      "max_drawdown_r": 6.1180455602505175,
+      "gross_r": 2.7547169811321757,
+      "net_r": -0.21102944460586437,
+      "data_quality_failures": 0
+    },
+    {
+      "year_month": "2023-07",
+      "symbol": "EURUSD",
+      "executed_trades": 23,
+      "tp5_wins": 4,
+      "win_rate_percent": 17.391304347826086,
+      "profit_factor": 1.3253689138505569,
+      "max_drawdown_r": 7.975769506075821,
+      "gross_r": 8.787456174522582,
+      "net_r": 5.882826080777121,
+      "data_quality_failures": 1
+    },
+    {
+      "year_month": "2023-08",
+      "symbol": "EURUSD",
+      "executed_trades": 29,
+      "tp5_wins": 4,
+      "win_rate_percent": 13.793103448275861,
+      "profit_factor": 1.3254867454722647,
+      "max_drawdown_r": 8.514049805150604,
+      "gross_r": 11.588038791406914,
+      "net_r": 7.263595472610915,
+      "data_quality_failures": 1
+    },
+    {
+      "year_month": "2023-09",
+      "symbol": "EURUSD",
+      "executed_trades": 21,
+      "tp5_wins": 5,
+      "win_rate_percent": 23.80952380952381,
+      "profit_factor": 1.1282111855654626,
+      "max_drawdown_r": 7.212008472949381,
+      "gross_r": 5.25,
+      "net_r": 2.3276030773267102,
+      "data_quality_failures": 0
+    },
+    {
+      "year_month": "2023-10",
+      "symbol": "EURUSD",
+      "executed_trades": 26,
+      "tp5_wins": 6,
+      "win_rate_percent": 23.076923076923077,
+      "profit_factor": 1.5236899210436614,
+      "max_drawdown_r": 4.945965292559217,
+      "gross_r": 13.838504535045088,
+      "net_r": 10.640164667592199,
+      "data_quality_failures": 0
+    },
+    {
+      "year_month": "2023-11",
+      "symbol": "EURUSD",
+      "executed_trades": 23,
+      "tp5_wins": 4,
+      "win_rate_percent": 17.391304347826086,
+      "profit_factor": 1.275807201319461,
+      "max_drawdown_r": 7.605924454112603,
+      "gross_r": 6.751940944380928,
+      "net_r": 5.036571761526548,
+      "data_quality_failures": 1
+    },
+    {
+      "year_month": "2023-12",
+      "symbol": "EURUSD",
+      "executed_trades": 19,
+      "tp5_wins": 2,
+      "win_rate_percent": 10.526315789473685,
+      "profit_factor": 0.5924231454171831,
+      "max_drawdown_r": 8.082112732160859,
+      "gross_r": -4.5,
+      "net_r": -7.492089833289471,
+      "data_quality_failures": 1
+    }
+  ],
+  "cross_asset": [
+    {
+      "symbol": "EURUSD",
+      "window": "2022-10-03 to 2022-12-31",
+      "executed_trades": 74,
+      "tp5_wins": 14,
+      "win_rate_percent": 18.91891891891892,
+      "profit_factor": 1.3935419644661657,
+      "max_drawdown_r": 12.313516273133013,
+      "gross_r": 28.11656988682854,
+      "net_r": 21.329302235847727,
+      "data_quality_failures": 2
+    },
+    {
+      "symbol": "GBPUSD",
+      "window": "2022-10-03 to 2022-12-31",
+      "executed_trades": 71,
+      "tp5_wins": 12,
+      "win_rate_percent": 16.901408450704224,
+      "profit_factor": 0.9142228686237832,
+      "max_drawdown_r": 14.805097209274926,
+      "gross_r": -2.4704359147211807,
+      "net_r": -5.03940391859357,
+      "data_quality_failures": 2
+    },
+    {
+      "symbol": "AUDUSD",
+      "window": "2022-10-03 to 2022-12-31",
+      "executed_trades": 60,
+      "tp5_wins": 13,
+      "win_rate_percent": 21.666666666666668,
+      "profit_factor": 1.5869878404693132,
+      "max_drawdown_r": 13.024159513010579,
+      "gross_r": 30.63179705326546,
+      "net_r": 25.97901224886719,
+      "data_quality_failures": 2
+    }
+  ]
+}

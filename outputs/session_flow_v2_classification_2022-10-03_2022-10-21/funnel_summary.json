@@ -1,0 +1,67 @@
+{
+  "contract_id": "SESSION_FLOW_V2_SIMPLE",
+  "contract_version": "2.1-simple",
+  "study": "CLASSIFICATION_ONLY",
+  "period": {
+    "start": "2022-10-03",
+    "end": "2022-10-21"
+  },
+  "symbols": [
+    "EURUSD",
+    "GBPUSD",
+    "USDJPY"
+  ],
+  "execution_metrics": "NOT_AUTHORIZED_NOT_CALCULATED",
+  "counts": {
+    "reference_expected": 90,
+    "reference_valid": 90,
+    "reference_invalid": 0,
+    "trend_sessions": 8,
+    "range_sessions": 82,
+    "range_with_sweep": 81,
+    "range_without_sweep": 1,
+    "trend_setups": 8,
+    "sweep_setups": 81,
+    "range_setups": 1,
+    "entry_valid": 0,
+    "entry_blocked": 82,
+    "no_valid_entry": 0,
+    "tickets": 0,
+    "fills": 0,
+    "results": 0
+  },
+  "metrics": {
+    "valid_reference_rate": 1.0,
+    "trend_session_rate": 0.08888888888888889,
+    "range_session_rate": 0.9111111111111111,
+    "sweep_rate_among_range_sessions": 0.9878048780487805,
+    "range_setup_rate_among_range_sessions": 0.012195121951219513,
+    "trend_entry_valid_rate": 0.0,
+    "trend_ticket_rate": 0.0,
+    "trend_fill_rate": null,
+    "trend_stop_rate_per_fill": null,
+    "trend_4r_rate_per_fill": null,
+    "trend_5r_rate_per_fill": null,
+    "sweep_entry_valid_rate": 0.0,
+    "sweep_ticket_rate": 0.0,
+    "sweep_fill_rate": null,
+    "sweep_stop_rate_per_fill": null,
+    "sweep_4r_rate_per_fill": null,
+    "sweep_5r_rate_per_fill": null,
+    "range_entry_valid_rate": 0.0,
+    "range_ticket_rate": 0.0,
+    "range_fill_rate": null,
+    "range_stop_rate_per_fill": null,
+    "range_4r_rate_per_fill": null,
+    "range_5r_rate_per_fill": null
+  },
+  "equations": {
+    "session_split": true,
+    "range_split": true,
+    "setup_total": true,
+    "trend_setup": true,
+    "sweep_setup": true,
+    "range_setup": true
+  },
+  "funnel_reconciles": true
+}

@@ -1,0 +1,119 @@
+{
+  "strategy_id": "SSPF_V2_3_PRODUCTION_CANDIDATE",
+  "mode": "READ_ONLY_RESEARCH",
+  "trading_date": "2026-07-30",
+  "generated_utc": "2026-08-13T08:11:11.075242+00:00",
+  "entry_window_utc": [
+    "08:00",
+    "11:00"
+  ],
+  "position_hold_end_utc": "2026-07-30T20:00:00+00:00",
+  "intrabar_collision_policy": "STOP_FIRST",
+  "spread_basis": "CONFIGURED_MAXIMUM_PROXY; historical spread unavailable",
+  "execution_authorized": false,
+  "symbols": {
+    "EURUSD": {
+      "broker_symbol": "EURUSD",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "m5_candles": 37,
+      "h4_candles": 22,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "setups": [],
+      "status": "NO_TRADE",
+      "rejection_reason": "GATE_G3_FAIL_CLASSIFICATION_UNCERTAIN",
+      "metrics": {
+        "asian_range_pips": 33.69999999999873,
+        "atr_14d_pips": 58.29285714285711,
+        "dynamic_min_pips": 11.658571428571422,
+        "dynamic_max_pips": 64.12214285714283,
+        "efficiency_ratio": 0.17804154302669334,
+        "classification": "UNCERTAIN",
+        "rejection_wick_ratio": null,
+        "selected_canonical_setup": null
+      }
+    },
+    "GBPUSD": {
+      "broker_symbol": "GBPUSD",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "m5_candles": 37,
+      "h4_candles": 22,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "setups": [],
+      "status": "NO_TRADE",
+      "rejection_reason": "GATE_ASSET_FAIL_GBPUSD_EFFICIENCY_BELOW_0_75",
+      "metrics": {
+        "asian_range_pips": 35.30000000000033,
+        "atr_14d_pips": 86.91428571428571,
+        "dynamic_min_pips": 17.382857142857144,
+        "dynamic_max_pips": 95.6057142857143,
+        "efficiency_ratio": 0.6600566572238367,
+        "classification": "BULLISH_TREND",
+        "rejection_wick_ratio": null,
+        "selected_canonical_setup": null
+      }
+    },
+    "USDJPY": {
+      "broker_symbol": "USDJPY",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "m5_candles": 37,
+      "h4_candles": 22,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "setups": [],
+      "status": "NO_TRADE",
+      "rejection_reason": "GATE_PATTERN_FAIL_NO_CANONICAL_SETUP",
+      "metrics": {
+        "asian_range_pips": 52.79999999999916,
+        "atr_14d_pips": 96.78571428571416,
+        "dynamic_min_pips": 19.357142857142833,
+        "dynamic_max_pips": 106.46428571428558,
+        "efficiency_ratio": 0.9147727272727496,
+        "classification": "BEARISH_TREND",
+        "rejection_wick_ratio": null,
+        "selected_canonical_setup": null,
+        "qualifying_candidates": []
+      }
+    },
+    "XAUUSD": {
+      "broker_symbol": "XAUUSD.crp",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "m5_candles": 37,
+      "h4_candles": 22,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "setups": [],
+      "status": "NO_TRADE",
+      "rejection_reason": "GATE_PATTERN_FAIL_NO_CANONICAL_SETUP",
+      "metrics": {
+        "asian_range_pips": 6449.000000000024,
+        "atr_14d_pips": 8713.857142857143,
+        "dynamic_min_pips": 1742.7714285714287,
+        "dynamic_max_pips": 9585.242857142859,
+        "efficiency_ratio": 0.10048069468134586,
+        "classification": "RANGE",
+        "rejection_wick_ratio": null,
+        "selected_canonical_setup": null,
+        "qualifying_candidates": []
+      }
+    }
+  },
+  "broker_utc_offset_hours": 3
+}

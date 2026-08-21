@@ -8,10 +8,16 @@ system:
   engine_version: "v1.0"
   active_strategy: ASIAN_SESSION_V1
   supersede_legacy: true
+# CORRECTED 2026-08-19 (C-32): this block still carried the superseded 22:00 / 36
+# values alongside the corrected session_start_utc / session_candles below, so the
+# same file stated the Asian window two different ways. Aligned to the corrected
+# reading. Authority: the 2026-08-15 correction at session_start_utc below,
+# SESSION_FLOW_V1_SPEC.md, STRATEGY_SPEC.md S10.
+# sweep_window_hours describes the 07:00-16:00 execution window and is unchanged.
 session_contract:
-  asian_start_utc: "22:00"
+  asian_start_utc: "00:00"
   asian_end_utc: "07:00"
-  required_m15_candles: 36
+  required_m15_candles: 28
   sweep_window_hours: 9
 # Exact broker input -> normalized strategy symbol.  MT5 queries still use the
 # configured broker symbol, so XAUUSD.crp is never queried as bare XAUUSD.

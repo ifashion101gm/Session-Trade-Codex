@@ -1,0 +1,129 @@
+{
+  "analysis_id": "d57191304275",
+  "timestamp_utc": "2026-08-10T08:07:30.538132Z",
+  "session_date": "2026-08-10",
+  "symbol": "GBPUSD",
+  "account": {
+    "login_masked": "****985",
+    "account_type": "demo",
+    "balance": 987.82,
+    "equity": 987.82,
+    "server": "VTMarkets-Demo",
+    "trade_allowed": true,
+    "expert_allowed": true,
+    "ping_ms": 250.672
+  },
+  "bid": 1.35006,
+  "ask": 1.35008,
+  "spread": 1.999999999990898e-05,
+  "broker_utc_offset_hours": 3,
+  "session_high": 1.34978,
+  "session_low": 1.34832,
+  "session_range": 0.0014600000000000168,
+  "midpoint": 1.34905,
+  "session_open": 1.34876,
+  "session_close": 1.34949,
+  "r0": 0.0003650000000000042,
+  "efficiency_ratio": 0.13394495412847432,
+  "classification": "RANGE",
+  "bias": "BULLISH",
+  "setup": "NONE",
+  "sweep": null,
+  "side": null,
+  "order_type": null,
+  "entry": null,
+  "stop_loss": null,
+  "take_profit": null,
+  "actual_r": null,
+  "volume": null,
+  "intended_risk_cash": null,
+  "actual_risk_cash": null,
+  "actual_risk_percent": null,
+  "expiry_utc": null,
+  "gates": [
+    {
+      "name": "G1_ENVIRONMENT",
+      "passed": true,
+      "detail": "account=demo, server=VTMarkets-Demo, login=****985"
+    },
+    {
+      "name": "G3_UNIVERSE",
+      "passed": true,
+      "detail": "symbol=GBPUSD"
+    },
+    {
+      "name": "G0_BROKER_CLOCK",
+      "passed": true,
+      "detail": "verified UTC+3:00, normalized tick age=2s"
+    },
+    {
+      "name": "G2_DATA_INTEGRITY",
+      "passed": true,
+      "detail": "valid session and fresh tick"
+    },
+    {
+      "name": "G4_RANGE_FLOOR",
+      "passed": true,
+      "detail": "range=0.00146, required=0.0008"
+    },
+    {
+      "name": "G5_BREACH_QUALITY",
+      "passed": false,
+      "detail": "sweep conflicts with bias"
+    },
+    {
+      "name": "G6_BIAS_AGREEMENT",
+      "passed": false,
+      "detail": "bias=BULLISH, setup=NONE"
+    },
+    {
+      "name": "G7_STOP_PROTECTION",
+      "passed": true,
+      "detail": "protected"
+    }
+  ],
+  "warnings": [
+    "Only bias-conflicting sweep(s) qualified"
+  ],
+  "candle_times": [
+    "2026-08-09T22:00:00Z",
+    "2026-08-09T22:15:00Z",
+    "2026-08-09T22:30:00Z",
+    "2026-08-09T22:45:00Z",
+    "2026-08-09T23:00:00Z",
+    "2026-08-09T23:15:00Z",
+    "2026-08-09T23:30:00Z",
+    "2026-08-09T23:45:00Z",
+    "2026-08-10T00:00:00Z",
+    "2026-08-10T00:15:00Z",
+    "2026-08-10T00:30:00Z",
+    "2026-08-10T00:45:00Z",
+    "2026-08-10T01:00:00Z",
+    "2026-08-10T01:15:00Z",
+    "2026-08-10T01:30:00Z",
+    "2026-08-10T01:45:00Z",
+    "2026-08-10T02:00:00Z",
+    "2026-08-10T02:15:00Z",
+    "2026-08-10T02:30:00Z",
+    "2026-08-10T02:45:00Z",
+    "2026-08-10T03:00:00Z",
+    "2026-08-10T03:15:00Z",
+    "2026-08-10T03:30:00Z",
+    "2026-08-10T03:45:00Z",
+    "2026-08-10T04:00:00Z",
+    "2026-08-10T04:15:00Z",
+    "2026-08-10T04:30:00Z",
+    "2026-08-10T04:45:00Z",
+    "2026-08-10T05:00:00Z",
+    "2026-08-10T05:15:00Z",
+    "2026-08-10T05:30:00Z",
+    "2026-08-10T05:45:00Z",
+    "2026-08-10T06:00:00Z",
+    "2026-08-10T06:15:00Z",
+    "2026-08-10T06:30:00Z",
+    "2026-08-10T06:45:00Z"
+  ],
+  "config_hash": "1f011b92abb718ca",
+  "approved": false,
+  "status": "NO_TRADE"
+}

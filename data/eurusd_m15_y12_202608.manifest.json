@@ -1,0 +1,56 @@
+{
+  "generator": "scripts/fetch_mt5_year.py",
+  "generator_version": "1.0",
+  "built_utc": "2026-08-16T13:28:57Z",
+  "source_file": "MT5 live pull: EURUSD @ VTMarkets-Demo",
+  "source_sha256": "n/a \u2014 pulled from terminal, not a file",
+  "server_offset_hours": "3 summer / 2 winter (US DST)",
+  "timezone": "UTC (server stamps shifted per-bar by the DST schedule)",
+  "rows": 17898,
+  "utc_start": "2025-08-11 13:30:00",
+  "utc_end": "2026-04-30 23:45:00",
+  "master": {
+    "file": "eurusd_m15_y12_202608.master.csv",
+    "columns": [
+      "timestamp",
+      "open",
+      "high",
+      "low",
+      "close",
+      "volume",
+      "spread"
+    ],
+    "sha256": "9c3145600dde5a82a5a47deb67b4e98f982f1e7c7f403ba45976d133226ff2cf"
+  },
+  "views": {
+    "eurusd_m15_y12_202608_utc.csv": {
+      "purpose": "engine \u2014 asian_session_backtester.py, validate_golden_oct3.py",
+      "columns": [
+        "time",
+        "open",
+        "high",
+        "low",
+        "close",
+        "spread"
+      ],
+      "derived_from": "eurusd_m15_y12_202608.master.csv",
+      "sha256": "ceed90cc7b5aa9e522ebc618d1d13cb519a9159d4acf28e99c9cd52fd8faeeac"
+    },
+    "eurusd_m15_y12_202608_audit.csv": {
+      "purpose": "tooling \u2014 .claude/skills/market-data-quality/scripts/audit_ohlcv.py",
+      "columns": [
+        "timestamp",
+        "open",
+        "high",
+        "low",
+        "close",
+        "volume"
+      ],
+      "derived_from": "eurusd_m15_y12_202608.master.csv",
+      "sha256": "f8a13f8a79d9e70b42a21a6e1acc90e56473a446e1378ed91ffd62dd4a12082b"
+    }
+  },
+  "repaired_utc": "2026-08-16T13:49:42Z",
+  "repair": "float-repr noise removed; prices rounded to 5 decimals (were being read as 16, which zeroed all spread costs)",
+  "price_digits": 5
+}

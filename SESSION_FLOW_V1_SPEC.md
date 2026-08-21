@@ -11,8 +11,12 @@ This contract implements the diagram and nothing else. Supersedes `ASIAN_SESSION
 (`2530b751134fbf6e`): every filter that contract accumulated has been removed. Evidence
 gathered under it **does not transfer** — see `STRATEGY_SPEC.md` §11.
 
-> **DRAFT — NOT EXECUTABLE.** Two decisions in §4 are unsigned. Until they are signed the
-> engine must refuse to load this contract.
+> **DRAFT — NOT EXECUTABLE.** **Three** decisions in §4 are unsigned (4-A, 4-B, 4-C), plus
+> §5.3a and §5.5. Until they are signed the engine must refuse to load this contract.
+>
+> **The active engine is additionally BLOCKED on `ENGINE_FIX_SPEC.md` FIX 0** — the sweep
+> test is vacuous, so `RANGE SETUP` is unreachable (0 of 1030 trades). Version
+> `a6188c364c63f39f` is **rejected**; see `STRATEGY_LEDGER.md`.
 
 ---
 
@@ -92,6 +96,279 @@ fields are usable as a gate. The entry fields pass today.
 
 ---
 
+### 0.0a-i Timezone-offset hypothesis — TESTED AND REFUTED  **2026-08-16**
+
+A review proposed that the `-1.000R` log was an artifact: *"broker time misinterpreted
+as pure UTC, shifting London bars to 15:00 UTC"*, and that the sweep really occurred
+at the London open. Three checkable claims, all tested against
+`data/eurusd_m15_2022_10.master.csv`:
+
+**1 · The offset is already correct, and the review's own test proves it.**
+It recommends *"ensure the Asian window lines up exactly with the blue box (A = 50.2)."*
+It does: **50.1p measured against 50.2p annotated.** A wrong offset would move the box.
+The match is the proof.
+
+**2 · "36-bar Asian construction window (00:00–07:00 UTC)" is arithmetically impossible.**
+00:00–07:00 at M15 is **28 bars**. 36 bars is 9 hours — the **superseded 22:00–07:00
+window**. The review is reasoning from a retired spec.
+
+**3 · There is no sweep at the London open.**
+
+```
+London opens 07:00Z at 0.97979  —  36.5 pips BELOW the Asian high 0.98344
+price then FALLS: 09:45Z low 0.97526
+first bar whose high exceeds the Asian high:  15:00Z   (0.98369)
+```
+
+No bar between 07:00 and 15:00 trades above 0.98344. A sweep of that boundary at the
+London open did not occur on this series.
+
+**Conclusion.** The chart being described is not this date, instrument or feed —
+§0.0a possibilities 1 and 2 remain live and are now the *likeliest* explanations. The
+benchmark's status is **unchanged**: `outcome` UNVERIFIED.
+
+**It has NOT been upgraded to VERIFIED TRUTH.** Upgrading a benchmark on the strength
+of a diagnosis the data refutes is the precise failure §0.0a exists to prevent.
+
+**Note on §0.0b.** This does not disturb the case for Reading C, which rests on
+**benchmark #2** (`london-to-new-york`, 14:15Z NY bar, setup + entry + outcome all
+reproduced only under the execution-window reading). That evidence is independent of
+benchmark #1.
+
+---
+
+### 0.0a-ii The chart image, read structurally — it favours Reading A  **2026-08-16**
+
+The chart was supplied. It shows a tall candle piercing the box top and closing back
+inside, at the box's **right edge**, with a yellow stop band above it and a large
+target box below.
+
+**Where the entry sits relative to the box is the discriminator, and it does not need
+legible digits:**
+
+```
+box top (Asian high)          0.98344
+Reading A entry               0.98256   17.6% of the range BELOW the top  -> visibly inside
+benchmark record entry        0.98342    0.4% below the top               -> would sit ON the line
+```
+
+On the image the `Open PNL` label sits clearly **inside** the box, well below its top
+edge. That is Reading A's geometry, not the recorded `0.98342`.
+
+**Two further consistencies with Reading A:**
+
+- the stop band is drawn **above the spike's wick** — Reading A's stop is `0.98381`,
+  above the 0.98344 high
+- the trade is shown **in profit, heading down toward the target**. Reading A replays
+  as **+3.723R** (TP1 at 09:30Z, 5R at 09:45Z). The execution-window reading replays
+  as **−1R**. A winning chart is consistent with Reading A and not with the alternative.
+
+**Which candle is it?** The 05:45Z bar — `O 0.98103  H 0.98344  L 0.98079  C 0.98256`.
+A tall candle with an upper wick closing back down. It sits at the right edge of the
+box, exactly where the image shows it.
+
+**The unresolved wrinkle.** Under a 00:00–07:00 box the 05:45 candle *makes* the high,
+so it cannot pierce it — yet the image shows the spike above the box line. Only a box
+ending at **05:45** makes it a genuine pierce, and that box measures **44.1p**, not the
+annotated 50.2. Either the box top is drawn at the body/close rather than the wick, or
+the rendering gap is smaller than it appears.
+
+**Label arithmetic does not close either.** `R:R 5.15` with a `61.8` pip target implies
+R = 12.0p and a 48.0p range — matching neither 50.2 nor 44.1. Pixel-level reading of
+five-decimal prices at this resolution is not reliable and no field is being changed on
+it.
+
+**Status unchanged — `outcome` remains UNVERIFIED.** But the balance has shifted: the
+image is *more* consistent with the current §2.1 reference-session reading than with
+the execution-window reading it was offered to support. **Benchmark #2 is unaffected**
+and remains the only non-circular evidence in §0.0b.
+
+---
+
+### 0.0a-ii The chart image, read structurally — it favours Reading A  **2026-08-16**
+
+The chart was supplied. It shows a tall candle piercing the box top and closing back
+inside at the box's **right edge**, a yellow stop band above it, and a large target
+box below.
+
+**Where the entry sits relative to the box is the discriminator, and it needs no
+legible digits:**
+
+```
+box top (Asian high)     0.98344
+Reading A entry          0.98256   17.6% of the range BELOW the top -> visibly inside
+benchmark record entry   0.98342    0.4% below the top              -> would sit ON the line
+```
+
+On the image the `Open PNL` label sits clearly **inside** the box, well below its top
+edge. That is Reading A's geometry, not the recorded `0.98342`.
+
+**Two further consistencies with Reading A:**
+
+- the stop band is drawn **above the spike's wick** — Reading A's stop is `0.98381`,
+  above the 0.98344 high
+- the trade is shown **in profit, heading toward the target**. Reading A replays as
+  **+3.723R** (TP1 09:30Z, 5R 09:45Z); the execution-window reading replays as
+  **−1R**. A winning chart is consistent with A and not with the alternative.
+
+**The candle is the 05:45Z bar** — `O 0.98103  H 0.98344  L 0.98079  C 0.98256`. Tall,
+upper wick, closes back down, sitting at the right edge of the box exactly where the
+image shows it.
+
+**Unresolved wrinkle.** Under a 00:00–07:00 box the 05:45 candle *makes* the high, so
+it cannot pierce it — yet the image shows the spike above the box line. Only a box
+ending at **05:45** makes it a true pierce, and that box measures **44.1p**, not the
+annotated 50.2. Either the box top is drawn at the body rather than the wick, or the
+rendering gap is smaller than it looks.
+
+**Label arithmetic does not close either.** `R:R 5.15` with a `61.8`-pip target implies
+R = 12.0p and a 48.0p range — matching neither 50.2 nor 44.1. Five-decimal prices are
+not reliably readable at this resolution and no field is being changed on them.
+
+**Status unchanged — `outcome` remains UNVERIFIED.** But the balance has shifted: the
+image is *more* consistent with the current §2.1 reference-session reading than with
+the execution-window reading it was offered to support. **Benchmark #2 is unaffected**
+and remains the only non-circular evidence in §0.0b.
+
+---
+
+### 0.0b-R RESOLVED — Reading A confirmed by the trader  **2026-08-17**
+
+The trader supplied the Oct-3 London chart from the source video and stated:
+**"this entry is same, no need to refine."**
+
+```
+engine (Reading A, 05:45Z Asian candle body)   0.98256   17.6% of range below the box top
+record (Reading B/C, 15:15Z London candle)     0.98342    0.4% below the top -> ON the line
+```
+
+On the chart the `Open PNL` label sits **clearly inside the box**, well below its top
+edge. That is Reading A's geometry. Combined with the trader's statement, **§2.1
+stands as written: the sweep is read in the REFERENCE session.**
+
+**The chart's own labels also resolve §0.0a.** `Risk/Reward Ratio 5.15` with a `64.0`
+pip target implies R = 12.43p against the contract's 12.525p, putting the target
+1.4 pips **beyond** 5R:
+
+```
+contract 5R  62.6 pips        chart target  64.0 pips = 5.11R
+```
+
+A dragged-target artifact, not a rule difference — which is §0.0a **possibility #3**,
+*"5.0 R is the target's label, not the realised result"*, now confirmed. The recorded
+`+5R` means **the target was reached**; the realised blended figure is `+3.723R`
+because 75% banks earlier at the opposite boundary. Both are correct descriptions of
+the same trade.
+
+**Consequences**
+
+- §2.1 reference-session sweep: **confirmed**, no change
+- §5.3 twice-daily static desk: **retained** — Reading A requires no intraday watching
+- `benchmarks/truth_source_setups.json` entry `0.98342` is **superseded**; it was
+  engine-reproduced under the pre-correction contract, never trader-confirmed
+- §0.0a `outcome` status upgrades from UNVERIFIED to **VERIFIED — target reached**
+
+**Benchmark #2 — resolved the same day, and it overturns the record.** The trader
+supplied the Oct-3 **New York** chart and states: **TREND setup, SHORT, result a miss.**
+
+```
+                        setup   dir     entry      result
+TRADER (video)          TREND   SHORT   —          miss
+ENGINE (Reading A)      TREND   SHORT   0.97900    STOP -1.000R
+old benchmark record    SWEEP   SHORT   0.98181    STOP_LOSS
+```
+
+The engine matches the trader on setup and direction. **The stored record does not** —
+it says SWEEP where the trader says TREND. Like benchmark #1, its entry was
+engine-reproduced under the pre-correction contract and was never trader-confirmed.
+
+**`truth_source_setups.json` benchmark #2 is SUPERSEDED.** Per its own schema rule —
+*"source/feed disagreement must be retained, never overwritten"* — the old row stays
+with a superseded flag rather than being edited.
+
+**§0.0b is therefore fully closed. Reading A matches the trader on BOTH Oct-3 legs.**
+§2.1 (reference-session sweep) and §5.3 (twice-daily static desk) both stand. No
+refinement required.
+
+### Conformance scope  **[TRADER] — 2026-08-17**
+
+> *"The engine only needs to calculate and produce trend (from range or trend),
+> short (up trend or down trend)."*
+
+**Conformance against the source video is scored on the CLASSIFICATION, not on price
+levels:**
+
+| Scored | Not scored |
+|---|---|
+| range-or-trend (§4-B) | entry / stop / target prices |
+| bull-or-bear direction (§4-A) | fill timing |
+| swept-or-not, when range (§2.1) | realised R |
+
+Prices remain derived quantities — `entry` follows from the setup, `stop` is 25% of
+range, `target` is 5R — so a correct classification determines them. A price mismatch
+with a correct classification is a feed or reading difference, not a rule defect.
+
+---
+
+### 0.0b UNRESOLVED — three [TRADER] rulings that cannot all hold  **2026-08-16**
+> **Superseded 2026-08-17 for benchmark #1 — see §0.0b-R above.** Retained because
+> benchmark #2 remains unexplained under the confirmed reading.
+
+
+An architectural review re-opened the sweep reading. The conflict is real and only the
+trader can settle it.
+
+| | Ruling | Tag |
+|---|---|---|
+| **§0.0** | the benchmark is truth; refine the strategy to match it | `[TRADER]` |
+| **§2.1** | the sweep is read in the **reference** session | `[TRADER]` 2026-08-15 |
+| **§5.3** | the engine runs **twice a day**, never continuously | `[TRADER]` |
+
+**They are mutually inconsistent on the 2022-10-03 benchmark.** Its confirmed entry
+`0.98342` is the body of the **15:15Z candle — a London bar**. Under §2.1 the engine
+reads the Asian session and returns `0.98256`, from the 05:45Z bar:
+
+```
+benchmark entry (15:15Z LONDON body)   0.98342
+corrected engine (05:45Z ASIAN body)   0.98256
+gap                                       8.6 pips
+```
+
+**§0.0a is stale.** Its claim that *"the engine reproduces the entry exactly — 10/10
+fields"* was written about the **pre-correction** contract. Under §2.1 as corrected,
+the entry field does **not** reproduce. §0.0 is therefore violated by §2.1.
+
+### This is also the root of FIX 0
+
+`ENGINE_FIX_SPEC.md` FIX 0 records that `RANGE SETUP` is unreachable because
+`swept = body < session_high` is trivially true. **That is not a coding defect. It is
+what the §2.1 reading forces.** The Session Top *is* the session's highest high, so
+nothing inside the session can pierce beyond it — the sweep test is self-referential
+by construction, and any implementation of it degenerates.
+
+Under an execution-window reading the test is well-posed: London price can genuinely
+pierce the Asian high and close back inside, and a session where that never happens
+stays `RANGE`. **The dead branch and the sweep reading are one question, not two.**
+
+### Options — not to be resolved by the engine
+
+| | Reading | Keeps | Breaks |
+|---|---|---|---|
+| **A** | reference-session sweep *(current)* | §2.1, §5.3 | §0.0; `RANGE` unreachable |
+| **B** | execution-window sweep *(pre-correction)* | §0.0, `RANGE` live | §5.3 — requires watching |
+| **C** | **hybrid**: freeze RANGE/TREND limits at the reference close; monitor only for SWEEP during execution | §0.0, `RANGE` live | §5.3 partially — one watched condition |
+
+**Do not adopt B or C on the strength of the benchmark alone.** §0.0a already records
+that this benchmark's **`outcome` is UNVERIFIED** — its 5R is unreachable from its own
+entry, with four unresolved explanations including *wrong date*, *different feed*, and
+*"5.0 R is the target's label, not the realised result."* A workflow change justified
+by a record that may itself be mislabelled would repeat the error §0.0a exists to
+prevent.
+
+**Sequence: confirm the benchmark first, then choose the reading.**
+
+---
+
 ## 0.1 The shape of a trading day  **[TRADER]**
 
 Two entries per symbol per day, no more. Each runs the diagram once, against exactly one range:
@@ -123,9 +400,24 @@ London range and nothing else.** Full statement in §5.
       SWEEP SETUP      RANGE SETUP   TREND SETUP
 ```
 
+> ### [TRADER] RULING — 2026-08-16 · there is no NO-TRADE terminal
+>
+> **"On this strategy the NO-TRADE branch can never fire."**
+>
+> The tree has exactly three terminal boxes and no fourth. **Every graded session
+> produces a plan.** `BIAS TREND` is therefore a direction **selector**, never a veto.
+>
+> **Retracted with this ruling:** the agent document's *"Mismatch → NO TRADE"* and
+> its §7 *"Bias filter is mandatory."* Neither is in the frame. Same class of error
+> as the "middle portion" gloss in §4-B — reviewer wording promoted to source.
+>
+> **Consequence.** The 12-month result (1030 trades, −0.114R/trade) was recorded with
+> a scope note saying it measured an unfiltered superset. **That note is void** —
+> there is no filter to omit, and the engine took the trade count the strategy takes.
+
 Three decisions, in order:
 
-1. **Bull or bear?**  → §4-A **[UNSIGNED]**
+1. **Bull or bear?**  → §4-A **[UNSIGNED]** — selector only, per the ruling above
 2. **Range or trend?**  → §4-B **[UNSIGNED]**
 3. **If range: swept or not swept?**  → §2.1 **[DIAGRAM]**
 
@@ -229,6 +521,23 @@ a single price.
 
 ---
 
+### 2.4 A swept range session terminates at SWEEP, never RANGE  **[TRADER] — signed 2026-08-16**
+
+Query raised: on `RANGE?=YES` + `SWEEP?=YES`, is the entry the sweep candle body or
+the session top/bottom?
+
+**Answer: the sweep candle body — SWEEP SETUP.** Confirmed against the video
+walkthrough. It matches the frame: `SWEEP DURING SESSION?` sits under the YES arm of
+`IS RANGE SESSION?`, and its own YES arm drops into `SWEEP SETUP`.
+
+**Consequence: `RANGE SETUP` fires only on a range session with NO sweep.**
+
+This is a **signed rule, not a parameter** — it does not enter the sensitivity grid.
+
+**The engine already implements this branch order correctly** (`session_flow.py:79-93`).
+The defect is not the tree; it is the sweep *test* that feeds it — see
+`ENGINE_FIX_SPEC.md` FIX 0.
+
 ## 3. What was removed from `ASIAN_SESSION_V1`
 
 Every one of these is absent from the diagram:
@@ -268,7 +577,21 @@ Measured across fifteen days: `close_location` +4.500R / 24 trades · `sign` +11
 **The engine currently defaults to `close_location`** because it is the only reading consistent
 with the confirmed truth. That is a benchmark constraint, not a sign-off.
 
-### 4-B · "IS RANGE SESSION?" — range or trend?  **[UNSIGNED]**
+### 4-B · "IS RANGE SESSION?" — range or trend?  **[UNSIGNED — the diagram supplies NO test]**
+
+> **RETRACTION, 2026-08-16.** Earlier drafts of this section and of the agent
+> document carried *"open and close both sit inside the middle portion of the
+> range"* as though it came from the source. **It does not.** The flowchart poses
+> `IS RANGE SESSION?` and gives no definition at all. That wording was a gloss
+> written by a reviewer and then treated as source — exactly the drift the
+> provenance tags exist to stop.
+>
+> Consequence: the efficiency ratio is an interpretation, and so is the gloss.
+> Rejecting the gloss across five bands rejected one interpretation in favour of
+> another, not the source. **Any single test is an undeclared free parameter
+> sitting on the tree's only fork**, silently deciding which bucket every session
+> lands in. See `ENGINE_FIX_SPEC.md` FIX 3 for the six-candidate grid and the
+> pre-registered identified / not-identified protocol.
 
 The diagram shows a yes/no branch and gives no test. The engine currently uses
 `efficiency_ratio = |close − open| ÷ range <= 0.35`, carried over from `ASIAN_SESSION_V1`, which
@@ -426,13 +749,86 @@ is why the original correction to 00:00–07:00 was not caught by the golden cas
 06:00 and 07:00 ranges differ. Until then the contract stays on `00:00–07:00 / 28 bars` and
 this section records the discrepancy rather than acting on it.
 
+### 5.3b Leg-2 reference window — **SIGNED 2026-08-16** · `07:00–12:00 / 20 bars` · **[BENCHMARK]**
+
+Previously carried from `SESSION_TRADING_SOURCE_WORKFLOW_V2` by inheritance and marked
+**[UNSIGNED]**. It is now signed on benchmark evidence and promoted from `[UNSIGNED]` to
+`[BENCHMARK]`.
+
+**The evidence.** The 2022-10-06 trader chart (`benchmarks/SOURCE_ENTRIES.md` #19) carries
+`Target 0.98544` with its own `34.8` pip distance label, implying an entry of `0.98892`.
+Every candidate leg-2 window from 05:00–12:00 through 11:00–14:00 was scored against it:
+
+```
+  06:00-13:00   28 bars   67.2p   TREND SHORT   0.98892   0.00 pip
+  07:00-12:00   20 bars   62.7p   TREND SHORT   0.98894   0.15 pip
+  07:00-13:00   24 bars   65.1p   TREND SHORT   0.98881   1.05 pip
+  06:00-12:00   24 bars   64.8p   TREND SHORT   0.98904   1.20 pip
+  08:00-12:00   16 bars   55.1p   TREND SHORT   0.98856   3.65 pip
+  09:00-12:00   12 bars   44.6p   TREND SHORT   0.98803   8.90 pip
+```
+
+Only two windows land inside one pip. **`07:00–12:00` is chosen over `06:00–13:00`** on two
+grounds that outrank a 0.15-pip residual:
+
+1. **`06:00–13:00` overlaps leg 1.** The leg-1 reference is `00:00–07:00`, confirmed
+   independently by two benchmarks — Oct 3 (`A = 50.2` vs 50.1p) and Oct 6 (`A = 33.3` vs
+   33.3p). A leg-2 reference starting at 06:00 would re-consume an hour already inside leg 1's
+   locked range, which no reading of the diagram supports.
+2. **`06:00–13:00` moves the desk clock.** §5.3 is **[TRADER]**-signed: run 2 is at **12:00
+   UTC**. A window closing at 13:00 would put the run an hour later and contradict a
+   higher-provenance rule.
+
+A 0.15-pip residual is well inside the resolution at which the chart label was read. The
+0.00-pip fit of `06:00–13:00` is recorded as the runner-up, not discarded — if a future
+benchmark separates them, this decision is re-openable at a version bump.
+
+**What this does NOT resolve.** The same Oct-6 chart implies a stop of roughly **7.0 pips**,
+where `stop = 25% of range` gives **15.7p** on this window — and **16.8p** on the runner-up.
+The window is therefore *not* the cause of the stop discrepancy. That belongs to the sizing
+rule and is tracked separately; see §4-C and the note on #19.
+
+### 5.6 Ticket guidance — place promptly  **[TRADER] — 2026-08-17**
+
+**This is ticket content, not engine behaviour.** The system produces a ticket; the
+trader places the order. Nothing here changes what the engine computes.
+
+Every ticket carries a placement recommendation:
+
+```
+PLACEMENT     : place this order as soon as possible after the reference close.
+                The plan is complete at 07:00 / 12:00 UTC — waiting for
+                confirmation, a retest, or a second signal is not part of the
+                strategy and costs fills.
+```
+
+**What it is not.** It is not an instruction to enter at market. The order price is
+the setup's own level from §2 — sweep candle body, session boundary, or midpoint —
+and it rests there until filled or until the execution window closes.
+
+Measured on the Oct-2022 fixture, why prompt placement matters:
+
+```
+price already beyond the entry when the order is placed   0 of 30
+fills on the very first bar                               7 of 30   23%
+fills within one hour                                    11 of 30   37%
+never fills                                               6 of 30   20%
+```
+
+Nothing is ever missed by being *late* to a level price has already passed — that
+case does not occur. But 23% fill on the first bar of the execution session, so a
+ticket acted on late loses those outright.
+
+Unfilled at the window close is `EXPIRED_UNFILLED` — a **miss**, not a skip, and not
+a NO-TRADE (§1 ruling).
+
 ### 5.4 Window provenance
 
 The three-decision logic and the setups are **[DIAGRAM]**. The clock is not: session boundaries
 and candle counts are operational configuration. Leg 1's `00:00–07:00 / 28 bars` was determined
 empirically — only that window reproduces the confirmed-truth levels for 2022-10-03
-(`STRATEGY_SPEC.md` §10). Leg 2's `07:00–12:00 / 20 bars` is carried from the trader's earlier
-`SESSION_TRADING_SOURCE_WORKFLOW_V2` and is **[UNSIGNED]**.
+(`STRATEGY_SPEC.md` §10). Leg 2's `07:00–12:00 / 20 bars` is **signed as of 2026-08-16**; see
+§5.3b.
 
 ---
 

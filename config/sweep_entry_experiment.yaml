@@ -1,0 +1,41 @@
+strategy_id: SESSION_SWEEP_ENTRY_EXPERIMENT
+strategy_version: "0.2.0"
+status: RESEARCH_ONLY
+source: "ChatGPT share 6a86f231-bff0-83ea-8e68-dd46b3854b5b"
+
+# This is deliberately side-by-side with SESSION_FLOW_V1. It does not replace it.
+data:
+  timeframe: M15
+  timezone: UTC
+  reference_window: "00:00-08:00"
+  reference_bars: 32
+  execution_window: "08:00-16:00"
+  source_timezone: "BROKER_SERVER"
+  source_utc_offset_hours: 3
+
+frozen_baseline_assumptions:
+  bias: "UNRESOLVED/B1 — evaluate LONG and SHORT geometry separately; do not choose direction here"
+  regime: "ER = abs(close-open)/range; ER >= 0.60 = TREND, otherwise RANGE"
+  sweep_counter_bias_action: DEFER_TO_LOCKED_BIAS_ENGINE
+
+proposed_rules:
+  reclaim_clearance_fraction: 0.025
+  structural_stop_gate: true
+  structural_stop_failure: FIXED_RISK_SL_INSIDE_SWEEP_EXTREME
+  variants:
+    - SWEEP_CLOSE_ENTRY
+    - POST_SWEEP_CONFIRMATION_ENTRY
+
+risk:
+  stop_fraction_of_reference_range: 0.25
+  partial_target_r: 4.0
+  partial_close_fraction: 0.75
+  final_target_r: 5.0
+  intrabar_collision: STOP_FIRST
+
+governance:
+  baseline_mutation_allowed: false
+  sealed_data_allowed: false
+  promotion_allowed_from_this_sample: false
+  note: "Oct 3-21 is diagnostic/in-sample; the 2.5% clearance is predeclared, not optimized here."
+  fill_model: "IDEALIZED_SIGNAL_BAR_CLOSE — research approximation, not a guaranteed executable close fill"

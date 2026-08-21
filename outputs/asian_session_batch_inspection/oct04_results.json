@@ -1,0 +1,66 @@
+{
+  "strategy": "ASIAN_SESSION_REALIGNED_V1",
+  "source": "VT Markets (Pty) Ltd / VTMarkets-Demo",
+  "period": {
+    "start": "2022-10-01",
+    "end": "2022-10-22"
+  },
+  "trading_days": 1,
+  "assumptions": {
+    "asian_utc": "00:00-07:00",
+    "execution_utc": "07:00-20:00",
+    "range_classification": "efficiency<=0.35; otherwise direction follows Asian displacement (no uncertain state)",
+    "signals": "closed-bar confirmation; pending entry may fill only on later bars",
+    "asian_close_sweeps": "wick through the final Asian close and close back across it",
+    "collision": "STOP_FIRST",
+    "trend_trail": "breakeven floor after 4R; 5R target",
+    "slippage_pips_round_trip": 0.2,
+    "spread_fallback_policy": "dynamic: transitions 1.0; active hours 0.4-0.7; off-hours 1.2 pips",
+    "minimum_asian_range_pips": 10.0,
+    "max_trades_per_symbol_session": 3,
+    "execution_end_utc": "22:00",
+    "momentum_filter_disabled": false,
+    "daily_target_lock": "TP5_HIT",
+    "max_session_loss_r": -2.0,
+    "post_loss_cooldown_bars": 4,
+    "sweep_momentum_body_multiplier_diagnostic": 1.5,
+    "minimum_directional_sweep_wick_ratio": 0.35
+  },
+  "sessions": [
+    {
+      "date": "2022-10-04",
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_range_pips": 65.99999999999939,
+      "signals": 0,
+      "executed_trades": 0,
+      "session_realized_gross_r": 0.0,
+      "cooldown_until_bar_index": 0,
+      "last_loss_timestamp": null,
+      "cooldown_bars_skipped": 0,
+      "circuit_breaker": null,
+      "trades": []
+    }
+  ],
+  "trades": [],
+  "summary": {
+    "generated_signals": 0,
+    "executed_trades": 0,
+    "trades": 0,
+    "tp5_wins": 0,
+    "win_rate": null,
+    "gross_r": 0,
+    "net_r_spread_only": 0,
+    "net_r_with_friction": 0,
+    "gross_pip_gain": 0,
+    "winning_target_pips": 0,
+    "historical_spread_trades": 0,
+    "dynamic_spread_trades": 0,
+    "stop_losses": 0,
+    "momentum_rejections": 0,
+    "daily_target_locks": 0,
+    "max_loss_locks": 0,
+    "cooldown_bars_skipped": 0
+  },
+  "won_trades": []
+}

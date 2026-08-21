@@ -1,0 +1,64 @@
+{
+  "analysis_id": "4f32ef6cf61b",
+  "timestamp_utc": "2026-08-10T06:00:22.087760Z",
+  "session_date": "2026-08-10",
+  "symbol": "XAUUSD.crp",
+  "account": {
+    "login_masked": "****985",
+    "account_type": "demo",
+    "balance": 987.82,
+    "equity": 987.82,
+    "server": "VTMarkets-Demo",
+    "trade_allowed": true,
+    "expert_allowed": true,
+    "ping_ms": 250.672
+  },
+  "bid": 4345.44,
+  "ask": 4345.7,
+  "spread": 0.2600000000002183,
+  "session_high": null,
+  "session_low": null,
+  "session_range": null,
+  "midpoint": null,
+  "session_open": null,
+  "session_close": null,
+  "r0": null,
+  "efficiency_ratio": null,
+  "classification": "UNCLASSIFIED",
+  "bias": "NONE",
+  "setup": "NONE",
+  "sweep": null,
+  "side": null,
+  "order_type": null,
+  "entry": null,
+  "stop_loss": null,
+  "take_profit": null,
+  "actual_r": null,
+  "volume": null,
+  "intended_risk_cash": null,
+  "actual_risk_cash": null,
+  "actual_risk_percent": null,
+  "expiry_utc": null,
+  "gates": [
+    {
+      "name": "G1_ENVIRONMENT",
+      "passed": true,
+      "detail": "account=demo, server=VTMarkets-Demo, login=****985"
+    },
+    {
+      "name": "G3_UNIVERSE",
+      "passed": true,
+      "detail": "symbol=XAUUSD.crp"
+    },
+    {
+      "name": "G2_DATA_INTEGRITY",
+      "passed": false,
+      "detail": "stale tick (-10799s old)"
+    }
+  ],
+  "warnings": [],
+  "candle_times": [],
+  "config_hash": "1f011b92abb718ca",
+  "approved": false,
+  "status": "NO_TRADE"
+}

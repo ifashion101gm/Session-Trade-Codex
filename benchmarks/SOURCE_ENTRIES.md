@@ -17,7 +17,7 @@ each row when known.
 | 1 | 2022-10-03 | **50.2p** | BEAR | SWEEP | SHORT | 0.98342 | 0.9846725 | 0.9771575 | 5R | ✅ |
 | 2 | 2022-10-04 | **43.2p** | BULL | — | LONG | — | — | — | R:R 5.00 | ✅ |
 | 3 | 2022-10-05 | **31.1p** | BULL | TREND | LONG | — | — | — | — | ✅ |
-| 4 | 2022-10-06 | | | | | | | | | |
+| 4 | 2022-10-06 | **33.3p** | BEAR | TREND | SHORT | — | — | — | **−1R** | ✅ |
 | 5 | 2022-10-07 | | | | | | | | | |
 | 6 | 2022-10-10 | | | | | | | | | |
 | 7 | 2022-10-11 | | | | | | | | | |
@@ -37,7 +37,7 @@ each row when known.
 | 16 | 2022-10-03 | 74.7p | BEAR | SWEEP | SHORT | 0.98181 | 0.9836775 | 0.9724725 | STOP_LOSS | ✅ |
 | 17 | 2022-10-04 | | BULL | TREND | LONG | — | — | — | — | ✅ |
 | 18 | 2022-10-05 | | | | | | | | | |
-| 19 | 2022-10-06 | | | | | | | | | |
+| 19 | 2022-10-06 | | — | — | SHORT | ~0.98894 | — | 0.98544 | R:R 5 | ✅ |
 | 20 | 2022-10-07 | | | | | | | | | |
 | 21 | 2022-10-10 | | | | | | | | | |
 | 22 | 2022-10-11 | | | | | | | | | |
@@ -52,7 +52,7 @@ each row when known.
 
 ---
 
-**Recorded: 5 of 30.**
+**Recorded: 7 of 30.** One earlier chart supplied and not yet placed — see the UNPLACED note.
 
 ## Notes taken from the charts, not computed
 
@@ -65,6 +65,58 @@ each row when known.
   LONG**. Target box above, stop box below. A `Target` label sits at the top of the target box
   and an `Open PNL` label with a `Risk/Reward Ratio` sits at the entry; prices not legible at
   the supplied resolution.
+- **UNPLACED CHART · long, entry label ~`0.97133`, stop ~16.2p, target ~51.6p.** Offered as
+  "Oct 11 Asian→London, RANGE, BULL". **Candle data rules that out and points at the other
+  leg.** Checked against `data/eurusd_m15_2022_10`:
+
+  | | Oct 11 **Asian**→London | Oct 11 **London**→NY |
+  |---|---|---|
+  | reference width | 52.2p (`0.96706`–`0.97228`) | 48.8p (`0.96893`–`0.97381`) |
+  | close_location | 0.38 → **BEAR** | 0.73 → **BULL** ✓ |
+  | direction | SHORT ✗ | **LONG** ✓ |
+  | engine entry | 0.96967 | **0.97137** ✓ (0.4p from the label) |
+
+  The Asian session on Oct 11 opens at `0.97109` and falls all day to `0.96706` at 04:45 —
+  it cannot produce a long. The London session rises from `0.96893` at the 07:00 open to
+  `0.97381` at 11:15. So the box on that chart is the **London** range and the trade is the
+  **New York** entry (slot #22), not #7.
+
+  Two residuals, unresolved: the engine calls it **TREND** (entry = midpoint) where the trader
+  said RANGE — a midpoint entry *is* TREND under this contract — and the stop reads ~16.2p
+  against an engine 12.2p. **Competing candidate: Oct 13 London→NY**, BULL TREND LONG at
+  `0.97192` with a 16.9p stop — matches the stop better, the entry worse.
+  **Discriminator: the reference-range annotation. 48.8p → Oct 11 · 67.7p → Oct 13.**
+- **#4 · 2022-10-06 London** and **#19 · 2022-10-06 New York** — one chart, both legs, date
+  **confirmed three independent ways**: the axis marker reads `Thu 06 Oct '22` (Oct 6 2022 was
+  a Thursday); the box annotation reads `A = 33.3` and the Asian session measures **33.3p**;
+  and the `−1R` label on the first trade matches the engine's replay exactly.
+
+  **#4 is the first full engine↔chart agreement outside the Oct-3 golden case.**
+
+  ```
+  ASIAN 00:00-07:00   hi 0.99263  lo 0.98930  33.3p  close 0.98965  BEAR  ER 0.468
+  plan                TREND SHORT  entry 0.99096  stop 0.99180  tp2 0.98680
+  replay              filled 07:00 (high 0.99115)
+                      stopped 07:45 (high 0.99207 > 0.99180), no target touched
+  result              -1R          <- the chart's own label
+  ```
+
+  **#19 agrees on the entry and disagrees on the stop.** The chart's `Target 0.98544` carries
+  a `34.8` pip distance, which back-solves to an entry of `0.98892` — the engine's London→NY
+  entry is `0.98894`, a 0.2 pip difference. But:
+
+  | | chart | engine |
+  |---|---|---|
+  | entry | ~0.98894 | 0.98894 ✓ |
+  | target distance | 34.8p | 78.4p (5R) ✗ |
+  | implied risk at R:R 5 | ~7.0p | 15.7p (25% of 62.7p) ✗ |
+  | fill | tool drawn as open | **UNFILLED** — exec 12:00–18:00 high is 0.98823 ✗ |
+
+  So the trader and the engine choose the *same price* off the London range but size the stop
+  differently, and our execution window never reaches the limit. Two candidate explanations,
+  neither adopted: the trader's leg-2 reference window is not 07:00–12:00 (**§5.3a, unsigned**),
+  or the position tool is a drawn plan rather than a filled trade. **Do not treat #19's stop or
+  target as benchmark values until this resolves.**
 - **#16 · 2022-10-03 New York** — from `truth_source_setups.json`, `USER_CONFIRMED_TRUTH`.
 - **#17 · 2022-10-04 New York** — trader states **BULL, TREND**. Long: target box above, stop
   box below. Chart shows both the Asian box (`A = 43.2`) and the London box, with two position

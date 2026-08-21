@@ -64,7 +64,10 @@ def levels(ref):
             "bias": "BULL" if loc >= 0.50 else "BEAR"}
 
 
-def plan(ref, lv, er_max):
+THETA_REJ = 0.05          # signed 2026-08-16 — see Q3 below
+
+
+def plan(ref, lv, er_max, theta_rej=THETA_REJ):
     """All three questions, answered from the reference session alone."""
     bear = lv["bias"] == "BEAR"
     sgn = -1 if bear else 1          # direction multiplier for a short/long
@@ -76,21 +79,70 @@ def plan(ref, lv, er_max):
                     sl=e - sgn * R, tp1=e + sgn * 4 * R, tp2=e + sgn * TP2_R * R,
                     swept=None, sweep_bar=None)
 
-    # Q3 — did the candle that made the relevant extreme reject it?
-    ext = lv["hi"] if bear else lv["lo"]
-    sw = [b for b in ref if (b["h"] if bear else b["l"]) == ext][-1]
-    body = max(sw["o"], sw["c"]) if bear else min(sw["o"], sw["c"])
-    swept = (body < ext) if bear else (body > ext)
+    # Q3 — did the candle that made the relevant extreme REJECT it?
+    #
+    # SIGNED 2026-08-16.  The old test was `body < ext`, which is true unless the
+    # candle closed exactly on its own extreme — so SWEEP fired 1486/1486 and
+    # RANGE was unreachable code.  A body edge is always inside its own wick;
+    # asking "is it inside" asks nothing.  The question is HOW FAR inside, as a
+    # fraction of the session range:
+    #
+    #     rejection_ratio = (high - body_high) / range     bear
+    #                     = (body_low - low)   / range     bull
+    #
+    #   >= THETA_REJ  ->  liquidity was pushed back  ->  SWEEP
+    #   <  THETA_REJ  ->  price held at the boundary ->  RANGE
+    #
+    # THETA_REJ is [UNSIGNED-derived]: chosen on the 1486-session distribution
+    # (median 0.089) to land RANGE at 27.3%, inside the 20-50% acceptance band.
+    # It is a declared parameter, not a source rule.  Registry: AGENT_SKILLS B7.
+    # FIX 1, 2026-08-17 — detect BOTH sides independently, then let the swept
+    # side choose the direction.
+    #
+    # The old code did:   bias -> pick a side -> look for a sweep there
+    # which finds the sweep it already expects. The source says the opposite:
+    # observe which boundary was swept, and trade AWAY from it. Under the old
+    # form that rule never executed.
+    def _rejection(high_side):
+        ext = lv["hi"] if high_side else lv["lo"]
+        sw = [b for b in ref if (b["h"] if high_side else b["l"]) == ext][-1]
+        body = max(sw["o"], sw["c"]) if high_side else min(sw["o"], sw["c"])
+        rej = ((ext - body) if high_side else (body - ext)) / lv["rng"] if lv["rng"] else 0.0
+        return rej, sw, body
 
-    if swept:
-        e = body
-        return dict(setup="SWEEP", dir="SHORT" if bear else "LONG", entry=e,
-                    sl=e - sgn * R, tp1=lv["lo"] if bear else lv["hi"],
-                    tp2=e + sgn * TP2_R * R, swept=True, sweep_bar=sw)
-    e = ext
+    rej_h, sw_h, body_h = _rejection(True)
+    rej_l, sw_l, body_l = _rejection(False)
+    high_swept, low_swept = rej_h >= theta_rej, rej_l >= theta_rej
+
+    if high_swept and low_swept:
+        # both extremes rejected — take the LATER one, it is the live liquidity
+        # event going into the execution session.  [UNSIGNED — declared]
+        take_high = sw_h["t"] >= sw_l["t"]
+    elif high_swept or low_swept:
+        take_high = high_swept
+    else:
+        take_high = None
+
+    if take_high is not None:
+        # SWEEP — direction is set by the SWEPT SIDE, not by bias
+        e = body_h if take_high else body_l
+        sgn_s = -1 if take_high else 1            # high swept -> SHORT
+        return dict(setup="SWEEP", dir="SHORT" if take_high else "LONG", entry=e,
+                    sl=e - sgn_s * R, tp1=lv["lo"] if take_high else lv["hi"],
+                    tp2=e + sgn_s * TP2_R * R, swept=True,
+                    sweep_bar=sw_h if take_high else sw_l,
+                    dir_source="swept_side", both_swept=high_swept and low_swept,
+                    rej_high=rej_h, rej_low=rej_l)
+
+    # RANGE — neither extreme rejected. Bias is the SELECTOR here, and only here:
+    # bull buys the bottom, bear sells the top.  (§1 ruling: no NO-TRADE terminal.)
+    e = lv["hi"] if bear else lv["lo"]
     return dict(setup="RANGE", dir="SHORT" if bear else "LONG", entry=e,
                 sl=e - sgn * R, tp1=lv["lo"] if bear else lv["hi"],
-                tp2=e + sgn * TP2_R * R, swept=False, sweep_bar=sw)
+                tp2=e + sgn * TP2_R * R, swept=False,
+                sweep_bar=sw_h if bear else sw_l,
+                dir_source="bias_selector", both_swept=False,
+                rej_high=rej_h, rej_low=rej_l)
 
 
 def simulate(p, lv, ex, forward):

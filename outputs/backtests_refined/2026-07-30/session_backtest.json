@@ -1,0 +1,163 @@
+{
+  "strategy_id": "SSPF_V2_3_REFINED_RESEARCH",
+  "mode": "READ_ONLY_RESEARCH",
+  "trading_date": "2026-07-30",
+  "generated_utc": "2026-08-13T07:35:04.795747+00:00",
+  "entry_window_utc": [
+    "08:00",
+    "11:00"
+  ],
+  "position_hold_end_utc": "2026-07-30T20:00:00+00:00",
+  "intrabar_collision_policy": "STOP_FIRST",
+  "spread_basis": "CONFIGURED_MAXIMUM_PROXY; historical spread unavailable",
+  "execution_authorized": false,
+  "symbols": {
+    "EURUSD": {
+      "broker_symbol": "EURUSD",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "m5_candles": 37,
+      "h4_candles": 22,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "setups": [
+        {
+          "setup": "SWEEP",
+          "status": "TRIGGERED",
+          "direction": "SHORT",
+          "signal_time_utc": "2026-07-30T10:00:00Z",
+          "entry": 1.14719,
+          "stop_loss": 1.14774,
+          "tp2_5r": 1.1444399999999997,
+          "h4_bias_override_applied": true,
+          "m15_classification": "UNCERTAIN",
+          "effective_classification": "BEARISH_TREND",
+          "outcome": "STOP_LOSS",
+          "gross_r": -1.0,
+          "exit_time_utc": "2026-07-30T10:15:00Z"
+        }
+      ],
+      "status": "EVALUATED",
+      "metrics": {
+        "asian_range_pips": 33.69999999999873,
+        "atr_14d_pips": 58.29285714285711,
+        "dynamic_min_pips": 11.658571428571422,
+        "dynamic_max_pips": 72.86607142857139,
+        "efficiency_ratio": 0.14540059347177978,
+        "m15_classification": "UNCERTAIN",
+        "h4_bias": "BEARISH",
+        "h4_bias_override_applied": true,
+        "selected_canonical_setup": "SWEEP",
+        "effective_classification": "BEARISH_TREND",
+        "qualifying_candidates": [
+          "SWEEP"
+        ]
+      }
+    },
+    "GBPUSD": {
+      "broker_symbol": "GBPUSD",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "m5_candles": 37,
+      "h4_candles": 22,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "setups": [],
+      "status": "NO_TRADE",
+      "rejection_reason": "GATE_PATTERN_FAIL_NO_CANONICAL_SETUP",
+      "metrics": {
+        "asian_range_pips": 35.30000000000033,
+        "atr_14d_pips": 86.91428571428571,
+        "dynamic_min_pips": 17.382857142857144,
+        "dynamic_max_pips": 108.64285714285715,
+        "efficiency_ratio": 0.6600566572238367,
+        "m15_classification": "BULLISH_TREND",
+        "h4_bias": "NEUTRAL",
+        "h4_bias_override_applied": false,
+        "selected_canonical_setup": null,
+        "effective_classification": "BULLISH_TREND",
+        "qualifying_candidates": []
+      }
+    },
+    "USDJPY": {
+      "broker_symbol": "USDJPY",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "m5_candles": 37,
+      "h4_candles": 22,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "setups": [
+        {
+          "setup": "SWEEP",
+          "status": "TRIGGERED",
+          "direction": "LONG",
+          "signal_time_utc": "2026-07-30T10:00:00Z",
+          "entry": 162.988,
+          "stop_loss": 162.88060714285714,
+          "tp2_5r": 163.52496428571428,
+          "h4_bias_override_applied": true,
+          "m15_classification": "UNCERTAIN",
+          "effective_classification": "BULLISH_TREND",
+          "outcome": "STOP_LOSS",
+          "gross_r": -1.0,
+          "exit_time_utc": "2026-07-30T10:15:00Z"
+        }
+      ],
+      "status": "EVALUATED",
+      "metrics": {
+        "asian_range_pips": 52.79999999999916,
+        "atr_14d_pips": 96.78571428571416,
+        "dynamic_min_pips": 19.357142857142833,
+        "dynamic_max_pips": 120.9821428571427,
+        "efficiency_ratio": 0.6060606060606027,
+        "m15_classification": "UNCERTAIN",
+        "h4_bias": "BULLISH",
+        "h4_bias_override_applied": true,
+        "selected_canonical_setup": "SWEEP",
+        "effective_classification": "BULLISH_TREND",
+        "qualifying_candidates": [
+          "SWEEP"
+        ]
+      }
+    },
+    "XAUUSD": {
+      "broker_symbol": "XAUUSD.crp",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "m5_candles": 37,
+      "h4_candles": 22,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "setups": [],
+      "status": "NO_TRADE",
+      "rejection_reason": "GATE_PATTERN_FAIL_NO_CANONICAL_SETUP",
+      "metrics": {
+        "asian_range_pips": 6449.000000000024,
+        "atr_14d_pips": 8713.857142857143,
+        "dynamic_min_pips": 1742.7714285714287,
+        "dynamic_max_pips": 9585.242857142859,
+        "efficiency_ratio": 0.10048069468134586,
+        "m15_classification": "RANGE",
+        "h4_bias": "BEARISH",
+        "h4_bias_override_applied": false,
+        "selected_canonical_setup": null,
+        "effective_classification": "RANGE",
+        "qualifying_candidates": []
+      }
+    }
+  },
+  "broker_utc_offset_hours": 3
+}

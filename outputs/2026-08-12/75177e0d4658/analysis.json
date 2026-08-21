@@ -1,0 +1,395 @@
+{
+  "analysis_id": "75177e0d4658",
+  "timestamp_utc": "2026-08-12T08:23:20.103114Z",
+  "trading_date": "2026-08-12",
+  "symbol": "USDJPY",
+  "account": {
+    "login_masked": "****985",
+    "account_type": "demo",
+    "balance": 987.82,
+    "equity": 987.82,
+    "server": "VTMarkets-Demo",
+    "trade_allowed": true,
+    "expert_allowed": false,
+    "ping_ms": 303.748
+  },
+  "bid": 159.323,
+  "ask": 159.326,
+  "spread": 0.002999999999985903,
+  "strategy_id": "ASIAN_SESSION_V1",
+  "contract_version": "1.0",
+  "schema_version": 2,
+  "timezone": "UTC",
+  "broker_utc_offset_hours": 3,
+  "asian_start": "2026-08-11T22:00:00Z",
+  "asian_end": "2026-08-12T07:00:00Z",
+  "asian_high": 159.461,
+  "asian_low": 159.2,
+  "asian_range": 0.2610000000000241,
+  "midpoint": 159.3305,
+  "asian_open": 159.257,
+  "asian_close": 159.382,
+  "risk_unit": 0.06525000000000603,
+  "lower_quartile": 159.26524999999998,
+  "upper_quartile": 159.39575000000002,
+  "efficiency_ratio": 0.4789272030650899,
+  "close_location": 0.6973180076628336,
+  "session_type": "BULLISH_TREND",
+  "setup": "TREND_CONTINUATION",
+  "direction": "LONG",
+  "signal_time": "2026-08-12T07:00:00Z",
+  "signal_candle": {
+    "time": "2026-08-12T07:00:00Z",
+    "open": 159.383,
+    "high": 159.391,
+    "low": 159.334,
+    "close": 159.391
+  },
+  "entry": 159.391,
+  "stop_loss": 159.326,
+  "initial_risk": 0.06499999999999773,
+  "tp1_4r": 159.651,
+  "tp2_5r": 159.716,
+  "partial_close_percent": 75.0,
+  "risk_fraction": 0.005,
+  "volume": 0.12,
+  "partial_volume": 0.09,
+  "runner_volume": 0.03,
+  "runner_below_minimum": false,
+  "estimated_cost_r": 0.07692307692286274,
+  "gross_tp2_r": 5.0,
+  "net_tp1_r": 3.9230769230771374,
+  "net_tp2_r": 4.923076923077137,
+  "broker_symbol": "USDJPY",
+  "intended_risk_cash": 4.9391,
+  "actual_risk_cash": 4.896,
+  "actual_risk_percent": 0.49563685691725207,
+  "expiry_utc": "2026-08-12T09:00:00Z",
+  "gates": [
+    {
+      "name": "G1_ENVIRONMENT",
+      "passed": true,
+      "detail": "account=demo, server=VTMarkets-Demo, login=****985 via exact allowlist (gateway verified)"
+    },
+    {
+      "name": "G2_UNIVERSE",
+      "passed": true,
+      "detail": "symbol=USDJPY"
+    },
+    {
+      "name": "G3_BROKER_CLOCK",
+      "passed": true,
+      "detail": "verified UTC+3:00, normalized tick age=0s"
+    },
+    {
+      "name": "G4_SESSION_DATA",
+      "passed": true,
+      "detail": "36 contiguous closed candles"
+    },
+    {
+      "name": "G5_RANGE_BOUNDS",
+      "passed": true,
+      "detail": "range=0.261, allowed=[0.15, 1.2]"
+    },
+    {
+      "name": "G6_SPREAD",
+      "passed": true,
+      "detail": "spread=0.003, maximum=0.03"
+    },
+    {
+      "name": "G7_SESSION_CLASSIFIED",
+      "passed": true,
+      "detail": "type=BULLISH_TREND, ER=0.4789, close_location=0.6973"
+    },
+    {
+      "name": "G8_SESSION_QUOTA",
+      "passed": true,
+      "detail": "taken=0, allowed=1"
+    },
+    {
+      "name": "G9_SETUP_DETECTED",
+      "passed": true,
+      "detail": "setup=TREND_CONTINUATION LONG"
+    },
+    {
+      "name": "G10_STRUCTURAL_STOP",
+      "passed": true,
+      "detail": "not applicable to this setup"
+    },
+    {
+      "name": "G11_STOPS_LEVEL",
+      "passed": true,
+      "detail": "distance=0.065, broker minimum=0"
+    },
+    {
+      "name": "G12_VOLUME_BOUNDS",
+      "passed": true,
+      "detail": "volume=0.12, allowed=[0.01, 100.0]"
+    },
+    {
+      "name": "G13_DAILY_RISK",
+      "passed": true,
+      "detail": "used+proposed=4.90, limit=19.76"
+    },
+    {
+      "name": "G14_DRAWDOWN",
+      "passed": true,
+      "detail": "drawdown=0.00%, maximum=15.00%"
+    },
+    {
+      "name": "G15_EXECUTION_WINDOW",
+      "passed": true,
+      "detail": "now=2026-08-12T08:23:20.103114+00:00, window=[2026-08-12T07:00:00+00:00, 2026-08-12T09:00:00+00:00)"
+    }
+  ],
+  "reason_codes": [
+    "TREND_SESSION",
+    "MIDPOINT_RETRACEMENT"
+  ],
+  "warnings": [],
+  "session_candle_times": [
+    "2026-08-11T22:00:00Z",
+    "2026-08-11T22:15:00Z",
+    "2026-08-11T22:30:00Z",
+    "2026-08-11T22:45:00Z",
+    "2026-08-11T23:00:00Z",
+    "2026-08-11T23:15:00Z",
+    "2026-08-11T23:30:00Z",
+    "2026-08-11T23:45:00Z",
+    "2026-08-12T00:00:00Z",
+    "2026-08-12T00:15:00Z",
+    "2026-08-12T00:30:00Z",
+    "2026-08-12T00:45:00Z",
+    "2026-08-12T01:00:00Z",
+    "2026-08-12T01:15:00Z",
+    "2026-08-12T01:30:00Z",
+    "2026-08-12T01:45:00Z",
+    "2026-08-12T02:00:00Z",
+    "2026-08-12T02:15:00Z",
+    "2026-08-12T02:30:00Z",
+    "2026-08-12T02:45:00Z",
+    "2026-08-12T03:00:00Z",
+    "2026-08-12T03:15:00Z",
+    "2026-08-12T03:30:00Z",
+    "2026-08-12T03:45:00Z",
+    "2026-08-12T04:00:00Z",
+    "2026-08-12T04:15:00Z",
+    "2026-08-12T04:30:00Z",
+    "2026-08-12T04:45:00Z",
+    "2026-08-12T05:00:00Z",
+    "2026-08-12T05:15:00Z",
+    "2026-08-12T05:30:00Z",
+    "2026-08-12T05:45:00Z",
+    "2026-08-12T06:00:00Z",
+    "2026-08-12T06:15:00Z",
+    "2026-08-12T06:30:00Z",
+    "2026-08-12T06:45:00Z"
+  ],
+  "execution_candle_times": [
+    "2026-08-12T07:00:00Z",
+    "2026-08-12T07:15:00Z",
+    "2026-08-12T07:30:00Z",
+    "2026-08-12T07:45:00Z",
+    "2026-08-12T08:00:00Z"
+  ],
+  "config_hash": "936249f5ee059177",
+  "config_snapshot": {
+    "mode": "analysis_only",
+    "strategy_id": "ASIAN_SESSION_V1",
+    "contract_version": "1.0",
+    "governance": {
+      "specification_status": "DRAFT",
+      "implementation_authorized": true,
+      "backtest_authorized_after_schema_validation": true,
+      "demo_execution_authorized": false,
+      "live_execution_authorized": false,
+      "research_status": "PROVISIONAL_LOCKED_FOR_BASELINE",
+      "optimization_allowed": false,
+      "provisional_parameters": [
+        "efficiency_ratio_threshold",
+        "close_location_trend",
+        "sweep_buffer_fraction",
+        "stop_buffer_fraction",
+        "touch_tolerance_fraction",
+        "rejection_quality_fraction",
+        "symbol_range_limits",
+        "symbol_spread_limits"
+      ],
+      "parameter_signoff": {
+        "status": "APPROVED",
+        "config_hash": "e814ea799d03197a",
+        "approved_by": "Aung",
+        "approved_utc": "2026-08-12T04:21:22Z"
+      },
+      "promotion_requirements": [
+        "deterministic_unit_tests_pass",
+        "golden_cases_pass",
+        "no_lookahead_audit_pass",
+        "baseline_backtest_complete",
+        "transaction_cost_stress_pass",
+        "walk_forward_pass",
+        "sealed_out_of_sample_pass"
+      ]
+    },
+    "execution_permissions": {
+      "calculate_signals": true,
+      "calculate_hypothetical_volume": true,
+      "submit_orders": false,
+      "modify_orders": false,
+      "close_positions": false
+    },
+    "account_guard": {
+      "required_server": "VTMarkets-Demo",
+      "allowed_logins": [],
+      "require_demo_account": true,
+      "reject_suffix_only_matching": false,
+      "fallback_account_suffix": "985"
+    },
+    "timeframe": "M15",
+    "timeframe_seconds": 900,
+    "use_closed_candles_only": true,
+    "interval_semantics": "left_closed_right_open",
+    "candle_timestamp_semantics": "bar_open_time",
+    "session_start_utc": "22:00",
+    "session_end_utc": "07:00",
+    "session_candles": 36,
+    "execution_start_utc": "07:00",
+    "execution_end_utc": "09:00",
+    "post_session_candles": 8,
+    "live_data": {
+      "maximum_tick_age_seconds": 60,
+      "stale_tick_policy": "NO_GO"
+    },
+    "data_quality": {
+      "require_exact_candle_count": true,
+      "require_unique_timestamps": true,
+      "require_contiguous_intervals": true,
+      "reject_zero_ohlc": true,
+      "reject_non_monotonic_timestamps": true,
+      "reject_future_timestamps": true,
+      "missing_candle_policy": "REJECT_SESSION",
+      "duplicate_candle_policy": "REJECT_SESSION",
+      "zero_range_policy": "REJECT_SESSION"
+    },
+    "classification": {
+      "efficiency_ratio_threshold": 0.35,
+      "close_location_trend": 0.65,
+      "ambiguous_classification": "UNCERTAIN",
+      "trade_uncertain_sessions": false
+    },
+    "setups": {
+      "priority": [
+        "SWEEP",
+        "RANGE_REJECTION",
+        "TREND_CONTINUATION"
+      ],
+      "maximum_accepted_setups_per_session": 1,
+      "sweep": {
+        "enabled": true,
+        "session_types": [
+          "RANGE"
+        ],
+        "confirmation": "CLOSE_BACK_INSIDE",
+        "entry_price": "CONFIRMATION_CANDLE_CLOSE",
+        "require_structural_stop_clearance": true
+      },
+      "range_rejection": {
+        "enabled": true,
+        "session_types": [
+          "RANGE"
+        ],
+        "confirmation": "BOUNDARY_TOUCH_AND_DIRECTIONAL_CLOSE",
+        "entry_price": "CONFIRMATION_CANDLE_CLOSE",
+        "disallow_after_confirmed_sweep": true
+      },
+      "trend_continuation": {
+        "enabled": true,
+        "session_types": [
+          "BULLISH_TREND",
+          "BEARISH_TREND"
+        ],
+        "confirmation": "MIDPOINT_RETRACE_AND_DIRECTIONAL_CLOSE",
+        "entry_price": "CONFIRMATION_CANDLE_CLOSE"
+      }
+    },
+    "fixed_stop_policy": {
+      "distance_source": "ASIAN_RANGE",
+      "stop_range_fraction": 0.25,
+      "structural_clearance_required": true,
+      "on_clearance_failure": "REJECT_TRADE",
+      "widening_allowed": false
+    },
+    "midpoint_zone_low_fraction": 0.45,
+    "midpoint_zone_high_fraction": 0.55,
+    "sweep_buffer_fraction": 0.02,
+    "stop_buffer_fraction": 0.02,
+    "touch_tolerance_fraction": 0.05,
+    "rejection_quality_fraction": 0.5,
+    "management": {
+      "partial_target_r": 4.0,
+      "partial_close_percent": 75.0,
+      "move_stop_after_partial": "BREAKEVEN",
+      "breakeven_price_basis": "ACTUAL_WEIGHTED_ENTRY",
+      "final_target_r": 5.0,
+      "trailing_stop_enabled": false,
+      "intrabar_collision_policy": "STOP_FIRST",
+      "gap_fill_policy": "NEXT_AVAILABLE_MARKET_PRICE",
+      "partial_volume_rounding": "DOWN_TO_VOLUME_STEP",
+      "remainder_below_minimum_volume_policy": "CLOSE_FULL_AT_TP1"
+    },
+    "cost_model": {
+      "spread_source": "HISTORICAL_IF_AVAILABLE_ELSE_CONFIGURED",
+      "commission_per_lot_round_turn": 0.0,
+      "slippage_model": "CONFIGURED_POINTS",
+      "slippage_points": 1.0,
+      "financing_enabled": false,
+      "cost_model_signed_off": true,
+      "reject_if_cost_model_incomplete": false
+    },
+    "risk": {
+      "risk_percent_per_trade": 0.5,
+      "percentage_scale": "PERCENT_NOT_DECIMAL",
+      "daily_risk_limit_percent": 2.0,
+      "daily_risk_measure": "OPEN_PLUS_REALIZED_LOSS_AND_PENDING_COMMITTED_RISK",
+      "daily_reset_timezone": "UTC",
+      "maximum_drawdown_percent": 15.0,
+      "drawdown_reference": "HIGH_WATERMARK_EQUITY",
+      "drawdown_action": "DISABLE_NEW_SIGNALS",
+      "maximum_trades_per_symbol_session": 1,
+      "maximum_open_positions_per_symbol": 1,
+      "maximum_portfolio_open_risk_percent": 2.0
+    },
+    "symbols": {
+      "EURUSD": {
+        "broker_symbol": "EURUSD",
+        "display_pip_size": 0.0001,
+        "minimum_range": 0.0015,
+        "maximum_range": 0.012,
+        "maximum_spread": 0.0003
+      },
+      "GBPUSD": {
+        "broker_symbol": "GBPUSD",
+        "display_pip_size": 0.0001,
+        "minimum_range": 0.0018,
+        "maximum_range": 0.015,
+        "maximum_spread": 0.00035
+      },
+      "USDJPY": {
+        "broker_symbol": "USDJPY",
+        "display_pip_size": 0.01,
+        "minimum_range": 0.15,
+        "maximum_range": 1.2,
+        "maximum_spread": 0.03
+      },
+      "XAUUSD": {
+        "broker_symbol": "XAUUSD.crp",
+        "display_pip_size": 0.01,
+        "minimum_range": 2.0,
+        "maximum_range": 25.0,
+        "maximum_spread": 0.6
+      }
+    }
+  },
+  "accepted": true,
+  "status": "SIGNAL_ACCEPTED"
+}

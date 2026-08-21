@@ -1,0 +1,653 @@
+{
+  "strategy_id": "SSPF_V2_2",
+  "period": {
+    "start": "2026-07-30",
+    "end": "2026-08-12"
+  },
+  "trading_days": 10,
+  "symbol_sessions": 40,
+  "data_quality_failures": 0,
+  "triggered_setups": 12,
+  "resolved_trades": 12,
+  "unresolved_at_window_end": 0,
+  "resolved_gross_r": 13.855285472018476,
+  "historical_spread_coverage": 0,
+  "net_r_historical_spread_only": null,
+  "friction_stress": {
+    "0.2R_per_trade": 11.455285472018476,
+    "0.3R_per_trade": 10.255285472018477,
+    "0.4R_per_trade": 9.055285472018475
+  },
+  "h4_override_trades": 0,
+  "outcome_warning": "Trades still active at 20:00 UTC are exited at the final completed M15 close.",
+  "setup_evaluation": "One canonical setup per symbol/session is selected by configured priority.",
+  "by_symbol": {
+    "EURUSD": {
+      "sessions": 10,
+      "triggered": 2,
+      "resolved": 2,
+      "gross_r": 3.25000000000038,
+      "losses": 1,
+      "no_trigger": 8,
+      "range_rejections": 3,
+      "wins": 1
+    },
+    "GBPUSD": {
+      "sessions": 10,
+      "no_trigger": 6,
+      "triggered": 4,
+      "resolved": 4,
+      "gross_r": 9.631147540983546,
+      "wins": 3,
+      "range_rejections": 3,
+      "losses": 1
+    },
+    "USDJPY": {
+      "sessions": 10,
+      "no_trigger": 7,
+      "triggered": 3,
+      "resolved": 3,
+      "gross_r": -1.275862068965399,
+      "losses": 2,
+      "range_rejections": 1,
+      "wins": 1
+    },
+    "XAUUSD": {
+      "sessions": 10,
+      "triggered": 3,
+      "resolved": 3,
+      "gross_r": 2.2499999999999485,
+      "losses": 2,
+      "no_trigger": 7,
+      "wins": 1,
+      "range_rejections": 1
+    }
+  },
+  "by_setup": {
+    "TREND_CONTINUATION": {
+      "triggered": 8,
+      "resolved": 8,
+      "gross_r": 6.499999999999847,
+      "losses": 5,
+      "wins": 3
+    },
+    "SWEEP": {
+      "triggered": 3,
+      "resolved": 3,
+      "gross_r": 3.105285472018248,
+      "wins": 2,
+      "losses": 1
+    },
+    "RANGE_REJECTION": {
+      "triggered": 1,
+      "resolved": 1,
+      "gross_r": 4.25000000000038,
+      "wins": 1
+    }
+  },
+  "trades": [
+    {
+      "date": "2026-07-30",
+      "symbol": "EURUSD",
+      "setup": "TREND_CONTINUATION",
+      "status": "TRIGGERED",
+      "session_type": "BEARISH_TREND",
+      "direction": "SHORT",
+      "signal_time_utc": "2026-07-30T08:30:00Z",
+      "entry": 1.1451200000000001,
+      "stop_loss": 1.14596,
+      "partial_target": 1.14175,
+      "partial_target_r": 4.000000000000264,
+      "partial_target_label": "4R",
+      "runner_management": "TRAIL_TO_5R_OR_FURTHER",
+      "tp1_4r": 1.14175,
+      "tp2_5r": 1.14091,
+      "outcome": "STOP_LOSS",
+      "gross_r": -1.0,
+      "exit_time_utc": "2026-07-30T09:15:00Z"
+    },
+    {
+      "date": "2026-07-30",
+      "symbol": "XAUUSD",
+      "setup": "TREND_CONTINUATION",
+      "status": "TRIGGERED",
+      "session_type": "BEARISH_TREND",
+      "direction": "SHORT",
+      "signal_time_utc": "2026-07-30T08:45:00Z",
+      "entry": 4060.655,
+      "stop_loss": 4076.7780000000002,
+      "partial_target": 3996.165,
+      "partial_target_r": 4.0,
+      "partial_target_label": "4R",
+      "runner_management": "TRAIL_TO_5R_OR_FURTHER",
+      "tp1_4r": 3996.165,
+      "tp2_5r": 3980.042,
+      "outcome": "STOP_LOSS",
+      "gross_r": -1.0,
+      "exit_time_utc": "2026-07-30T10:15:00Z"
+    },
+    {
+      "date": "2026-07-31",
+      "symbol": "GBPUSD",
+      "setup": "SWEEP",
+      "status": "TRIGGERED",
+      "session_type": "RANGE",
+      "direction": "LONG",
+      "signal_time_utc": "2026-07-31T08:30:00Z",
+      "entry": 1.3437400000000002,
+      "stop_loss": 1.3431300000000002,
+      "partial_target": 1.3464900000000002,
+      "partial_target_r": 4.5081967213115295,
+      "partial_target_label": "opposite session boundary",
+      "runner_management": "BREAKEVEN_TO_5R",
+      "tp1_4r": 1.3464900000000002,
+      "tp2_5r": 1.3467900000000002,
+      "outcome": "PARTIAL_THEN_BREAKEVEN",
+      "gross_r": 3.381147540983647,
+      "exit_time_utc": "2026-07-31T11:00:00Z"
+    },
+    {
+      "date": "2026-07-31",
+      "symbol": "USDJPY",
+      "setup": "SWEEP",
+      "status": "TRIGGERED",
+      "session_type": "RANGE",
+      "direction": "LONG",
+      "signal_time_utc": "2026-07-31T09:45:00Z",
+      "entry": 159.882,
+      "stop_loss": 159.64600000000002,
+      "partial_target": 160.879,
+      "partial_target_r": 4.215644820295932,
+      "partial_target_label": "opposite session boundary",
+      "runner_management": "BREAKEVEN_TO_5R",
+      "tp1_4r": 160.879,
+      "tp2_5r": 161.064,
+      "outcome": "STOP_LOSS",
+      "gross_r": -1.0,
+      "exit_time_utc": "2026-07-31T13:15:00Z"
+    },
+    {
+      "date": "2026-08-04",
+      "symbol": "XAUUSD",
+      "setup": "TREND_CONTINUATION",
+      "status": "TRIGGERED",
+      "session_type": "BULLISH_TREND",
+      "direction": "LONG",
+      "signal_time_utc": "2026-08-04T10:45:00Z",
+      "entry": 4055.9100000000003,
+      "stop_loss": 4049.225,
+      "partial_target": 4082.65,
+      "partial_target_r": 3.999999999999932,
+      "partial_target_label": "4R",
+      "runner_management": "TRAIL_TO_5R_OR_FURTHER",
+      "tp1_4r": 4082.65,
+      "tp2_5r": 4089.335,
+      "outcome": "PARTIAL_AND_5R",
+      "gross_r": 4.2499999999999485,
+      "exit_time_utc": "2026-08-04T13:15:00Z"
+    },
+    {
+      "date": "2026-08-05",
+      "symbol": "GBPUSD",
+      "setup": "TREND_CONTINUATION",
+      "status": "TRIGGERED",
+      "session_type": "BULLISH_TREND",
+      "direction": "LONG",
+      "signal_time_utc": "2026-08-05T09:00:00Z",
+      "entry": 1.34566,
+      "stop_loss": 1.3450300000000002,
+      "partial_target": 1.3481800000000002,
+      "partial_target_r": 4.000000000000353,
+      "partial_target_label": "4R",
+      "runner_management": "TRAIL_TO_5R_OR_FURTHER",
+      "tp1_4r": 1.3481800000000002,
+      "tp2_5r": 1.34881,
+      "outcome": "PARTIAL_THEN_BREAKEVEN",
+      "gross_r": 3.0000000000002647,
+      "exit_time_utc": "2026-08-05T17:00:00Z"
+    },
+    {
+      "date": "2026-08-05",
+      "symbol": "USDJPY",
+      "setup": "SWEEP",
+      "status": "TRIGGERED",
+      "session_type": "RANGE",
+      "direction": "SHORT",
+      "signal_time_utc": "2026-08-05T09:30:00Z",
+      "entry": 157.80700000000002,
+      "stop_loss": 157.923,
+      "partial_target": 157.306,
+      "partial_target_r": 4.328293736501179,
+      "partial_target_label": "opposite session boundary",
+      "runner_management": "BREAKEVEN_TO_5R",
+      "tp1_4r": 157.306,
+      "tp2_5r": 157.228,
+      "outcome": "END_OF_DAY_EXIT",
+      "gross_r": 0.724137931034601,
+      "exit_price": 157.723,
+      "exit_time_utc": "2026-08-05T19:45:00Z"
+    },
+    {
+      "date": "2026-08-10",
+      "symbol": "EURUSD",
+      "setup": "RANGE_REJECTION",
+      "status": "TRIGGERED",
+      "session_type": "RANGE",
+      "direction": "SHORT",
+      "signal_time_utc": "2026-08-10T08:15:00Z",
+      "entry": 1.1565500000000002,
+      "stop_loss": 1.1569900000000002,
+      "partial_target": 1.1548,
+      "partial_target_r": 4.000000000000507,
+      "partial_target_label": "opposite session boundary",
+      "runner_management": "BREAKEVEN_TO_5R",
+      "tp1_4r": 1.1548,
+      "tp2_5r": 1.15436,
+      "outcome": "PARTIAL_AND_5R",
+      "gross_r": 4.25000000000038,
+      "exit_time_utc": "2026-08-10T17:00:00Z"
+    },
+    {
+      "date": "2026-08-10",
+      "symbol": "GBPUSD",
+      "setup": "TREND_CONTINUATION",
+      "status": "TRIGGERED",
+      "session_type": "BULLISH_TREND",
+      "direction": "LONG",
+      "signal_time_utc": "2026-08-10T10:00:00Z",
+      "entry": 1.3492300000000002,
+      "stop_loss": 1.34878,
+      "partial_target": 1.35105,
+      "partial_target_r": 3.999999999999512,
+      "partial_target_label": "4R",
+      "runner_management": "TRAIL_TO_5R_OR_FURTHER",
+      "tp1_4r": 1.35105,
+      "tp2_5r": 1.3515100000000002,
+      "outcome": "PARTIAL_AND_5R",
+      "gross_r": 4.249999999999634,
+      "exit_time_utc": "2026-08-10T14:00:00Z"
+    },
+    {
+      "date": "2026-08-10",
+      "symbol": "XAUUSD",
+      "setup": "TREND_CONTINUATION",
+      "status": "TRIGGERED",
+      "session_type": "BULLISH_TREND",
+      "direction": "LONG",
+      "signal_time_utc": "2026-08-10T10:15:00Z",
+      "entry": 4337.675,
+      "stop_loss": 4325.532,
+      "partial_target": 4386.245,
+      "partial_target_r": 4.0,
+      "partial_target_label": "4R",
+      "runner_management": "TRAIL_TO_5R_OR_FURTHER",
+      "tp1_4r": 4386.245,
+      "tp2_5r": 4398.388,
+      "outcome": "STOP_LOSS",
+      "gross_r": -1.0,
+      "exit_time_utc": "2026-08-10T12:15:00Z"
+    },
+    {
+      "date": "2026-08-11",
+      "symbol": "GBPUSD",
+      "setup": "TREND_CONTINUATION",
+      "status": "TRIGGERED",
+      "session_type": "BEARISH_TREND",
+      "direction": "SHORT",
+      "signal_time_utc": "2026-08-11T08:45:00Z",
+      "entry": 1.3505200000000002,
+      "stop_loss": 1.3510600000000001,
+      "partial_target": 1.3483800000000001,
+      "partial_target_r": 4.0,
+      "partial_target_label": "4R",
+      "runner_management": "TRAIL_TO_5R_OR_FURTHER",
+      "tp1_4r": 1.3483800000000001,
+      "tp2_5r": 1.3478400000000001,
+      "outcome": "STOP_LOSS",
+      "gross_r": -1.0,
+      "exit_time_utc": "2026-08-11T15:30:00Z"
+    },
+    {
+      "date": "2026-08-12",
+      "symbol": "USDJPY",
+      "setup": "TREND_CONTINUATION",
+      "status": "TRIGGERED",
+      "session_type": "BULLISH_TREND",
+      "direction": "LONG",
+      "signal_time_utc": "2026-08-12T08:15:00Z",
+      "entry": 159.33,
+      "stop_loss": 159.26500000000001,
+      "partial_target": 159.591,
+      "partial_target_r": 3.9999999999995643,
+      "partial_target_label": "4R",
+      "runner_management": "TRAIL_TO_5R_OR_FURTHER",
+      "tp1_4r": 159.591,
+      "tp2_5r": 159.656,
+      "outcome": "STOP_LOSS",
+      "gross_r": -1.0,
+      "exit_time_utc": "2026-08-12T09:00:00Z"
+    }
+  ],
+  "sessions": [
+    {
+      "date": "2026-07-30",
+      "symbol": "EURUSD",
+      "status": "EVALUATED",
+      "session_type": "BEARISH_TREND",
+      "asian_range": 0.003369999999999873,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-07-30",
+      "symbol": "GBPUSD",
+      "status": "EVALUATED",
+      "session_type": "BEARISH_TREND",
+      "asian_range": 0.003530000000000033,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-07-30",
+      "symbol": "USDJPY",
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_range": 0.5279999999999916,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-07-30",
+      "symbol": "XAUUSD",
+      "status": "EVALUATED",
+      "session_type": "BEARISH_TREND",
+      "asian_range": 64.49000000000024,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-07-31",
+      "symbol": "EURUSD",
+      "status": "EVALUATED",
+      "session_type": "UNCERTAIN",
+      "asian_range": 0.0022200000000001108,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-07-31",
+      "symbol": "GBPUSD",
+      "status": "EVALUATED",
+      "session_type": "RANGE",
+      "asian_range": 0.0024399999999999977,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-07-31",
+      "symbol": "USDJPY",
+      "status": "EVALUATED",
+      "session_type": "RANGE",
+      "asian_range": 0.945999999999998,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-07-31",
+      "symbol": "XAUUSD",
+      "status": "EVALUATED",
+      "session_type": "BEARISH_TREND",
+      "asian_range": 39.5,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-03",
+      "symbol": "EURUSD",
+      "status": "EVALUATED",
+      "session_type": "BEARISH_TREND",
+      "asian_range": 0.003530000000000033,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-03",
+      "symbol": "GBPUSD",
+      "status": "EVALUATED",
+      "session_type": "BEARISH_TREND",
+      "asian_range": 0.004969999999999919,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-03",
+      "symbol": "USDJPY",
+      "status": "REJECTED_RANGE_BOUNDS",
+      "session_type": "RANGE",
+      "asian_range": 2.660999999999973,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-03",
+      "symbol": "XAUUSD",
+      "status": "EVALUATED",
+      "session_type": "UNCERTAIN",
+      "asian_range": 31.61999999999989,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-04",
+      "symbol": "EURUSD",
+      "status": "REJECTED_RANGE_BOUNDS",
+      "session_type": "RANGE",
+      "asian_range": 0.0014799999999999258,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-04",
+      "symbol": "GBPUSD",
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_range": 0.0019199999999999218,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-04",
+      "symbol": "USDJPY",
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_range": 0.6150000000000091,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-04",
+      "symbol": "XAUUSD",
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_range": 26.740000000000236,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-05",
+      "symbol": "EURUSD",
+      "status": "EVALUATED",
+      "session_type": "RANGE",
+      "asian_range": 0.0020000000000000018,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-05",
+      "symbol": "GBPUSD",
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_range": 0.0025199999999998557,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-05",
+      "symbol": "USDJPY",
+      "status": "EVALUATED",
+      "session_type": "RANGE",
+      "asian_range": 0.46299999999999386,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-05",
+      "symbol": "XAUUSD",
+      "status": "REJECTED_RANGE_BOUNDS",
+      "session_type": "BULLISH_TREND",
+      "asian_range": 109.05000000000018,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-06",
+      "symbol": "EURUSD",
+      "status": "EVALUATED",
+      "session_type": "BEARISH_TREND",
+      "asian_range": 0.0018599999999999728,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-06",
+      "symbol": "GBPUSD",
+      "status": "REJECTED_RANGE_BOUNDS",
+      "session_type": "BEARISH_TREND",
+      "asian_range": 0.0017899999999999583,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-06",
+      "symbol": "USDJPY",
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_range": 0.3089999999999975,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-06",
+      "symbol": "XAUUSD",
+      "status": "EVALUATED",
+      "session_type": "RANGE",
+      "asian_range": 56.840000000000146,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-07",
+      "symbol": "EURUSD",
+      "status": "REJECTED_RANGE_BOUNDS",
+      "session_type": "RANGE",
+      "asian_range": 0.0007800000000000029,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-07",
+      "symbol": "GBPUSD",
+      "status": "REJECTED_RANGE_BOUNDS",
+      "session_type": "BEARISH_TREND",
+      "asian_range": 0.0012499999999999734,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-07",
+      "symbol": "USDJPY",
+      "status": "EVALUATED",
+      "session_type": "RANGE",
+      "asian_range": 0.35599999999999454,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-07",
+      "symbol": "XAUUSD",
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_range": 69.03999999999996,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-10",
+      "symbol": "EURUSD",
+      "status": "EVALUATED",
+      "session_type": "RANGE",
+      "asian_range": 0.0017499999999999183,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-10",
+      "symbol": "GBPUSD",
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_range": 0.0018200000000001548,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-10",
+      "symbol": "USDJPY",
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_range": 0.6829999999999927,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-10",
+      "symbol": "XAUUSD",
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_range": 48.56999999999971,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-11",
+      "symbol": "EURUSD",
+      "status": "EVALUATED",
+      "session_type": "BEARISH_TREND",
+      "asian_range": 0.0018000000000000238,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-11",
+      "symbol": "GBPUSD",
+      "status": "EVALUATED",
+      "session_type": "BEARISH_TREND",
+      "asian_range": 0.0021400000000000308,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-11",
+      "symbol": "USDJPY",
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_range": 0.4590000000000032,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-11",
+      "symbol": "XAUUSD",
+      "status": "EVALUATED",
+      "session_type": "BEARISH_TREND",
+      "asian_range": 78.39000000000033,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-12",
+      "symbol": "EURUSD",
+      "status": "REJECTED_RANGE_BOUNDS",
+      "session_type": "UNCERTAIN",
+      "asian_range": 0.0012499999999999734,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-12",
+      "symbol": "GBPUSD",
+      "status": "REJECTED_RANGE_BOUNDS",
+      "session_type": "RANGE",
+      "asian_range": 0.000980000000000203,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-12",
+      "symbol": "USDJPY",
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_range": 0.2610000000000241,
+      "rejection_reason": null
+    },
+    {
+      "date": "2026-08-12",
+      "symbol": "XAUUSD",
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_range": 49.56999999999971,
+      "rejection_reason": null
+    }
+  ]
+}

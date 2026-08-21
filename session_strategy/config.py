@@ -240,10 +240,18 @@ def _validate(config: StrategyConfig) -> None:
         problems.append("system.supersede_legacy must be true")
     if config.strategy_id != "ASIAN_SESSION_V1" or config.contract_version != "1.0":
         problems.append("strategy_id/contract_version must be ASIAN_SESSION_V1/1.0")
+    # CORRECTED 2026-08-19 (C-33): these literals still asserted the superseded
+    # 22:00-07:00 / 36-candle window after config/strategy.yaml was corrected on
+    # 2026-08-15 to 00:00-07:00 / 28. The validator therefore rejected its own SSOT
+    # before any engine logic ran. Authority for 00:00-07:00 / 28:
+    # config/strategy.yaml L85-90, SESSION_FLOW_V1_SPEC.md, STRATEGY_SPEC.md S10.
+    # sweep_window_hours stays 9 — it describes the 07:00-16:00 execution window,
+    # which is unchanged. No strategy behaviour depends on session_contract; it is
+    # asserted here and never read elsewhere.
     expected_contract = {
-        "asian_start_utc": "22:00",
+        "asian_start_utc": "00:00",
         "asian_end_utc": "07:00",
-        "required_m15_candles": 36,
+        "required_m15_candles": 28,
         "sweep_window_hours": 9,
     }
     for key, value in expected_contract.items():
@@ -251,8 +259,8 @@ def _validate(config: StrategyConfig) -> None:
             problems.append(f"session_contract.{key} must be {value!r} for ASIAN_SESSION_V1")
     if (config.session_start_utc, config.session_end_utc, config.session_candles,
             config.execution_start_utc, config.execution_end_utc, config.post_session_candles) != (
-                "22:00", "07:00", 36, "07:00", "16:00", 36):
-        problems.append("runtime session window must be 22:00-07:00 plus 07:00-16:00 UTC (36 + 36 M15 candles)")
+                "00:00", "07:00", 28, "07:00", "16:00", 36):
+        problems.append("runtime session window must be 00:00-07:00 plus 07:00-16:00 UTC (28 + 36 M15 candles)")
 
     if config.timeframe_seconds <= 0:
         problems.append("timeframe_seconds must be positive")

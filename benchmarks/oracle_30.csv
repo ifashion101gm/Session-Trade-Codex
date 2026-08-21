@@ -1,0 +1,31 @@
+slot,date,weekday,leg,graded_session,traded_session,eng_bias,eng_setup,eng_dir,eng_range_pips,eng_entry,eng_stop,eng_target,eng_fill_state,eng_r,eng_dir_source,vid_shown,vid_timestamp,vid_setup,vid_dir,vid_entry,vid_stop,vid_target,vid_result,is_skip,skip_reason_stated,match,notes
+01,2022-10-03,Mon,A->L,Asian,London,BEAR,SWEEP,SHORT,50.1,0.98256,0.98381,0.97630,FILLED,+3.723,swept_side,Y,,SWEEP,SHORT,0.98256,,,+5R (target reached),,,SETUP+DIR CONFIRMED,"chart R:R 5.15 / 64.0p = dragged-target artifact around 5R/62.6p. Entry label sits inside the box -> Reading A (0.98256), not 0.98342."
+02,2022-10-03,Mon,L->NY,London,NewYork,BEAR,TREND,SHORT,74.7,0.97900,0.98086,0.96966,FILLED,-1.000,—,Y,,TREND,SHORT,,,,miss,,,SETUP+DIR CONFIRMED,"trader-confirmed TREND/SHORT/miss. Engine agrees (TREND SHORT, stopped). SUPERSEDES truth_source_setups.json #2 which recorded SWEEP @0.98181."
+03,2022-10-04,Tue,A->L,Asian,London,BULL,TREND,LONG,66.0,0.98390,0.98225,0.99215,UNFILLED,+0.000,—,Y,,TREND,LONG,,,,miss,,,SETUP+DIR CONFIRMED,"RANGE label withdrawn: stated entry 0.9844 is 5p from midpoint, 38p from bottom. Engine TREND LONG UNFILLED = miss."
+04,2022-10-04,Tue,L->NY,London,NewYork,BULL,TREND,LONG,51.2,0.98783,0.98655,0.99423,UNFILLED,+0.000,—,Y,,TREND,LONG,,,,miss,,,SETUP+DIR CONFIRMED,"trader states TREND LONG. Engine agrees, UNFILLED. Stated entry 0.9904 = London high, disregarded as a misread line."
+05,2022-10-05,Wed,A->L,Asian,London,BULL,SWEEP,SHORT,35.7,0.99923,1.00012,0.99477,UNFILLED,+0.000,swept_side,,,,,,,,,,,,
+06,2022-10-05,Wed,L->NY,London,NewYork,BEAR,TREND,SHORT,78.8,0.99389,0.99586,0.98404,UNFILLED,+0.000,—,,,,,,,,,,,,
+07,2022-10-06,Thu,A->L,Asian,London,BEAR,TREND,SHORT,33.3,0.99096,0.99180,0.98680,FILLED,-1.000,—,,,,,,,,,,,,
+08,2022-10-06,Thu,L->NY,London,NewYork,BEAR,TREND,SHORT,62.7,0.98894,0.99050,0.98110,UNFILLED,+0.000,—,,,,,,,,,,,,
+09,2022-10-07,Fri,A->L,Asian,London,BEAR,SWEEP,LONG,46.1,0.97705,0.97590,0.98281,FILLED,-1.000,swept_side,,,,,,,,,,,,
+10,2022-10-07,Fri,L->NY,London,NewYork,BEAR,SWEEP,SHORT,35.3,0.98142,0.98230,0.97701,UNFILLED,+0.000,swept_side,,,,,,,,,,,,
+11,2022-10-10,Mon,A->L,Asian,London,BEAR,TREND,SHORT,37.4,0.97346,0.97440,0.96878,FILLED,+4.250,—,,,,,,,,,,,,
+12,2022-10-10,Mon,L->NY,London,NewYork,BEAR,TREND,SHORT,51.4,0.97076,0.97205,0.96434,FILLED,-1.000,—,,,,,,,,,,,,
+13,2022-10-11,Tue,A->L,Asian,London,BEAR,TREND,SHORT,52.2,0.96967,0.97098,0.96315,FILLED,-1.000,—,,,,,,,,,,,,
+14,2022-10-11,Tue,L->NY,London,NewYork,BULL,TREND,LONG,48.8,0.97137,0.97015,0.97747,FILLED,-1.000,—,,,,,,,,,,,,
+15,2022-10-12,Wed,A->L,Asian,London,BULL,TREND,LONG,51.7,0.97084,0.96955,0.97731,FILLED,-1.000,—,,,,,,,,,,,,
+16,2022-10-12,Wed,L->NY,London,NewYork,BEAR,TREND,SHORT,30.7,0.97110,0.97186,0.96726,FILLED,+4.250,—,,,,,,,,,,,,
+17,2022-10-13,Thu,A->L,Asian,London,BEAR,TREND,SHORT,33.4,0.97054,0.97137,0.96636,FILLED,-1.000,—,,,,,,,,,,,,
+18,2022-10-13,Thu,L->NY,London,NewYork,BULL,TREND,LONG,67.7,0.97192,0.97023,0.98039,FILLED,-1.000,—,,,,,,,,,,,,
+19,2022-10-14,Fri,A->L,Asian,London,BULL,TREND,LONG,46.5,0.97850,0.97733,0.98431,FILLED,-1.000,—,,,,,,,,,,,,
+20,2022-10-14,Fri,L->NY,London,NewYork,BEAR,TREND,SHORT,78.8,0.97485,0.97682,0.96500,FILLED,-1.000,—,,,,,,,,,,,,
+21,2022-10-17,Mon,A->L,Asian,London,BEAR,SWEEP,SHORT,25.3,0.97521,0.97584,0.97205,FILLED,+5.000,swept_side,,,,,,,,,,,,
+22,2022-10-17,Mon,L->NY,London,NewYork,BEAR,SWEEP,SHORT,50.6,0.97677,0.97803,0.97045,FILLED,-1.000,swept_side,,,,,,,,,,,,
+23,2022-10-18,Tue,A->L,Asian,London,BULL,TREND,LONG,49.4,0.98479,0.98356,0.99097,FILLED,-1.000,—,,,,,,,,,,,,
+24,2022-10-18,Tue,L->NY,London,NewYork,BEAR,TREND,SHORT,61.1,0.98433,0.98585,0.97669,FILLED,-1.000,—,,,,,,,,,,,,
+25,2022-10-19,Wed,A->L,Asian,London,BEAR,TREND,SHORT,46.5,0.98436,0.98553,0.97855,UNFILLED,+0.000,—,,,,,,,,,,,,
+26,2022-10-19,Wed,L->NY,London,NewYork,BEAR,TREND,SHORT,80.2,0.97993,0.98194,0.96990,FILLED,-1.000,—,,,,,,,,,,,,
+27,2022-10-20,Thu,A->L,Asian,London,BULL,TREND,LONG,39.8,0.97743,0.97644,0.98240,FILLED,+5.000,—,Y,,TREND,LONG,,,,+5R (target reached),,,SETUP+DIR CONFIRMED,DECISIVE for TREND entry = midpoint. Midpoint gives TP5; market-at-open gives STOP.
+28,2022-10-20,Thu,L->NY,London,NewYork,BULL,TREND,LONG,57.3,0.98003,0.97859,0.98719,FILLED,-1.000,—,,,,,,,,,,,,
+29,2022-10-21,Fri,A->L,Asian,London,BEAR,TREND,SHORT,21.7,0.97727,0.97781,0.97455,FILLED,-1.000,—,,,,,,,,,,,,
+30,2022-10-21,Fri,L->NY,London,NewYork,BEAR,SWEEP,LONG,70.2,0.97410,0.97235,0.98287,FILLED,-1.000,swept_side,,,,,,,,,,,,

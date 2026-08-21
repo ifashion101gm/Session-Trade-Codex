@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "requested_identity": "SSPF_V1_3_BASELINE_FROZEN",
+  "status": "IDENTITY_UNRESOLVED_NOT_FROZEN",
+  "recorded_utc": "2026-08-20T00:00:00Z",
+  "repository_head": "2b58c4f011de45bd6d15fca72a091ad72aa99958",
+  "working_tree_state": "DIRTY_PREEXISTING",
+  "decision": "No artifact in the repository carries the requested identity. Candidate files are fingerprinted for preservation, but none is declared the SSPF v1.3 frozen baseline.",
+  "known_distinct_lineage": {
+    "name": "SESSION_FLOW_V1_FIX1",
+    "spec": {
+      "file": "SESSION_FLOW_V1_SPEC.md",
+      "sha256": "ed1780dfaf79b25b72156fa3d9880b78329d7dca415c5e78f6e46f8411715c9e"
+    },
+    "engine": {
+      "file": "scripts/session_flow.py",
+      "sha256": "49a6269edda2cd12f71363030dadfbccde0614611eecb2e6b5b907509ac1bb08"
+    },
+    "warning": "This is registered SESSION_FLOW_V1_FIX1 lineage and must not be relabelled SSPF v1.3."
+  },
+  "candidate_legacy_artifacts": [
+    {"role": "config_candidate", "file": "config/strategy.yaml", "sha256": "ef20136d2587ca1502b15a55f50915ff0840681b93c3d9a82b84958b17833ad0"},
+    {"role": "engine_candidate", "file": "session_strategy/engine.py", "sha256": "e2d48979dee5cc13b9a02edb69c208a847527bf3b9ce82f8ffa8496c1a11522e"},
+    {"role": "golden_candidate", "file": "benchmarks/oct2022_full_dataset.csv", "sha256": "6fec1390deb46b2d4b3f45b816c1038d7291c5b3772a9b8d8d7273fd5a1107b8"},
+    {"role": "output_candidate", "file": "outputs/session_flow_y12_trades.json", "sha256": "fc3db330d5e40e1a26b3d38eb6b3b85001c238d9c909ed934ad35f7add4bffa8"}
+  ],
+  "audited_dataset_fingerprints": [
+    {"file": "data/eurusd_m15_y12_202608.master.csv", "sha256": "9c3145600dde5a82a5a47deb67b4e98f982f1e7c7f403ba45976d133226ff2cf"},
+    {"file": "data/gbpusd_m15_y12_202608.master.csv", "sha256": "c7825a45b5d7845cbed0a1496fe4acb8c9e402af25a637feb9e6cbb66317d270"},
+    {"file": "data/usdjpy_m15_y12_202608.master.csv", "sha256": "cffbd2772c72b9a537bbcab3acd4947398e0bdf06274956fc37eeaaa4560df4a"}
+  ],
+  "required_to_resolve": [
+    "authoritative SSPF v1.3 specification identity",
+    "authoritative SSPF v1.3 configuration identity",
+    "engine revision or immutable source hash",
+    "dataset manifest and fingerprint",
+    "golden-output set and reproduction command",
+    "runtime/dependency lock"
+  ],
+  "phase_b_gate": "BLOCKED_UNTIL_IDENTITY_RESOLVED_AND_REPRODUCED"
+}

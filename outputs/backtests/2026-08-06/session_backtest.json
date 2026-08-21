@@ -1,0 +1,179 @@
+{
+  "strategy_id": "SSPF_V2_2",
+  "contract_version": "2.2",
+  "config_hash": "10304d115519bcc1",
+  "trading_date": "2026-08-06",
+  "generated_utc": "2026-08-13T07:24:23.983282+00:00",
+  "read_only": true,
+  "cost_basis": "GROSS_R; historical bid/ask spread unavailable in M15 OHLC",
+  "intrabar_collision_policy": "STOP_FIRST",
+  "symbols": {
+    "EURUSD": {
+      "broker_symbol": "EURUSD",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "status": "EVALUATED",
+      "session_type": "BEARISH_TREND",
+      "asian_high": 1.15597,
+      "asian_low": 1.15411,
+      "asian_range": 0.0018599999999999728,
+      "range_model": "STATIC_SYMBOL_BOUNDS",
+      "range_minimum": 0.0015,
+      "range_maximum": 0.012,
+      "daily_atr_14": null,
+      "efficiency_ratio": 0.6774193548386211,
+      "close_location": 0.17204301075274336,
+      "setups_separate_research": [
+        {
+          "setup": "SWEEP",
+          "status": "NOT_ELIGIBLE",
+          "session_type": "BEARISH_TREND"
+        },
+        {
+          "setup": "TREND_CONTINUATION",
+          "status": "NO_SETUP",
+          "session_type": "BEARISH_TREND"
+        },
+        {
+          "setup": "RANGE_REJECTION",
+          "status": "NOT_ELIGIBLE",
+          "session_type": "BEARISH_TREND"
+        }
+      ],
+      "setups": [
+        {
+          "setup": "NONE",
+          "status": "NO_SETUP",
+          "session_type": "BEARISH_TREND"
+        }
+      ]
+    },
+    "GBPUSD": {
+      "broker_symbol": "GBPUSD",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "status": "REJECTED_RANGE_BOUNDS",
+      "session_type": "BEARISH_TREND",
+      "asian_high": 1.34726,
+      "asian_low": 1.34547,
+      "asian_range": 0.0017899999999999583,
+      "range_model": "STATIC_SYMBOL_BOUNDS",
+      "range_minimum": 0.0018,
+      "range_maximum": 0.015,
+      "daily_atr_14": null,
+      "efficiency_ratio": 0.5363128491619398,
+      "close_location": 0.2737430167598396,
+      "setups_separate_research": [],
+      "setups": []
+    },
+    "USDJPY": {
+      "broker_symbol": "USDJPY",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "status": "EVALUATED",
+      "session_type": "BULLISH_TREND",
+      "asian_high": 157.896,
+      "asian_low": 157.587,
+      "asian_range": 0.3089999999999975,
+      "range_model": "STATIC_SYMBOL_BOUNDS",
+      "range_minimum": 0.15,
+      "range_maximum": 1.2,
+      "daily_atr_14": null,
+      "efficiency_ratio": 0.8155339805825618,
+      "close_location": 0.8964401294498947,
+      "setups_separate_research": [
+        {
+          "setup": "SWEEP",
+          "status": "NOT_ELIGIBLE",
+          "session_type": "BULLISH_TREND"
+        },
+        {
+          "setup": "TREND_CONTINUATION",
+          "status": "NO_SETUP",
+          "session_type": "BULLISH_TREND"
+        },
+        {
+          "setup": "RANGE_REJECTION",
+          "status": "NOT_ELIGIBLE",
+          "session_type": "BULLISH_TREND"
+        }
+      ],
+      "setups": [
+        {
+          "setup": "NONE",
+          "status": "NO_SETUP",
+          "session_type": "BULLISH_TREND"
+        }
+      ]
+    },
+    "XAUUSD": {
+      "broker_symbol": "XAUUSD.crp",
+      "session_candles": 32,
+      "execution_candles": 12,
+      "data_quality": {
+        "passed": true,
+        "session": "32 contiguous closed candles",
+        "execution": "12 contiguous closed candles"
+      },
+      "status": "EVALUATED",
+      "session_type": "RANGE",
+      "asian_high": 4304.05,
+      "asian_low": 4247.21,
+      "asian_range": 56.840000000000146,
+      "range_model": "DAILY_ATR_14_DYNAMIC",
+      "range_minimum": 17.707428571428586,
+      "range_maximum": 97.39085714285723,
+      "daily_atr_14": 88.53714285714292,
+      "efficiency_ratio": 0.272343420126679,
+      "close_location": 0.2718156228008406,
+      "setups_separate_research": [
+        {
+          "setup": "SWEEP",
+          "status": "NO_SETUP",
+          "session_type": "RANGE"
+        },
+        {
+          "setup": "TREND_CONTINUATION",
+          "status": "NOT_ELIGIBLE",
+          "session_type": "RANGE"
+        },
+        {
+          "setup": "RANGE_REJECTION",
+          "status": "NO_SETUP",
+          "session_type": "RANGE"
+        }
+      ],
+      "setups": [
+        {
+          "setup": "NONE",
+          "status": "NO_SETUP",
+          "session_type": "RANGE"
+        }
+      ]
+    }
+  },
+  "entry_window_end_utc": "2026-08-06T11:00:00+00:00",
+  "position_hold_end_utc": "2026-08-06T20:00:00+00:00",
+  "end_of_day_exit_policy": "CLOSE_AT_LAST_COMPLETED_M15_CLOSE",
+  "canonical_setup_priority": [
+    "SWEEP",
+    "TREND_CONTINUATION",
+    "RANGE_REJECTION"
+  ],
+  "broker_utc_offset_hours": 3
+}

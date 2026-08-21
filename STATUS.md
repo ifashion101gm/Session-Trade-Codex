@@ -95,16 +95,43 @@ ALL              63 trades   net +27.124R   +0.431R/trade   win 29%
 ```
 95% CI on net R/trade   [-0.149, +1.010]   ** SPANS ZERO **
 profit factor            1.590
-max drawdown            11.071R
+max drawdown             6.330R   chronological   (was 11.071R symbol-major)
 cost drag                0.021R per trade  (immaterial)
+collisions               1 of 63 (1.6%) — STOP_FIRST costs 0.000R
 ```
+
+### The drawdown breach was a measurement artifact — corrected 2026-08-16
+
+`max drawdown 11.071R` was computed by walking a trade list built symbol-major:
+all 24 EURUSD trades, then all 18 GBPUSD, then all 21 USDJPY. **Nobody trades in
+that order.** Walked chronologically by exit time, with all symbols and both legs
+interleaved as they actually occurred, the figure is **6.330R** — peak 20 Oct to
+trough 21 Oct.
+
+`equity_curve()` in `backtest_session_flow.py` now does this by default and prints
+the symbol-major number beside it, labelled, so the two can never be confused again.
+
+**All four Stage-2 thresholds now pass on this sample.** The remaining objection is
+the one that always mattered: n=63, in-sample, fifteen days, CI spans zero.
+
+### The collision assumption costs nothing
+
+`STOP_FIRST` decides the outcome only when one bar contains both the stop and a live
+target. That happens in **1 of 63 trades (1.6%)**, and re-running the whole sample
+under `TARGET_FIRST` gives an identical **+27.124R**. The conservative assumption is
+free.
+
+**Consequence: tick-level replay is not worth building.** The reason to want ticks
+was to resolve intrabar ordering; there is almost nothing to resolve. Bar data is
+sufficient for this strategy, which follows from its design — entries are resting
+limits and targets sit 5R away, so stop and target rarely occupy the same bar.
 
 **All three symbols positive independently. All four setup-by-leg cells positive.** GBPUSD
 and USDJPY had no part in any threshold choice.
 
-**Against `config/lifecycle.json` Stage-2 thresholds: 3 of 4 pass.**
-`trades >= 50` now passes (63). The failure is **`max drawdown <= 10R`** at 11.071R — a new
-failure that appeared with the larger sample.
+**Against `config/lifecycle.json` Stage-2 thresholds: 4 of 4 pass** once drawdown is
+measured chronologically — see the correction below. Thresholds passing means the
+configured rules passed on fifteen in-sample days. It is not a verdict.
 
 **Verdict: research candidate — needs more evidence.** In-sample, fifteen days, CI spans
 zero. ~114 trades are needed for the interval to exclude zero at this effect size.
@@ -135,7 +162,17 @@ suggestion was wrong and is withdrawn.
 | **§4-A** | "BIAS TREND" — `close_location` or `sign(close − open)` | `close_location` (only reading the benchmark permits) | ~7R over 15 days |
 | **§4-B** | "IS RANGE SESSION?" — formula and threshold | `ER <= 0.35`, inherited, never sourced from the diagram | ~0.3R/trade across ±0.05 |
 | **§4-C** | "Trail" for the TREND runner | held at breakeven | unmeasured |
-| **§5.3a** | Leg 2 reference window | 07:00–12:00, inherited from V2 | unmeasured |
+
+**§5.3a (leg-2 window) is SIGNED as of 2026-08-16** — `07:00–12:00 / 20 bars`, promoted from
+`[UNSIGNED]` to `[BENCHMARK]`. It reproduces the Oct-6 chart entry to 0.15 pip; the only
+closer window (`06:00–13:00`, 0.00 pip) overlaps leg 1's confirmed reference and contradicts
+the `[TRADER]`-signed 12:00 desk run. See `SESSION_FLOW_V1_SPEC.md` §5.3b. Three decisions
+remain open.
+
+**New defect surfaced by the same chart:** Oct 6 implies a **~7.0 pip** stop where
+`stop = 25% of range` gives **15.7p**. The window is not the cause — both candidate windows
+give ~16p. The 25% sizing rule is now itself in question and has never been sourced to the
+diagram.
 
 ---
 
@@ -186,7 +223,8 @@ out-of-sample** — see `EXPORT_INSTRUCTIONS.md` and `ROADMAP.md`.
 |---|---|
 | `session_flow.py` | **canonical engine** — plans and replays, both legs |
 | `engine_report.py` | desk report at a reference close |
-| `backtest_session_flow.py` | costed backtest, pools every dataset |
+| `backtest_session_flow.py` | costed backtest, chronological drawdown, collision audit |
+| `fetch_mt5_year.py` | **read-only** long history pull from the terminal, DST-aware |
 | `build_dataset.py` | master + views + manifest from an MT5 export |
 | `verify_datasets.py` | drift check, exits non-zero |
 | `validate_golden_oct3.py` | golden-case conformance |

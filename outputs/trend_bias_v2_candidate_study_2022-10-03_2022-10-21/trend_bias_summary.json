@@ -1,0 +1,81 @@
+{
+  "contract_id": "TREND_BIAS_V2",
+  "study": "CANDIDATE_DIRECTION_ONLY_OUTCOME_BLIND",
+  "period": {
+    "start": "2022-10-03",
+    "end": "2022-10-21"
+  },
+  "symbols": [
+    "EURUSD",
+    "GBPUSD",
+    "USDJPY"
+  ],
+  "population": {
+    "all_references": 90,
+    "trend_references": 8
+  },
+  "candidate_a": {
+    "rule": "CLOSE_GT_OPEN_LONG_CLOSE_LT_OPEN_SHORT_EQUAL_UNRESOLVED",
+    "long": 5,
+    "short": 3,
+    "unresolved": 0,
+    "coverage_fraction": 1.0,
+    "available_by_box_completion": true,
+    "by_leg": {
+      "POST_ASIAN": {
+        "trend_references": 0,
+        "long": 0,
+        "short": 0,
+        "unresolved": 0,
+        "coverage_fraction": null
+      },
+      "POST_LONDON": {
+        "trend_references": 8,
+        "long": 5,
+        "short": 3,
+        "unresolved": 0,
+        "coverage_fraction": 1.0
+      }
+    },
+    "by_symbol": {
+      "EURUSD": {
+        "SHORT": 2,
+        "LONG": 1
+      },
+      "GBPUSD": {
+        "SHORT": 1,
+        "LONG": 1
+      },
+      "USDJPY": {
+        "LONG": 3
+      }
+    }
+  },
+  "candidate_b": {
+    "status": "NOT_EVALUABLE_SPEC_INCOMPLETE",
+    "missing": [
+      "timeframe",
+      "feed",
+      "structure_equation",
+      "LONG_rule",
+      "SHORT_rule",
+      "staleness_and_conflict_rules"
+    ]
+  },
+  "candidate_c": {
+    "status": "NOT_EVALUABLE_SPEC_INCOMPLETE",
+    "missing": [
+      "source_context",
+      "transfer_rule",
+      "LONG_rule",
+      "SHORT_rule",
+      "carry_duration",
+      "missing_and_conflict_rules"
+    ]
+  },
+  "candidate_agreement": "NOT_CALCULABLE_UNTIL_B_AND_C_ARE_DEFINED",
+  "trade_outcomes_used": false,
+  "router_changed": false,
+  "sweep_classifier_changed": false,
+  "execution_or_scheduling": false
+}

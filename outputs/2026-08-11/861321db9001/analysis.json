@@ -1,0 +1,165 @@
+{
+  "analysis_id": "861321db9001",
+  "timestamp_utc": "2026-08-11T11:09:15.134062Z",
+  "session_date": "2026-08-11",
+  "symbol": "USDJPY",
+  "account": {
+    "login_masked": "****985",
+    "account_type": "demo",
+    "balance": 987.82,
+    "equity": 987.82,
+    "server": "VTMarkets-Demo",
+    "trade_allowed": true,
+    "expert_allowed": true,
+    "ping_ms": 283.341
+  },
+  "bid": 159.115,
+  "ask": 159.117,
+  "spread": 0.001999999999981128,
+  "broker_utc_offset_hours": 3,
+  "session_high": 159.377,
+  "session_low": 158.918,
+  "session_range": 0.4590000000000032,
+  "midpoint": 159.1475,
+  "session_open": 159.158,
+  "session_close": 159.363,
+  "r0": 0.1147500000000008,
+  "efficiency_ratio": 0.16666666666667437,
+  "classification": "RANGE",
+  "bias": "BULLISH",
+  "setup": "RANGE",
+  "sweep": null,
+  "side": "BUY",
+  "order_type": "BUY_LIMIT",
+  "entry": 158.918,
+  "stop_loss": 158.803,
+  "take_profit": 159.493,
+  "partial_target": 159.377,
+  "partial_target_r": 3.991304347825799,
+  "actual_r": 0.1150000000000091,
+  "volume": 0.13,
+  "intended_risk_cash": 9.8782,
+  "actual_risk_cash": 9.4146,
+  "actual_risk_percent": 0.953068372780466,
+  "expiry_utc": "2026-08-11T11:00:00Z",
+  "gates": [
+    {
+      "name": "G1_ENVIRONMENT",
+      "passed": true,
+      "detail": "account=demo, server=VTMarkets-Demo, login=****985"
+    },
+    {
+      "name": "G3_UNIVERSE",
+      "passed": true,
+      "detail": "symbol=USDJPY"
+    },
+    {
+      "name": "G0_BROKER_CLOCK",
+      "passed": true,
+      "detail": "verified UTC+3:00, normalized tick age=3s"
+    },
+    {
+      "name": "G2_DATA_INTEGRITY",
+      "passed": true,
+      "detail": "valid session and fresh tick"
+    },
+    {
+      "name": "G4_RANGE_FLOOR",
+      "passed": true,
+      "detail": "range=0.459, required=0.08"
+    },
+    {
+      "name": "G5_BREACH_QUALITY",
+      "passed": true,
+      "detail": "qualified or not required"
+    },
+    {
+      "name": "G6_BIAS_AGREEMENT",
+      "passed": true,
+      "detail": "bias=BULLISH, setup=RANGE"
+    },
+    {
+      "name": "G7_STOP_PROTECTION",
+      "passed": true,
+      "detail": "protected"
+    },
+    {
+      "name": "G8_STOPS_LEVEL",
+      "passed": true,
+      "detail": "distance=0.115, minimum=0"
+    },
+    {
+      "name": "G9_VOLUME_BOUNDS",
+      "passed": true,
+      "detail": "volume=0.13"
+    },
+    {
+      "name": "G10_DAILY_RISK",
+      "passed": true,
+      "detail": "used+proposed=9.41, limit=19.76"
+    },
+    {
+      "name": "G11_DRAWDOWN",
+      "passed": true,
+      "detail": "drawdown=0.00%"
+    },
+    {
+      "name": "G12_EXECUTION_WINDOW",
+      "passed": false,
+      "detail": "now=11:09:15 UTC"
+    }
+  ],
+  "warnings": [],
+  "candle_times": [
+    "2026-08-11T00:00:00Z",
+    "2026-08-11T00:15:00Z",
+    "2026-08-11T00:30:00Z",
+    "2026-08-11T00:45:00Z",
+    "2026-08-11T01:00:00Z",
+    "2026-08-11T01:15:00Z",
+    "2026-08-11T01:30:00Z",
+    "2026-08-11T01:45:00Z",
+    "2026-08-11T02:00:00Z",
+    "2026-08-11T02:15:00Z",
+    "2026-08-11T02:30:00Z",
+    "2026-08-11T02:45:00Z",
+    "2026-08-11T03:00:00Z",
+    "2026-08-11T03:15:00Z",
+    "2026-08-11T03:30:00Z",
+    "2026-08-11T03:45:00Z",
+    "2026-08-11T04:00:00Z",
+    "2026-08-11T04:15:00Z",
+    "2026-08-11T04:30:00Z",
+    "2026-08-11T04:45:00Z",
+    "2026-08-11T05:00:00Z",
+    "2026-08-11T05:15:00Z",
+    "2026-08-11T05:30:00Z",
+    "2026-08-11T05:45:00Z",
+    "2026-08-11T06:00:00Z",
+    "2026-08-11T06:15:00Z",
+    "2026-08-11T06:30:00Z",
+    "2026-08-11T06:45:00Z",
+    "2026-08-11T07:00:00Z",
+    "2026-08-11T07:15:00Z",
+    "2026-08-11T07:30:00Z",
+    "2026-08-11T07:45:00Z"
+  ],
+  "post_session_candle_times": [
+    "2026-08-11T08:00:00Z",
+    "2026-08-11T08:15:00Z",
+    "2026-08-11T08:30:00Z",
+    "2026-08-11T08:45:00Z",
+    "2026-08-11T09:00:00Z",
+    "2026-08-11T09:15:00Z",
+    "2026-08-11T09:30:00Z",
+    "2026-08-11T09:45:00Z",
+    "2026-08-11T10:00:00Z",
+    "2026-08-11T10:15:00Z",
+    "2026-08-11T10:30:00Z",
+    "2026-08-11T10:45:00Z"
+  ],
+  "config_hash": "fddb7465a73fd724",
+  "approved": false,
+  "provisional": false,
+  "status": "NO_TRADE"
+}

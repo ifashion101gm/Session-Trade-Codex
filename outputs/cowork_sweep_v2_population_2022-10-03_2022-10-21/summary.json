@@ -1,0 +1,31 @@
+{
+  "contract": "COWORK_SWEEP_V2",
+  "study": "SIGNAL_POPULATION_ONLY_NO_ORDERS_FILLS_OR_PNL",
+  "references": 90,
+  "valid": 90,
+  "trend_sessions": 8,
+  "range_sessions": 82,
+  "range_cycles_with_cowork_sweep": 55,
+  "range_cycles_without_cowork_sweep": 27,
+  "total_cowork_sweep_signals": 97,
+  "first_signal_directions": {
+    "SHORT": 25,
+    "LONG": 30
+  },
+  "by_leg": {
+    "POST_ASIAN": {
+      "range_cycles": 45,
+      "cycles_with_sweep": 32,
+      "cycles_without_sweep": 13,
+      "total_sweep_signals": 66
+    },
+    "POST_LONDON": {
+      "range_cycles": 37,
+      "cycles_with_sweep": 23,
+      "cycles_without_sweep": 14,
+      "total_sweep_signals": 31
+    }
+  },
+  "retired_completed_box_population_comparable": false,
+  "orders_fills_pnl": "NOT_CALCULATED"
+}
