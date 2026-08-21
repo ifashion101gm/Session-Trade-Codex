@@ -22,6 +22,17 @@ data/*.pre_audit_migration_*.sqlite3
 /USDJPY_M15_*.csv
 /XAUUSD_M15_*.csv
 
+# Large generated data files — rebuilt locally via scripts/fetch_mt5_year.py.
+# Manifests (sha256) are tracked; raw CSVs are not.
+data/*.master.csv
+data/*.manifest.json
+data/*_audit.csv
+data/*_utc.csv
+data/sealed/
+
+# Output JSON results — large, reproducible, not evidence
+outputs/**/*.json
+
 # OS / editor
 .DS_Store
 Thumbs.db
