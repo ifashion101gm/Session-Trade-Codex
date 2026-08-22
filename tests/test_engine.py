@@ -17,7 +17,8 @@ from session_strategy.models import AccountSnapshot, Candle, Reason, SymbolSpec
 
 
 TRADING_DATE = date(2026, 8, 11)
-ASIAN_START = datetime(2026, 8, 10, 22, tzinfo=timezone.utc)
+# Session now starts 00:00 on the trading date (corrected window 00:00-07:00 / 28 bars)
+ASIAN_START = datetime(2026, 8, 11, 0, tzinfo=timezone.utc)
 EXEC_START = datetime(2026, 8, 11, 7, tzinfo=timezone.utc)
 SPEC = SymbolSpec("EURUSD", 5, .00001, .00001, .01, 100, .01, 0)
 
@@ -39,24 +40,24 @@ def execution(i, o, h, l, c):
 
 
 def range_session(close=1.16500):
-    """36 candles spanning HIGH..LOW with a mid-range close -> RANGE."""
+    """28 candles spanning HIGH..LOW with a mid-range close -> RANGE (corrected: 00:00-07:00 / 28 bars)."""
     bars = []
-    for i in range(36):
+    for i in range(28):
         top = HIGH if i == 5 else HIGH - 0.0005
         bottom = LOW if i == 20 else LOW + 0.0005
         bars.append(asian(i, 1.16600, top, bottom, 1.16600))
-    bars[-1] = asian(35, 1.16600, HIGH - 0.0005, LOW + 0.0005, close)
+    bars[-1] = asian(27, 1.16600, HIGH - 0.0005, LOW + 0.0005, close)
     return bars
 
 
 def trend_session():
-    """36 candles trending up, closing near the high -> BULLISH_TREND."""
+    """28 candles trending up, closing near the high -> BULLISH_TREND (corrected: 00:00-07:00 / 28 bars)."""
     bars = []
-    for i in range(36):
-        o = LOW + (RANGE - 0.0002) * i / 35
+    for i in range(28):
+        o = LOW + (RANGE - 0.0002) * i / 27
         bars.append(asian(i, o, min(o + 0.00012, HIGH), max(o - 0.00004, LOW), o + 0.0001))
     bars[0] = asian(0, LOW, LOW + 0.0002, LOW, LOW + 0.0001)
-    bars[-1] = asian(35, HIGH - 0.0004, HIGH, HIGH - 0.0005, HIGH - 0.0002)
+    bars[-1] = asian(27, HIGH - 0.0004, HIGH, HIGH - 0.0005, HIGH - 0.0002)
     return bars
 
 
@@ -80,11 +81,13 @@ class EngineTests(unittest.TestCase):
             news_calendar_available=kwargs.get("news_calendar_available", True))
 
     # ---------------------------------------------------------------- time model
-    def test_asian_session_starts_on_the_prior_calendar_day(self):
+    def test_asian_session_window_is_midnight_to_0700_utc(self):
+        # CORRECTED 2026-08-22: the session window is 00:00-07:00 UTC / 28 bars.
+        # The prior 22:00-07:00 / 36 bar window was superseded on 2026-08-15.
         start, end = session_bounds(TRADING_DATE, self.config)
-        self.assertEqual(start, datetime(2026, 8, 10, 22, tzinfo=timezone.utc))
+        self.assertEqual(start, datetime(2026, 8, 11, 0, tzinfo=timezone.utc))
         self.assertEqual(end, datetime(2026, 8, 11, 7, tzinfo=timezone.utc))
-        self.assertEqual((end - start).total_seconds() / 3600, 9.0)
+        self.assertEqual((end - start).total_seconds() / 3600, 7.0)
         self.assertEqual(end.date(), TRADING_DATE)
 
     def test_execution_window_runs_through_the_london_session(self):
@@ -97,9 +100,10 @@ class EngineTests(unittest.TestCase):
         self.assertEqual(self.config.contract_version, "1.0")
         self.assertEqual(self.config.system["engine_version"], "v1.0")
         self.assertTrue(self.config.system["supersede_legacy"])
-        self.assertEqual(self.config.session_candles, 36)
+        # CORRECTED 2026-08-22: 00:00-07:00 / 28 M15 session bars.
+        self.assertEqual(self.config.session_candles, 28)
         self.assertEqual(self.config.timeframe, "M15")
-        self.assertEqual(self.config.expected_session_candles, 36)
+        self.assertEqual(self.config.expected_session_candles, 28)
         self.assertEqual(self.config.post_session_candles, 36)
         self.assertEqual(self.config.expected_post_session_candles, 36)
 
@@ -113,10 +117,10 @@ class EngineTests(unittest.TestCase):
     # ------------------------------------------------------------------ validation
     def test_missing_and_duplicated_candles_are_rejected(self):
         bars = range_session()
-        self.assertTrue(validate_candles(bars, ASIAN_START, 36, self.config)[0])
-        self.assertFalse(validate_candles(bars[:35], ASIAN_START, 36)[0])
-        duped = bars[:10] + [bars[9]] + bars[10:35]
-        self.assertFalse(validate_candles(duped, ASIAN_START, 36, self.config)[0])
+        self.assertTrue(validate_candles(bars, ASIAN_START, 28, self.config)[0])
+        self.assertFalse(validate_candles(bars[:27], ASIAN_START, 28)[0])
+        duped = bars[:10] + [bars[9]] + bars[10:27]
+        self.assertFalse(validate_candles(duped, ASIAN_START, 28, self.config)[0])
 
     def test_empty_execution_window_is_valid(self):
         self.assertTrue(validate_candles([], EXEC_START, 36, minimum_count=0)[0])
@@ -313,7 +317,7 @@ class EngineTests(unittest.TestCase):
         self.assertIn(Reason.EXCESSIVE_SPREAD, result.reason_codes)
 
     def test_range_outside_configured_bounds_is_rejected(self):
-        tiny = [asian(i, 1.16600, 1.16605, 1.16595, 1.16600) for i in range(36)]
+        tiny = [asian(i, 1.16600, 1.16605, 1.16595, 1.16600) for i in range(28)]
         result = self.run_analysis(tiny)
         gate = next(g for g in result.gates if g.name == "G5_RANGE_BOUNDS")
         self.assertFalse(gate.passed)
@@ -337,21 +341,21 @@ class EngineTests(unittest.TestCase):
     def test_half_open_window_filter_excludes_the_closing_bar(self):
         bars = range_session() + [execution(0, 1.16500, 1.16510, 1.16490, 1.16500)]
         kept = filter_window(bars, ASIAN_START, EXEC_START)
-        self.assertEqual(len(kept), 36)
+        self.assertEqual(len(kept), 28)
         self.assertTrue(all(c.time < EXEC_START for c in kept))
         self.assertEqual(len(filter_window(bars, EXEC_START, EXEC_START + timedelta(hours=9))), 1)
 
     def test_unclosed_or_future_bars_are_rejected(self):
         bars = range_session()
         mid_bar = bars[-1].time + timedelta(minutes=5)   # the last bar has not closed yet
-        ok, detail = validate_candles(bars, ASIAN_START, 36, self.config, now=mid_bar)
+        ok, detail = validate_candles(bars, ASIAN_START, 28, self.config, now=mid_bar)
         self.assertFalse(ok)
         self.assertIn("unclosed", detail)
 
     def test_non_positive_ohlc_is_rejected(self):
         bars = range_session()
         bars[3] = asian(3, 1.16600, 1.16650, 0.0, 1.16600)
-        self.assertFalse(validate_candles(bars, ASIAN_START, 36, self.config)[0])
+        self.assertFalse(validate_candles(bars, ASIAN_START, 28, self.config)[0])
 
     def test_logical_symbol_maps_to_the_broker_symbol(self):
         self.assertEqual(self.config.broker_symbol("XAUUSD"), "XAUUSD.crp")

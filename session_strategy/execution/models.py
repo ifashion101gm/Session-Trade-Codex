@@ -1,6 +1,6 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from enum import Enum
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Optional, Literal
 
 # Broker‑neutral representation of a trade decision
@@ -51,6 +51,10 @@ class ValidationResult(Enum):
     MISSING_ENTRY = "MISSING_ENTRY"
     MISSING_STOP = "MISSING_STOP"
     MISSING_TARGET = "MISSING_TARGET"
+    # These were returned by validator.py but absent from the enum (H-1 fix)
+    INVALID_STOP = "INVALID_STOP"
+    INVALID_TARGET = "INVALID_TARGET"
+    INVALID_TRADE_GEOMETRY = "INVALID_TRADE_GEOMETRY"
     INVALID_RISK = "INVALID_RISK"
     ENTRY_CONTRACT_UNSIGNED = "ENTRY_CONTRACT_UNSIGNED"
     TRADING_DISABLED = "TRADING_DISABLED"
@@ -68,7 +72,9 @@ class ExecutionReport:
     order_check_retcode: Optional[int] = None
     order_send_retcode: Optional[int] = None
     mt5_ticket: Optional[int] = None
-    timestamp: datetime = datetime.utcnow()
+    # M-8 fix: use default_factory; datetime.utcnow() at class level evaluated
+    # once at import time (shared across all instances) and is deprecated in 3.12+.
+    timestamp: datetime = field(default_factory=lambda: datetime.now(timezone.utc))
 
 class RiskResultReason(Enum):
     SUCCESS = "SUCCESS"

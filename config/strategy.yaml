@@ -34,7 +34,7 @@ governance:
   implementation_authorized: true
   backtest_authorized_after_schema_validation: true
   demo_execution_authorized: true
-  live_execution_authorized: true
+  live_execution_authorized: false
   research_status: PROVISIONAL_LOCKED_FOR_BASELINE
   optimization_allowed: false
   provisional_parameters:
@@ -50,9 +50,9 @@ governance:
   # authorize demo or live execution, and optimization remains prohibited.
   parameter_signoff:
     status: APPROVED
-    config_hash: 0f2e89f3a44fca01
-    approved_by: TRADER_CLASSIFIER_UPGRADE
-    approved_utc: "2026-08-15T00:00:00Z"
+    config_hash: a41881d1cb4de00c
+    approved_by: EXECUTION_LAYER_REMEDIATION_2026_08_22
+    approved_utc: "2026-08-22T00:00:00Z"
   promotion_requirements:
     - deterministic_unit_tests_pass
     - golden_cases_pass
@@ -96,9 +96,9 @@ candle_timestamp_semantics: bar_open_time
 # at G4_SESSION_DATA on candle count. See SESSION_FLOW_V1_SPEC.md and STRATEGY_SPEC.md S10.
 # This changes the config hash and starts a new evidence set.
 # Levels lock at 07:00, followed by the 07:00-16:00 London entry window.
-session_start_utc: "22:00"
+session_start_utc: "00:00"
 session_end_utc: "07:00"
-session_candles: 36
+session_candles: 28
 execution_start_utc: "07:00"
 execution_end_utc: "16:00"
 post_session_candles: 36

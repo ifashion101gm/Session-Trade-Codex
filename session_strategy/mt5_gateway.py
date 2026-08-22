@@ -26,12 +26,16 @@ from .models import AccountSnapshot, Candle, SymbolSpec
 
 logger = logging.getLogger(__name__)
 
-#: MT5 API surface this project must never call. Asserted at connect time so a dependency
-#: upgrade or an accidental import cannot quietly widen the boundary.
+#: MT5 API calls that the *read-only* gateway must never expose.
+#: Asserted at connect time so a dependency upgrade or an accidental import
+#: cannot quietly widen the boundary.
 FORBIDDEN_MT5_CALLS = (
     "order_send", "order_check", "order_calc_margin_send", "positions_close",
     "position_close", "order_delete", "order_modify", "login",
 )
+
+# MT5 calls permitted on the *execution* gateway (removed from the forbidden list).
+_EXECUTION_PERMITTED = frozenset({"order_send", "order_check"})
 
 
 class MT5ReadOnlyGateway:
@@ -190,29 +194,7 @@ class MT5ReadOnlyGateway:
 
     def deals(self, start: datetime, end: datetime) -> list[dict[str, Any]]:
         return [d._asdict() for d in (mt5.history_deals_get(start, end) or ())]
-    def order_send(self, request: dict) -> None:
-        """Basic logging of order submissions.
 
-        This method enforces execution permissions and logs the request. In the read‑only gateway,
-        the actual MT5 call is intentionally omitted.
-        """
-        self._assert_permissions()
-        logger.info("Order submission", extra={"request": request})
-        # Placeholder: actual send not implemented in read-only gateway.
-
-
-
-    def order_check(self, request: dict) -> dict:
-        """Dry‑run order check.
-
-        Logs the request and returns a simulated success response when the gateway operates in demo mode.
-        The return format mirrors the real MT5 ``order_check`` dictionary. Real validation will be performed
-        by a future ``MT5TradingGateway`` subclass.
-        """
-        self._assert_permissions()
-        logger.info("Order check", extra={"request": request})
-        # Simulated successful check – retcode 0 per MT5 conventions.
-        return {"retcode": 0, "order": request, "comment": "dry‑run check passed"}
     def historical_spread(self, symbol: str, timestamp_utc: datetime,
                           broker_offset_hours: int = 0,
                           window_seconds: int = 60) -> float | None:
@@ -227,3 +209,87 @@ class MT5ReadOnlyGateway:
         spreads = [float(row["ask"] - row["bid"]) for row in rows
                    if float(row["ask"]) > float(row["bid"])]
         return median(spreads) if spreads else None
+
+    # order_send and order_check are intentionally absent from MT5ReadOnlyGateway.
+    # Physical absence (not just runtime assertion) prevents research code from
+    # accidentally touching the trading surface. Use MT5ExecutionGateway instead.
+
+
+class MT5ExecutionGateway(MT5ReadOnlyGateway):
+    """Extends the read-only gateway with controlled order submission.
+
+    Only ``"demo"`` execution mode is accepted at construction.  The read-only
+    boundary check is re-run at ``__enter__`` and additionally verifies that
+    ``order_send`` and ``order_check`` are *not* in the forbidden list for this
+    subclass (they are legitimately present here).
+
+    Parameters
+    ----------
+    execution_mode:
+        Must be ``"demo"`` — no live path exists.  Passing any other value
+        raises ``ValueError`` immediately at construction.
+    execution_permissions:
+        Passed through to :class:`MT5ReadOnlyGateway`; ``submit_orders``
+        must be ``True`` for ``order_send`` to proceed.
+    """
+
+    def __init__(
+        self,
+        execution_mode: str,
+        execution_permissions: dict | None = None,
+    ) -> None:
+        if execution_mode != "demo":
+            raise ValueError(
+                f"MT5ExecutionGateway requires execution_mode='demo'; got {execution_mode!r}."
+                " Live trading is not implemented."
+            )
+        super().__init__(execution_permissions=execution_permissions)
+        self._execution_mode = execution_mode
+
+    @staticmethod
+    def _assert_read_only() -> None:
+        """Override: execution gateway permits order_send and order_check."""
+        exposed = sorted(
+            n for n in FORBIDDEN_MT5_CALLS
+            if hasattr(MT5ExecutionGateway, n) and n not in _EXECUTION_PERMITTED
+        )
+        if exposed:
+            raise RuntimeError(f"Execution gateway boundary violated: exposes {exposed}")
+
+    def order_check(self, request: dict) -> dict:
+        """Broker-side dry-run for the given order request.
+
+        Returns a dict matching the MT5 ``order_check`` return format.  A
+        ``retcode`` of 0 indicates the order would be accepted.
+        """
+        self._assert_permissions()
+        result = mt5.order_check(request)
+        if result is None:
+            logger.warning("order_check returned None: %s", mt5.last_error())
+            return {"retcode": -1, "comment": "order_check failed", "order": request}
+        result_dict = result._asdict() if hasattr(result, "_asdict") else dict(result)
+        logger.info("order_check retcode=%s", result_dict.get("retcode"))
+        return result_dict
+
+    def order_send(self, request: dict) -> dict:
+        """Submit an order to the connected MT5 terminal (demo only).
+
+        Requires:
+        - ``submit_orders`` permission in ``execution_permissions``.
+        - The gateway was constructed with ``execution_mode="demo"``.
+
+        Returns the MT5 result dict with at least ``retcode`` and ``order`` keys.
+        """
+        self._assert_permissions()
+        if not self._permissions.get("submit_orders"):
+            raise PermissionError(
+                "order_send blocked: submit_orders permission not granted"
+            )
+        logger.info("order_send demo symbol=%s volume=%s", request.get("symbol"), request.get("volume"))
+        result = mt5.order_send(request)
+        if result is None:
+            logger.error("order_send returned None: %s", mt5.last_error())
+            return {"retcode": -1, "comment": "order_send failed", "order": request}
+        result_dict = result._asdict() if hasattr(result, "_asdict") else dict(result)
+        logger.info("order_send retcode=%s ticket=%s", result_dict.get("retcode"), result_dict.get("order"))
+        return result_dict

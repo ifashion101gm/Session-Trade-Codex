@@ -34,8 +34,8 @@ class SetupRule:
 
 @dataclass(frozen=True)
 class StrategyConfig:
+    # Required fields (no defaults) must precede all default-valued fields.
     mode: str
-    trading_mode: str = "demo"
     strategy_id: str
     contract_version: str
     system: dict[str, Any]
@@ -71,6 +71,9 @@ class StrategyConfig:
     news_filter: dict[str, Any]
     risk: dict[str, Any]
     symbols: dict[str, SymbolConfig]
+    # Default-valued fields follow.  Safety defaults are fail-closed.
+    # trading_mode: only "demo" is authorized; "live" is explicitly blocked.
+    trading_mode: str = "demo"
     setup_rules: dict[str, SetupRule] = field(default_factory=dict)
     raw: dict[str, Any] = field(default_factory=dict)
 

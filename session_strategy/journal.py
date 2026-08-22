@@ -14,6 +14,10 @@ class Journal:
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.db = sqlite3.connect(self.path)
         self.db.row_factory = sqlite3.Row
+        # M-7 fix: WAL mode allows concurrent reads during writes and eliminates
+        # "database is locked" errors in the production sync/execute loop.
+        self.db.execute("PRAGMA journal_mode=WAL")
+        self.db.execute("PRAGMA synchronous=NORMAL")
         self.db.execute("PRAGMA foreign_keys=ON")
         self.db.executescript("""
         CREATE TABLE IF NOT EXISTS analyses (
