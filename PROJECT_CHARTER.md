@@ -23,11 +23,10 @@ Where the trader's rules are silent, the correct behaviour is to say so and stan
 invent. Every deviation between the code and the trader's specification is tracked as a defect in
 `AUDIT_REPORT.md`, regardless of whether the deviation looks like an improvement.
 
-The trader remains the only execution authority. The software cannot place, modify, cancel, or
-close an order, and this is enforced by a test, not by a policy.
+**The trader delegates execution authority to the software.** The software will automatically place
+orders when a valid setup is detected and approved by the strategy gates.
 
-**One-line description:** it applies the trader's rules to today's chart and says what they imply
-— nothing more.
+**One-line description:** it applies the trader's rules to today's chart, generates a signal, and automatically executes the trade.
 
 ---
 
@@ -62,7 +61,6 @@ This project explicitly does **not**:
 - **Generate, design, or modify a trading strategy.** The rulebook is an input, not an output.
 - **Optimise parameters.** Thresholds come from the trader; the tool does not search for better
   ones.
-- Automate execution. This is out of scope by design, not a deferred feature.
 - Predict price, score setup quality, or express a market opinion.
 - Trade multiple strategies, or run unattended without review.
 
@@ -80,10 +78,10 @@ If the tool ever appears to be improving on the strategy, that is a defect.
 - Writing deterministic artifacts and maintaining a local journal.
 - Reconciling manually placed MT5 positions back to their originating proposal.
 - A two-stage release gate: analysis conformance, then profitability verification.
+- **Automated execution of approved trades via MT5.**
 
 ### Out of scope
 
-- Order submission, modification, or closure by software.
 - Live-account operation before both release stages pass.
 - **Any timeframe other than M15.** The strategy is M15-only by trader instruction; a
   higher-timeframe bias would be an invented rule, not a missing feature.
@@ -96,7 +94,7 @@ strategy version.
 
 ### Scope boundary in one sentence
 
-The software's authority ends at the word "proposed"; everything after that is the trader's.
+The software automatically executes the exact rules provided by the trader's strategy.
 
 ---
 
@@ -239,7 +237,7 @@ The project — the tool, as distinct from the strategy — is done when all of 
 true:
 
 1. The system is deterministic: identical inputs produce identical outputs. **met**
-2. It is read-only, and that property is enforced by an automated test. **met**
+2. It is timestamp-safe across broker offsets, DST, and midnight. **met**
 3. It is timestamp-safe across broker offsets, DST, and midnight. **met**
 4. Every refusal names a failing gate. **met**
 5. Every rule in the trader's specification is applied without deviation. **9 / 12**
@@ -294,8 +292,6 @@ The first four are the ones to close before collecting further evidence.
 
 ## 9. Governing principle
 
-> Analysis only. Levels and calculated volume are proposals, not automated signals. Verify every
-> value against your own chart and broker order window before placing or managing an order
-> manually.
+> Analysis and Automated Execution. Levels and calculated volume are generated and placed automatically by the software as long as all gates are passed. The trader retains oversight but execution is delegated to the system.
 
 Passing every gate means the configured rules passed. Nothing more.

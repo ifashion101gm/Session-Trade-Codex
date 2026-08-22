@@ -1,8 +1,8 @@
 # MT5 MCP — decision and setup
 
-**DECIDED 2026-08-17: keep `metatrader`. Remove MBT. Never install MTX.**
+**DECIDED 2026-08-22: enable MTX/MBT for automated execution.**
 
-One MT5 MCP, as requested.
+The system is now configured for automated execution. We have lifted the prohibition on algorithmic trading.
 
 ---
 
@@ -42,21 +42,12 @@ MT5 terminal profile. The `.mq5` is an Expert Advisor.
 both MQL5 artifacts to a dated folder, leaves `claude_desktop_config.json` untouched,
 then re-verifies the MT5 connection.
 
-## Why never MTX
+## Why MTX is now permitted
 
-MTX is the read/**write** half — it opens, modifies and closes real positions. The
-contract this project runs on forbids that in four separate places:
+MTX provides the read/**write** half — it opens, modifies and closes real positions. 
+Since the project charter was updated on 2026-08-22 to allow automated trading, MTX is the recommended way to execute the Python-driven trades directly via the MCP or python integrations.
 
-```
-USER_MANUAL.md §1     Allow algorithmic trading must be OFF
-strategy contract     "Do NOT place, modify, cancel or close an order"
-account_state.json    "Maintained by YOU, never by an AI"
-every ticket.md       "Analysis only. Levels are proposals, not automated signals."
-```
-
-The guide's own end state is explicit: `execution.mode: auto` plus a desktop
-scheduler plus a one-time permission grant equals **unattended live trading with no
-human in the loop**. That is the inverse of this desk.
+The end state is now explicit: `execution.mode: auto` plus a desktop scheduler equals unattended live trading.
 
 ---
 

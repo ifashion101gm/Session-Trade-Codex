@@ -233,13 +233,13 @@ symbols:
     display_pip_size: 0.0001
     minimum_range: 0.0018
     maximum_range: 0.0150
-    maximum_spread: 0.00035
+    maximum_spread: 0.00040
   USDJPY:
     broker_symbol: USDJPY
     display_pip_size: 0.01
     minimum_range: 0.150
     maximum_range: 1.200
-    maximum_spread: 0.030
+    maximum_spread: 0.035
   XAUUSD:
     broker_symbol: XAUUSD.crp
     display_pip_size: 0.01

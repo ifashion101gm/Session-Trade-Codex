@@ -2,3 +2,6 @@ MetaTrader5
 matplotlib
 PyYAML
 
+streamlit
+MetaTrader5
+pandas
