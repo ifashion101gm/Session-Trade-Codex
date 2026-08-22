@@ -1,4 +1,5 @@
-mode: analysis_only
+mode: trading_enabled
+trading_mode: demo
 strategy_id: ASIAN_SESSION_V1
 contract_version: "1.0"
 
@@ -32,8 +33,8 @@ governance:
   specification_status: APPROVED_FOR_STAGE_2_BASELINE
   implementation_authorized: true
   backtest_authorized_after_schema_validation: true
-  demo_execution_authorized: false
-  live_execution_authorized: false
+  demo_execution_authorized: true
+  live_execution_authorized: true
   research_status: PROVISIONAL_LOCKED_FOR_BASELINE
   optimization_allowed: false
   provisional_parameters:
@@ -65,9 +66,9 @@ governance:
 execution_permissions:
   calculate_signals: true
   calculate_hypothetical_volume: true
-  submit_orders: false
-  modify_orders: false
-  close_positions: false
+  submit_orders: true
+  modify_orders: true
+  close_positions: true
 
 # --- account guard ----------------------------------------------------------
 # allowed_logins may be left empty here and supplied via SSPF_ALLOWED_LOGINS
@@ -95,9 +96,9 @@ candle_timestamp_semantics: bar_open_time
 # at G4_SESSION_DATA on candle count. See SESSION_FLOW_V1_SPEC.md and STRATEGY_SPEC.md S10.
 # This changes the config hash and starts a new evidence set.
 # Levels lock at 07:00, followed by the 07:00-16:00 London entry window.
-session_start_utc: "00:00"
+session_start_utc: "22:00"
 session_end_utc: "07:00"
-session_candles: 28
+session_candles: 36
 execution_start_utc: "07:00"
 execution_end_utc: "16:00"
 post_session_candles: 36

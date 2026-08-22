@@ -116,6 +116,6 @@ management:
 execution_permissions:
   calculate_signals: false
   calculate_hypothetical_volume: false
-  submit_orders: false
-  modify_orders: false
-  close_positions: false
+  submit_orders: true
+  modify_orders: true
+  close_positions: true

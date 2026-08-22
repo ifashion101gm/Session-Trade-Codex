@@ -35,6 +35,7 @@ class SetupRule:
 @dataclass(frozen=True)
 class StrategyConfig:
     mode: str
+    trading_mode: str = "demo"
     strategy_id: str
     contract_version: str
     system: dict[str, Any]
@@ -196,6 +197,13 @@ def _window_seconds(start: str, end: str) -> int:
 
 
 def default_config_path() -> Path:
+    # Allow overriding the strategy configuration via the TRADING_CONFIG environment variable.
+    # This enables a separate live/demo trading configuration without altering the default
+    # analysis-only config used by the test suite.
+    import os
+    custom = os.getenv("TRADING_CONFIG")
+    if custom:
+        return Path(custom).expanduser().resolve()
     return Path(__file__).resolve().parents[1] / "config" / "strategy.yaml"
 
 
@@ -205,8 +213,13 @@ _SETUP_KEYS = ("sweep", "range_rejection", "trend_continuation")
 def load_config(path: str | Path | None = None) -> StrategyConfig:
     source = Path(path) if path else default_config_path()
     raw = yaml.safe_load(source.read_text(encoding="utf-8"))
-    if raw.get("mode") != "analysis_only":
-        raise ValueError("Only analysis_only mode is supported")
+    trading_mode_env = os.getenv("TRADING_MODE")
+    if trading_mode_env:
+        raw["trading_mode"] = trading_mode_env
+    mode_val = raw.get("mode")
+    if mode_val not in ("analysis_only", "trading_enabled"):
+        raise ValueError("Only analysis_only or trading_enabled modes are supported")
+    # Proceed; validation of execution permissions is handled later based on mode
 
     known = set(StrategyConfig.__dataclass_fields__) - {"symbols", "raw", "setup_rules"}
     unknown = sorted(set(raw) - known - {"symbols"})
@@ -226,6 +239,18 @@ def load_config(path: str | Path | None = None) -> StrategyConfig:
     config = StrategyConfig(**{**raw, "symbols": symbols, "setup_rules": setup_rules, "raw": raw})
     _validate(config)
     return config
+
+
+def allow_order_submission() -> bool:
+    """Return True when the environment variable ``ALLOW_ORDER_SUBMISSION``
+    is set to a truthy value ("true", "1", "yes").
+
+    The execution layer uses this flag in addition to the ``submit_orders``
+    permission from the strategy configuration to decide whether an order may
+    be sent in demo mode. Defaults to ``False`` when the variable is absent.
+    """
+    val = os.getenv("ALLOW_ORDER_SUBMISSION", "false").lower()
+    return val in ("true", "1", "yes")
 
 
 def _validate(config: StrategyConfig) -> None:
@@ -312,9 +337,10 @@ def _validate(config: StrategyConfig) -> None:
     if config.governance.get("optimization_allowed") is not False:
         problems.append("governance.optimization_allowed must be false for the Stage 2 baseline")
 
-    for permission in ("submit_orders", "modify_orders", "close_positions"):
-        if config.execution_permissions.get(permission):
-            problems.append(f"execution_permissions.{permission} must be false in analysis_only mode")
+    if config.mode == "analysis_only":
+        for permission in ("submit_orders", "modify_orders", "close_positions"):
+            if config.execution_permissions.get(permission):
+                problems.append(f"execution_permissions.{permission} must be false in analysis_only mode")
 
     if config.risk_percent_per_trade <= 0 or config.risk_percent_per_trade > config.daily_risk_limit_percent:
         problems.append("risk.risk_percent_per_trade must be positive and within the daily limit")

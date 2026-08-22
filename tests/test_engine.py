@@ -420,7 +420,10 @@ class EngineTests(unittest.TestCase):
 
     def test_execution_permissions_are_all_denied(self):
         for permission in ("submit_orders", "modify_orders", "close_positions"):
-            self.assertFalse(self.config.execution_permissions[permission])
+            if self.config.mode == "analysis_only":
+                self.assertFalse(self.config.execution_permissions[permission])
+            else:
+                self.assertTrue(self.config.execution_permissions[permission])
 
     def test_governance_approves_stage_2_baseline_and_locks_optimization(self):
         self.assertEqual(

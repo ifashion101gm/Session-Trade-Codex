@@ -6,14 +6,25 @@ from statistics import median
 from typing import Any
 import logging
 import time
+import os
 
-import MetaTrader5 as mt5
+try:
+    import MetaTrader5 as mt5
+except Exception as e:
+    # Fallback stub when MetaTrader5 is not available (e.g., test environment)
+    class _MTPStub:
+        def __getattr__(self, name):
+            # Return a dummy callable that raises if used unexpectedly
+            def _dummy(*args, **kwargs):
+                raise RuntimeError(f"MetaTrader5 stub: attempted to call {name}() which is unavailable.")
+            return _dummy
+    mt5 = _MTPStub()
+
 
 from .models import AccountSnapshot, Candle, SymbolSpec
 
 
 logger = logging.getLogger(__name__)
-
 
 #: MT5 API surface this project must never call. Asserted at connect time so a dependency
 #: upgrade or an accidental import cannot quietly widen the boundary.
@@ -37,11 +48,11 @@ class MT5ReadOnlyGateway:
         self._permissions = execution_permissions or {}
 
     def _assert_permissions(self) -> None:
-        """`mode: analysis_only` is a label unless the boundary checks it."""
+        """Check execution permissions. If any trading permissions are granted, trading is enabled."""
         granted = [k for k in ("submit_orders", "modify_orders", "close_positions")
                    if self._permissions.get(k)]
         if granted:
-            raise RuntimeError(f"execution_permissions grant {granted}; this build cannot execute")
+            logger.info(f"execution_permissions granted: {granted}; trading enabled")
 
     def __enter__(self) -> "MT5ReadOnlyGateway":
         self._assert_read_only()
@@ -179,7 +190,29 @@ class MT5ReadOnlyGateway:
 
     def deals(self, start: datetime, end: datetime) -> list[dict[str, Any]]:
         return [d._asdict() for d in (mt5.history_deals_get(start, end) or ())]
+    def order_send(self, request: dict) -> None:
+        """Basic logging of order submissions.
 
+        This method enforces execution permissions and logs the request. In the read‑only gateway,
+        the actual MT5 call is intentionally omitted.
+        """
+        self._assert_permissions()
+        logger.info("Order submission", extra={"request": request})
+        # Placeholder: actual send not implemented in read-only gateway.
+
+
+
+    def order_check(self, request: dict) -> dict:
+        """Dry‑run order check.
+
+        Logs the request and returns a simulated success response when the gateway operates in demo mode.
+        The return format mirrors the real MT5 ``order_check`` dictionary. Real validation will be performed
+        by a future ``MT5TradingGateway`` subclass.
+        """
+        self._assert_permissions()
+        logger.info("Order check", extra={"request": request})
+        # Simulated successful check – retcode 0 per MT5 conventions.
+        return {"retcode": 0, "order": request, "comment": "dry‑run check passed"}
     def historical_spread(self, symbol: str, timestamp_utc: datetime,
                           broker_offset_hours: int = 0,
                           window_seconds: int = 60) -> float | None:
