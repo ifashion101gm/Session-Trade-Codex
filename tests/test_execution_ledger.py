@@ -136,6 +136,33 @@ def test_has_committed_execution_today_ignores_other_magic_numbers(tmp_path):
     assert ledger.has_committed_execution_today("EURUSD", "2026-08-25", OTHER_MAGIC) is True
 
 
+def test_r8_obm_v1_magic_does_not_consume_session_simple_quota(tmp_path):
+    """Dual-strategy isolation, explicit with R8's real magic number (not a
+    placeholder): an R8_OBM_V1_EA fill on EURUSD (magic 8101501, an MQL5 EA
+    outside this repo -- see R8_OBM_V1_SPEC.md) must not be interpretable by
+    this ledger as a SESSION_SIMPLE_V1 (magic 123456) commit, and vice versa,
+    even though both trade the same broker symbol."""
+    R8_MAGIC = 8101501
+    ledger = _ledger(tmp_path)
+    ledger.prepare("sig_r8", "attempt1", "EURUSD", "LONG", {"magic": R8_MAGIC})
+    ledger.mark_send_requested("sig_r8")
+    assert ledger.has_committed_execution_today("EURUSD", "2026-08-25", MAGIC) is False
+    assert ledger.has_committed_execution_today("EURUSD", "2026-08-25", R8_MAGIC) is True
+
+
+def test_second_session_simple_execution_blocked_by_quota(tmp_path):
+    """Section 11.C/D: a genuine SESSION_SIMPLE_V1 commit consumes the quota
+    for that symbol/date; a second one for the same symbol/date must then
+    read as already taken."""
+    ledger = _ledger(tmp_path)
+    ledger.prepare("sig_first", "attempt1", "EURUSD", "SHORT", {"magic": MAGIC})
+    ledger.mark_send_requested("sig_first")
+    assert ledger.has_committed_execution_today("EURUSD", "2026-08-25", MAGIC) is True
+    # G8_SESSION_QUOTA in engine.py reads this boolean as taken=1, allowed=1 ->
+    # FAIL, which is the actual gate that blocks execute_session_signal.py's
+    # main() from ever reaching build_intent() for a second signal that day.
+
+
 def test_signal_id_is_the_primary_key_reprepare_does_not_duplicate(tmp_path):
     ledger = _ledger(tmp_path)
     ledger.prepare("sig7", "attempt1", "EURUSD", "LONG", {"a": 1})
