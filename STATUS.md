@@ -37,8 +37,16 @@ FORWARD_TEST_INFRASTRUCTURE_READY = YES
 NATURAL_SIGNAL_E2E_VALIDATED      = NO
 LIVE_READY                        = NO
 
-NEXT_EXECUTION_MILESTONE: ONE_GENUINE_DEMO_SIGNAL_E2E (Phase C — occurs naturally on
-the next real signal; does not block other work, see SessionBoxes_V1 below)
+NEXT_EXECUTION_MILESTONE: ONE_GENUINE_DEMO_SIGNAL_E2E (Phase C)
+
+SessionBoxes_V1 = VALIDATED (2026-08-26, owner visual confirmation — see
+SESSION_BOX_V1_VALIDATION.md). Asian window aligned to match the live strategy exactly
+(00:00–07:00 UTC / 28 bars) after initially being set separately. SESSION_SIMPLE_V1 is now
+CLEARED for the next genuine in-window signal, under the existing gate set unchanged (DEMO-only,
+ALLOW_ORDER_SUBMISSION, ALLOW_ONE_DEMO_ORDER, explicit --confirm, order_check before send,
+ledger duplicate/quota protection scoped by magic number, max 1/symbol/session, LIVE blocked).
+No strategy/session-definition/risk/TP/architecture change made to clear this — only the
+indicator was touched.
 
 TESTS: 261 passed, 4 known documented failures (KNOWN_TEST_FAILURES.md), 0 new regressions
 
