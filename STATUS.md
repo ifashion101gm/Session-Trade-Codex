@@ -40,7 +40,14 @@ LIVE_READY                        = NO
 NEXT_EXECUTION_MILESTONE: ONE_GENUINE_DEMO_SIGNAL_E2E (Phase C — occurs naturally on
 the next real signal; does not block other work, see SessionBoxes_V1 below)
 
-TESTS: 260 passed, 4 known documented failures (KNOWN_TEST_FAILURES.md), 0 new regressions
+TESTS: 261 passed, 4 known documented failures (KNOWN_TEST_FAILURES.md), 0 new regressions
+
+Bug found and fixed 2026-08-26 (checking activation readiness): has_committed_execution_today()
+had no magic-number filter, so the TEST_EXECUTION harness's own commits (magic 999999) on
+EURUSD silently blocked the real ASIAN_SESSION_V1 (magic 123456) quota for that symbol for the
+rest of the day. Fixed with a required magic param + ledger schema migration (magic column,
+backward-compatible for pre-fix rows). Confirmed live: G8_SESSION_QUOTA now correctly reads
+taken=0 for EURUSD.
 
 Frozen execution controls (do not weaken before Phase C):
   DEMO only · ALLOW_ORDER_SUBMISSION gate · ALLOW_ONE_DEMO_ORDER gate · explicit --confirm

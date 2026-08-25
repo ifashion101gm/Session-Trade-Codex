@@ -94,30 +94,46 @@ def test_reconciliation_failed_is_recorded_with_note(tmp_path):
     assert "no matching position" in row["note"]
 
 
+MAGIC = 123456
+OTHER_MAGIC = 999999
+
+
 def test_has_committed_execution_today_false_when_nothing_sent(tmp_path):
     ledger = _ledger(tmp_path)
-    ledger.prepare("sig8", "attempt1", "EURUSD", "LONG", {})  # PREPARED only, never sent
-    assert ledger.has_committed_execution_today("EURUSD", "2026-08-25") is False
+    ledger.prepare("sig8", "attempt1", "EURUSD", "LONG", {"magic": MAGIC})  # PREPARED only, never sent
+    assert ledger.has_committed_execution_today("EURUSD", "2026-08-25", MAGIC) is False
 
 
 def test_has_committed_execution_today_true_once_send_requested(tmp_path):
     """The regression this exists to prevent: a dry run/--check call must NOT
     burn the quota, but an actual send attempt must."""
     ledger = _ledger(tmp_path)
-    ledger.prepare("sig9", "attempt1", "EURUSD", "SHORT", {})
+    ledger.prepare("sig9", "attempt1", "EURUSD", "SHORT", {"magic": MAGIC})
     ledger.mark_send_requested("sig9")
-    assert ledger.has_committed_execution_today("EURUSD", "2026-08-25") is True
+    assert ledger.has_committed_execution_today("EURUSD", "2026-08-25", MAGIC) is True
 
 
 def test_has_committed_execution_today_ignores_other_symbols_and_dates(tmp_path):
     ledger = _ledger(tmp_path)
-    ledger.prepare("sig10", "attempt1", "GBPUSD", "LONG", {})
+    ledger.prepare("sig10", "attempt1", "GBPUSD", "LONG", {"magic": MAGIC})
     ledger.mark_send_requested("sig10")
-    assert ledger.has_committed_execution_today("EURUSD", "2026-08-25") is False
+    assert ledger.has_committed_execution_today("EURUSD", "2026-08-25", MAGIC) is False
     # Same symbol, but querying a different date should also be False, since
     # created_utc is matched by a date-prefix LIKE against the row's real
     # timestamp -- confirms the query is actually date-scoped, not global.
-    assert ledger.has_committed_execution_today("GBPUSD", "1999-01-01") is False
+    assert ledger.has_committed_execution_today("GBPUSD", "1999-01-01", MAGIC) is False
+
+
+def test_has_committed_execution_today_ignores_other_magic_numbers(tmp_path):
+    """Regression test for the real bug found live 2026-08-25: a TEST_EXECUTION
+    harness commit (magic 999999) on EURUSD must NOT be counted as a real
+    ASIAN_SESSION_V1 (magic 123456) commit on the same symbol/date -- they
+    are unrelated strategies sharing a broker symbol."""
+    ledger = _ledger(tmp_path)
+    ledger.prepare("sig11", "attempt1", "EURUSD", "LONG", {"magic": OTHER_MAGIC})
+    ledger.mark_send_requested("sig11")
+    assert ledger.has_committed_execution_today("EURUSD", "2026-08-25", MAGIC) is False
+    assert ledger.has_committed_execution_today("EURUSD", "2026-08-25", OTHER_MAGIC) is True
 
 
 def test_signal_id_is_the_primary_key_reprepare_does_not_duplicate(tmp_path):

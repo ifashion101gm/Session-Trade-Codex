@@ -59,6 +59,7 @@ class ExecutionLedger:
           symbol TEXT NOT NULL,
           direction TEXT,
           request_json TEXT,
+          magic INTEGER,
           order_check_retcode INTEGER,
           order_check_comment TEXT,
           order_send_retcode INTEGER,
@@ -77,6 +78,21 @@ class ExecutionLedger:
         );
         """)
         self.db.commit()
+        self._migrate_schema()
+
+    def _migrate_schema(self) -> None:
+        """Add columns safely to ledgers created before this column existed.
+
+        Bug found live 2026-08-25: has_committed_execution_today() originally
+        had no way to distinguish a real ASIAN_SESSION_V1 commit (magic
+        123456) from the test harness's own commits (magic 999999) on the
+        same symbol/date -- an infrastructure test on EURUSD silently blocked
+        the real strategy's EURUSD quota for the rest of the day.
+        """
+        columns = {row["name"] for row in self.db.execute("PRAGMA table_info(executions)")}
+        if "magic" not in columns:
+            self.db.execute("ALTER TABLE executions ADD COLUMN magic INTEGER")
+            self.db.commit()
 
     def close(self) -> None:
         self.db.close()
@@ -99,22 +115,23 @@ class ExecutionLedger:
         even a crash during those earlier steps leaves a trace."""
         existing = self.get(signal_id)
         now = datetime.now(timezone.utc).isoformat()
+        magic = (request or {}).get("magic")
         if existing is not None:
             # Re-preparing an existing, not-yet-committed row (e.g. a retried
             # dry run) refreshes the attempt id and request; a committed row
             # is left untouched here -- is_committed() is what blocks re-send.
             self.db.execute(
-                "UPDATE executions SET attempt_id=?, request_json=?, updated_utc=? "
+                "UPDATE executions SET attempt_id=?, request_json=?, magic=?, updated_utc=? "
                 "WHERE signal_id=?",
-                (attempt_id, json.dumps(request) if request else None, now, signal_id),
+                (attempt_id, json.dumps(request) if request else None, magic, now, signal_id),
             )
         else:
             self.db.execute(
                 "INSERT INTO executions "
-                "(signal_id, attempt_id, status, symbol, direction, request_json, "
-                " created_utc, updated_utc) VALUES (?,?,?,?,?,?,?,?)",
+                "(signal_id, attempt_id, status, symbol, direction, request_json, magic, "
+                " created_utc, updated_utc) VALUES (?,?,?,?,?,?,?,?,?)",
                 (signal_id, attempt_id, "PREPARED", symbol, direction,
-                 json.dumps(request) if request else None, now, now),
+                 json.dumps(request) if request else None, magic, now, now),
             )
         self.db.commit()
 
@@ -172,9 +189,9 @@ class ExecutionLedger:
         )
         self.db.commit()
 
-    def has_committed_execution_today(self, symbol: str, trading_date: str) -> bool:
-        """True if ANY signal for this symbol reached SEND_REQUESTED or later
-        on this trading date (YYYY-MM-DD), regardless of signal_id.
+    def has_committed_execution_today(self, symbol: str, trading_date: str, magic: int) -> bool:
+        """True if a signal for this EXACT symbol+magic reached SEND_REQUESTED
+        or later on this trading date (YYYY-MM-DD).
 
         This is what `execute_session_signal.py` uses for its own session-quota
         gate -- NOT `journal.trades_this_session()`, which counts every printed
@@ -182,12 +199,18 @@ class ExecutionLedger:
         "a ticket was printed" with "an order was sent" meant a plain dry run
         could silently burn the one-shot quota for a real signal before it was
         ever offered to order_check, found live 2026-08-25.
+
+        `magic` is REQUIRED (found live, same day): without it, an unrelated
+        commit under a different magic number on the same symbol -- e.g. the
+        TEST_EXECUTION harness (magic 999999) -- silently blocked the real
+        ASIAN_SESSION_V1 (magic 123456) quota for the rest of the day, since
+        both target the same broker symbol.
         """
         placeholders = ",".join("?" for _ in COMMITTED_STATUSES)
         row = self.db.execute(
-            f"SELECT COUNT(*) as n FROM executions WHERE symbol=? "
+            f"SELECT COUNT(*) as n FROM executions WHERE symbol=? AND magic=? "
             f"AND created_utc LIKE ? AND status IN ({placeholders})",
-            (symbol, f"{trading_date}%", *COMMITTED_STATUSES),
+            (symbol, magic, f"{trading_date}%", *COMMITTED_STATUSES),
         ).fetchone()
         return int(row["n"]) > 0
 

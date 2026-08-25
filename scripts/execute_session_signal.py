@@ -281,7 +281,8 @@ def main() -> int:
             # ExecutionLedger.has_committed_execution_today() docstring. Using
             # the journal here would let a plain dry run permanently consume
             # the one-shot quota for a real signal before order_check ever ran.
-            taken = 1 if ledger.has_committed_execution_today(symbol, trading_date.isoformat()) else 0
+            taken = 1 if ledger.has_committed_execution_today(
+                symbol, trading_date.isoformat(), ASIAN_SESSION_V1_MAGIC) else 0
             news_events, news_calendar_available = _load_news_calendar(config)
 
             result = analyze(
