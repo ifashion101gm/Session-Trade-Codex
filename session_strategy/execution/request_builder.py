@@ -4,6 +4,8 @@ import logging
 from dataclasses import dataclass
 from typing import Literal, Optional
 
+import MetaTrader5 as mt5
+
 from .models import TradeIntent, ExecutableOrder, RiskResult
 
 logger = logging.getLogger(__name__)
@@ -40,34 +42,45 @@ class RequestBuilder:
         and ``order_check``. Volume is taken from the normalized volume calculated
         by the risk supervisor. ``sl`` and ``tp`` use the stop and target prices
         from the intent.
+
+        FIXED 2026-08-25 (found during execution-hardening review, before any
+        live order_check/order_send was attempted): the previous version set
+        ``request["action"]`` to the BUY/SELL indicator (0/1) instead of an
+        MT5 ``TRADE_ACTION_*`` constant, and hard-coded ``order_type`` to 0
+        (``ORDER_TYPE_BUY``) UNCONDITIONALLY -- every order, regardless of
+        ``intent.direction`` or ``intent.entry_type``, would have been
+        submitted as a market BUY. ``action=0`` is not a valid
+        ``TRADE_ACTION_*`` value at all, so the most likely outcome was an
+        immediate broker rejection at ``order_check`` -- but a bug this
+        central to correctness must not be assumed benign, and is fixed
+        here rather than discovered live.
         """
         if not self.risk.passed:
             raise RuntimeError(f"Cannot build request: risk check failed – {self.risk.reason_code}")
 
         price = self._price_for_order()
-        # MT5 constants – using the stub's attributes where available.
-        try:
-            action = 0  # placeholder for BUY/SELL constant – real code uses mt5.ORDER_TYPE_BUY/SELL
-            if self.intent.direction == "LONG":
-                action = 0  # mt5.ORDER_TYPE_BUY
-            else:
-                action = 1  # mt5.ORDER_TYPE_SELL
-        except Exception:
-            action = 0
+        is_market = self.intent.entry_type == "MARKET"
+        is_long = self.intent.direction == "LONG"
+
+        action = mt5.TRADE_ACTION_DEAL if is_market else mt5.TRADE_ACTION_PENDING
+        if is_market:
+            order_type = mt5.ORDER_TYPE_BUY if is_long else mt5.ORDER_TYPE_SELL
+        else:
+            order_type = mt5.ORDER_TYPE_BUY_LIMIT if is_long else mt5.ORDER_TYPE_SELL_LIMIT
 
         request: dict = {
             "action": action,
             "symbol": self.intent.symbol,
             "volume": self.risk.normalized_volume,
-            "order_type": 0,  # market order by default – could be derived from entry_type
+            "type": order_type,
             "price": price,
             "sl": self.intent.stop_price,
             "tp": self.intent.target_price,
             "deviation": 10,
             "magic": 123456,
             "comment": f"{self.intent.strategy_id}:{self.intent.strategy_version}",
-            "type_time": 0,
-            "type_filling": 0,
+            "type_time": mt5.ORDER_TIME_GTC,
+            "type_filling": mt5.ORDER_FILLING_IOC,
         }
         logger.debug("Built MT5 request: %s", request)
         return request

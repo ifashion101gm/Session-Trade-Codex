@@ -28,7 +28,11 @@ R = 0.25 * RANGE            # 0.00100
 
 
 def account(kind="demo"):
-    return AccountSnapshot("****985", kind, 1000, 1000, "VTMarkets-Demo", True, True, 10)
+    # Corrected 2026-08-25 to match the real demo account (server VantageMarkets-Demo,
+    # login suffix 746) after config/strategy.yaml's account_guard was fixed away from
+    # a stale placeholder ("VTMarkets-Demo" / suffix "985") that never matched the
+    # actual connected account -- see STATUS.md.
+    return AccountSnapshot("*****746", kind, 1000, 1000, "VantageMarkets-Demo", True, True, 10)
 
 
 def asian(i, o, h, l, c):
@@ -374,14 +378,19 @@ class EngineTests(unittest.TestCase):
     def test_login_allowlist_rejects_a_matching_suffix_from_another_account(self):
         # Masking is length-sensitive, so an allowlisted login of a different length
         # is also rejected — that is intentional extra strength.
+        # 25972746 is the real 8-digit demo login (see account() above, corrected
+        # 2026-08-25) -- masking is length-sensitive, so it must match both the
+        # digit count and the suffix to produce the same masked form ("*****746")
+        # as the account() fixture, or the exact-allowlist match below would fail
+        # for the wrong reason.
         guarded = replace(self.config, account_guard={**self.config.account_guard,
-                                                      "allowed_logins": [1234985]})
+                                                      "allowed_logins": [25972746]})
         candle = execution(0, 1.16400, 1.16440, 1.16330, 1.16410)
         ok = self.run_analysis(range_session(), [candle], config=guarded)
         self.assertTrue(next(g for g in ok.gates if g.name == "G1_ENVIRONMENT").passed)
         other = self.run_analysis(range_session(), [candle], config=guarded,
                                   account=AccountSnapshot("****111", "demo", 1000, 1000,
-                                                          "VTMarkets-Demo", True, True, 10))
+                                                          "VantageMarkets-Demo", True, True, 10))
         self.assertFalse(next(g for g in other.gates if g.name == "G1_ENVIRONMENT").passed)
         self.assertIn(Reason.ACCOUNT_NOT_ALLOWLISTED, other.reason_codes)
 

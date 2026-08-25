@@ -18,20 +18,42 @@ Safety
   ASIAN_SESSION_V1 in config/strategy.yaml).
 - Without --confirm, ALWAYS dry-runs: prints what would be submitted and stops
   before any order_check/order_send call reaches the broker.
-- Even with --confirm, DemoExecutor's own composite gate independently requires
-  the ALLOW_ORDER_SUBMISSION environment variable to be truthy, or it fails
-  closed with SUBMIT_PERMISSION_DENIED. Two independent switches, not one.
+- THREE independent switches must all be true to reach a real order_send:
+  the script's own --confirm flag, ALLOW_ORDER_SUBMISSION=true, AND
+  ALLOW_ONE_DEMO_ORDER=true. Any one missing fails closed.
+- A module-level counter refuses a second order_send within the same process
+  invocation, regardless of anything else -- one run, at most one order.
+
+Hardening sequence, phased plan applied 2026-08-25 (see STATUS.md for full detail):
+  Phase A (steps 1-7): build_intent()/signal_id() unit tested against a synthetic
+  accepted result; duplicate-send protection (now execution_already_committed(),
+  in session_strategy/execution/reconciliation.py); --check mode running a REAL
+  order_check against the live broker.
+  Phase B (this revision): local durable execution ledger
+  (session_strategy/execution/ledger.py) written BEFORE order_send, so a crash
+  between broker acceptance and local recording can't produce a silent
+  duplicate; reconcile_position() independently re-queries the broker after
+  order_send rather than trusting the retcode alone.
+  A real correctness bug was also found and fixed in this revision:
+  RequestBuilder.build() was submitting every order as a market BUY regardless
+  of intent.direction/entry_type -- see request_builder.py's docstring.
+  Phase C (accepted real signal -> full pipeline), Phase D (4R-partial/
+  breakeven/5R management automation), and Phase E (multi-day forward test)
+  are not started.
 
 Usage
 -----
-    python scripts/execute_session_signal.py --symbol EURUSD                    # dry run
-    ALLOW_ORDER_SUBMISSION=true python scripts/execute_session_signal.py \\
-        --symbol EURUSD --confirm                                              # submits
+    python scripts/execute_session_signal.py --symbol EURUSD                    # dry run, no broker call
+    python scripts/execute_session_signal.py --symbol EURUSD --check            # + real order_check
+    ALLOW_ORDER_SUBMISSION=true ALLOW_ONE_DEMO_ORDER=true \\
+        python scripts/execute_session_signal.py --symbol EURUSD --confirm      # submits, once
 """
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import os
 import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
@@ -39,13 +61,25 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
+from session_strategy.cli import _sync  # noqa: E402
 from session_strategy.config import load_config, allow_order_submission  # noqa: E402
 from session_strategy.engine import analyze, session_bounds, execution_bounds, filter_window  # noqa: E402
 from session_strategy.journal import Journal  # noqa: E402
 from session_strategy.mt5_gateway import MT5ExecutionGateway  # noqa: E402
 from session_strategy.render import markdown, write_artifacts  # noqa: E402
-from session_strategy.execution.models import TradeIntent  # noqa: E402
-from session_strategy.execution.executor import DemoExecutor  # noqa: E402
+from session_strategy.execution.models import TradeIntent, ValidationResult  # noqa: E402
+from session_strategy.execution.validator import validate_intent  # noqa: E402
+from session_strategy.execution.risk_supervisor import RiskSupervisor  # noqa: E402
+from session_strategy.execution.request_builder import RequestBuilder  # noqa: E402
+from session_strategy.execution.ledger import ExecutionLedger  # noqa: E402
+from session_strategy.execution.reconciliation import (  # noqa: E402
+    execution_already_committed, reconcile_position,
+)
+
+ASIAN_SESSION_V1_MAGIC = 123456  # matches RequestBuilder.build() -- kept in sync manually
+LEDGER_PATH = ROOT / "data" / "execution_ledger.sqlite3"
+
+_orders_sent_this_run = 0  # module-level; one script invocation, at most one order_send
 
 
 def _load_news_calendar(config) -> tuple[list[dict], bool]:
@@ -96,12 +130,99 @@ def build_intent(result) -> TradeIntent:
     )
 
 
+def signal_id(result) -> str:
+    """Deterministic id for the underlying SIGNAL, not the analysis run.
+
+    Two `analyze()` calls against the same reference session that land on the
+    same setup/direction must produce the SAME id, even though `analysis_id`
+    (a random uuid), bid/ask, and spread differ between runs -- otherwise
+    duplicate-send protection could never recognize "we already acted on
+    this." Deliberately excludes anything that isn't part of what makes a
+    signal a signal: strategy, symbol, the reference session it was read
+    from, and the setup/direction it produced.
+    """
+    basis = "|".join([
+        result.strategy_id,
+        result.symbol,
+        result.trading_date,
+        result.asian_start.isoformat() if result.asian_start else "",
+        result.setup or "",
+        result.direction or "",
+    ])
+    return hashlib.sha256(basis.encode()).hexdigest()[:16]
+
+
+def dry_broker_check(config, gateway, intent: TradeIntent) -> dict:
+    """Run validation + risk sizing + REAL order_check against the live broker
+    (no order_send). Returns a dict with the exact retcode, comment, and
+    request MT5 handed back, so the broker's own verdict is visible before
+    any real submission is attempted."""
+    validation = validate_intent(intent)
+    if validation != ValidationResult.SUCCESS:
+        return {"stage": "VALIDATE_INTENT", "result": validation.value}
+
+    risk = RiskSupervisor(config=config).evaluate(intent, gateway)
+    if not risk.passed:
+        return {"stage": "RISK_SUPERVISOR", "result": risk.reason_code.value, "message": risk.message}
+
+    request = RequestBuilder(intent=intent, risk=risk).build()
+    check_result = gateway.order_check(request)
+    return {
+        "stage": "ORDER_CHECK",
+        "retcode": check_result.get("retcode"),
+        "comment": check_result.get("comment"),
+        "request": request,
+        "normalized_volume": risk.normalized_volume,
+    }
+
+
+def submit_one_order(config, gateway, ledger: ExecutionLedger, sig_id: str,
+                     attempt_id: str, intent: TradeIntent) -> dict:
+    """The only path that may call order_send. Enforces the one-shot counter,
+    writes to the ledger BEFORE order_send (the crash-safety property), and
+    reconciles against the broker afterward rather than trusting the retcode.
+    """
+    global _orders_sent_this_run
+    if _orders_sent_this_run >= 1:
+        return {"stage": "REFUSED", "reason": "max_orders_this_run=1 already reached this invocation"}
+
+    validation = validate_intent(intent)
+    if validation != ValidationResult.SUCCESS:
+        return {"stage": "VALIDATE_INTENT", "result": validation.value}
+
+    risk = RiskSupervisor(config=config).evaluate(intent, gateway)
+    if not risk.passed:
+        return {"stage": "RISK_SUPERVISOR", "result": risk.reason_code.value, "message": risk.message}
+
+    request = RequestBuilder(intent=intent, risk=risk).build()
+    ledger.prepare(sig_id, attempt_id, intent.symbol, intent.direction, request)
+
+    check_result = gateway.order_check(request)
+    ledger.mark_order_check(sig_id, check_result.get("retcode"), check_result.get("comment"))
+    if check_result.get("retcode") != 0:
+        return {
+            "stage": "ORDER_CHECK", "outcome": "REJECTED",
+            "retcode": check_result.get("retcode"), "comment": check_result.get("comment"),
+        }
+
+    # The critical write: persisted BEFORE order_send() is called.
+    ledger.mark_send_requested(sig_id)
+    _orders_sent_this_run += 1
+
+    send_result = gateway.order_send(request)
+    reconciliation = reconcile_position(gateway, ledger, sig_id, send_result)
+    return {"stage": "SUBMITTED", **reconciliation}
+
+
 def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--symbol", required=True)
     ap.add_argument("--config", default=str(ROOT / "config" / "strategy.yaml"))
     ap.add_argument("--journal", default=str(ROOT / "data" / "sspf_journal.sqlite3"))
+    ap.add_argument("--ledger", default=str(LEDGER_PATH))
     ap.add_argument("--output", default=str(ROOT / "outputs"))
+    ap.add_argument("--check", action="store_true",
+                     help="Also run a REAL broker-side order_check (no order_send).")
     ap.add_argument("--confirm", action="store_true",
                      help="Attempt real submission. Without this, always dry-run.")
     args = ap.parse_args()
@@ -112,6 +233,7 @@ def main() -> int:
         return 1
 
     journal = Journal(args.journal)
+    ledger = ExecutionLedger(args.ledger)
     try:
         try:
             symbol = config.resolve_symbol(args.symbol)
@@ -145,8 +267,21 @@ def main() -> int:
                               exec_start, window_end)
                 if window_end > exec_start else [])
 
+            # Bug found 2026-08-25: this call was missing entirely, so
+            # journal.healthy() (fed into analyze() as journal_healthy, which
+            # gates G14_DAILY_RISK/G15_DRAWDOWN) always read a never-refreshed,
+            # stale sync_state row -- both gates failed unconditionally.
+            # cli.py's analyze_command() calls this same _sync() every run;
+            # this script must too.
+            _sync(journal, gateway, config)
+
             used, drawdown = journal.risk_stats(account.equity, now)
-            taken = journal.trades_this_session(symbol, trading_date.isoformat())
+            # Gate on the EXECUTION LEDGER (an order was actually sent), not
+            # journal.trades_this_session() (a ticket was printed) -- see
+            # ExecutionLedger.has_committed_execution_today() docstring. Using
+            # the journal here would let a plain dry run permanently consume
+            # the one-shot quota for a real signal before order_check ever ran.
+            taken = 1 if ledger.has_committed_execution_today(symbol, trading_date.isoformat()) else 0
             news_events, news_calendar_available = _load_news_calendar(config)
 
             result = analyze(
@@ -167,10 +302,22 @@ def main() -> int:
                 return 3
 
             intent = build_intent(result)
+            sig_id = signal_id(result)
+            attempt_id = result.analysis_id
+
+            committed, reason = execution_already_committed(ledger, gateway, sig_id, intent.symbol, ASIAN_SESSION_V1_MAGIC)
+            if committed:
+                print(json.dumps({
+                    "execution": "DUPLICATE_BLOCKED",
+                    "signal_id": sig_id,
+                    "reason": reason,
+                }, indent=2))
+                return 1
 
             if not args.confirm:
-                print(json.dumps({
+                payload = {
                     "execution": "DRY_RUN",
+                    "signal_id": sig_id,
                     "would_submit": {
                         "symbol": intent.symbol, "direction": intent.direction,
                         "entry_type": intent.entry_type, "entry_price": intent.entry_price,
@@ -178,21 +325,35 @@ def main() -> int:
                     },
                     "note": "TP is the 5R ceiling. The 4R partial-close/breakeven step is NOT "
                             "automated -- manage manually via `python sspf.py monitor`.",
-                    "to_actually_submit": "re-run with --confirm and ALLOW_ORDER_SUBMISSION=true set",
-                }, indent=2))
+                    "to_actually_submit": "re-run with --confirm and ALLOW_ORDER_SUBMISSION=true "
+                                          "and ALLOW_ONE_DEMO_ORDER=true set",
+                }
+                if args.check:
+                    payload["broker_check"] = dry_broker_check(config, gateway, intent)
+                print(json.dumps(payload, indent=2))
                 return 0
 
-            executor = DemoExecutor(config=config, gateway=gateway)
-            report = executor.execute(intent)
-            print(json.dumps({
-                "execution": "ATTEMPTED",
-                "validation": report.validation.value,
-                "volume": report.volume,
-                "order_check_retcode": report.order_check_retcode,
-                "order_send_retcode": report.order_send_retcode,
-            }, indent=2))
-            return 0 if report.validation.value == "SUCCESS" else 1
+            if not allow_order_submission():
+                print(json.dumps({
+                    "execution": "REFUSED", "signal_id": sig_id,
+                    "reason": "ALLOW_ORDER_SUBMISSION is not set truthy",
+                }, indent=2))
+                return 1
+            if os.environ.get("ALLOW_ONE_DEMO_ORDER", "").lower() not in ("true", "1", "yes"):
+                print(json.dumps({
+                    "execution": "REFUSED", "signal_id": sig_id,
+                    "reason": "ALLOW_ONE_DEMO_ORDER is not set truthy -- this is the third, "
+                              "independent one-shot switch and is required in addition to "
+                              "--confirm and ALLOW_ORDER_SUBMISSION",
+                }, indent=2))
+                return 1
+
+            outcome = submit_one_order(config, gateway, ledger, sig_id, attempt_id, intent)
+            print(json.dumps({"execution": "ATTEMPTED", "signal_id": sig_id, **outcome}, indent=2, default=str))
+            return 0 if outcome.get("outcome") in (
+                "CONFIRMED", "CONFIRMED_VIA_DEAL_HISTORY", "PENDING_ORDER_CONFIRMED") else 1
     finally:
+        ledger.close()
         journal.close()
 
 

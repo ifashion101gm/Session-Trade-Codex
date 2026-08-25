@@ -1,5 +1,65 @@
 # Project status — 25 August 2026
 
+```
+CURRENT_MILESTONE:  DEMO_EXECUTION_INFRASTRUCTURE_VALIDATED_V1
+STRATEGY:           SESSION_SIMPLE_V1 (FROZEN)
+
+SESSION_SIMPLE_V1
+────────────────────────────────────
+Strategy rules              FROZEN
+Setup routing                FROZEN
+Direction / entry / SL      FROZEN
+TP = fixed 5R (tp2_5r)      FROZEN
+Risk = 0.5%                 FROZEN
+Max trades = 1              FROZEN
+Management = NONE           FROZEN
+
+DEMO EXECUTION INFRASTRUCTURE
+────────────────────────────────────
+Signal → Intent             PASS
+Risk sizing                 PASS
+Request construction        PASS
+Duplicate ledger gate       PASS
+DEMO account hard gate      PASS
+order_check                 PASS
+order_send                  PASS
+Pending-order confirmation  PASS
+SL reconciliation           PASS
+TP reconciliation           PASS
+
+STRATEGY END-TO-END
+────────────────────────────────────
+Genuine natural signal              NOT YET PROVEN
+Natural order lifecycle             NOT YET PROVEN
+Natural fill/exit reconciliation    NOT YET PROVEN
+
+FORWARD_TEST_INFRASTRUCTURE_READY = YES
+NATURAL_SIGNAL_E2E_VALIDATED      = NO
+LIVE_READY                        = NO
+
+NEXT_EXECUTION_MILESTONE: ONE_GENUINE_DEMO_SIGNAL_E2E (Phase C — occurs naturally on
+the next real signal; does not block other work, see SessionBoxes_V1 below)
+
+TESTS: 260 passed, 4 known documented failures (KNOWN_TEST_FAILURES.md), 0 new regressions
+
+Frozen execution controls (do not weaken before Phase C):
+  DEMO only · ALLOW_ORDER_SUBMISSION gate · ALLOW_ONE_DEMO_ORDER gate · explicit --confirm
+  · order_check before send · persistent ledger duplicate check · one real send per
+  authorized run · LIVE blocked
+
+Known accepted limitation: the persistent execution ledger is the durable authority: the
+check (execution_already_committed) and the write (mark_send_requested) are not yet atomic
+across simultaneous independent processes. Accepted for controlled single-process DEMO
+forward testing; must be solved before multi-process or LIVE execution. Not fixed now —
+not a reason to touch the proven send path before the first natural signal.
+
+Do not modify SESSION_SIMPLE_V1 or the execution layer again before Phase C unless a
+genuine defect is discovered. New work proceeds on SessionBoxes_V1 (MQL5 indicator,
+strategy/execution-authority-free) as a fully separate track — see below.
+```
+
+---
+
 **Read this first.** Every other top-level document in this folder (`README.md`,
 `PROJECT_CHARTER.md`, `USER_MANUAL.md`, `MT5_MCP_SETUP.md`) still describes **`SESSION_FLOW_V1`**
 as the active, automated-execution contract. That description is **stale** — `SESSION_FLOW_V1`
@@ -82,6 +142,99 @@ truthy or it fails closed with `SUBMIT_PERMISSION_DENIED`. Both tested 2026-08-2
 against live EURUSD/GBPUSD analyses — both correctly returned `NOT_ATTEMPTED` with no signal accepted
 at test time; the `--confirm` + order-submission path has not yet been exercised against a live
 accepted signal).
+
+### Hardening sequence, 14 steps, applied 2026-08-25 (steps 1-7 of 14)
+
+A trader-specified sequence for turning the script above into something trustworthy before it ever
+submits a real order. Status:
+
+| # | Step | Status |
+|---|---|---|
+| 1 | Test an artificially accepted `StrategyResult` | ✅ `tests/test_execute_session_signal.py`, no MT5 needed |
+| 2 | Verify exact `TradeIntent` mapping | ✅ field-by-field assertions, including the deliberate `tp2_5r` (not `tp1_4r`) choice |
+| 3 | Deterministic `signal_id` | ✅ `signal_id()` — hash of strategy/symbol/session-date/setup/direction; stable across re-analysis, distinct across genuinely different signals |
+| 4 | Duplicate-send protection | ✅ `already_sent()` — scans open positions AND today's deal history for this symbol's magic number before any broker call; MT5's ~31-char comment field can't hold a full signal_id, so this checks the broker's own record instead |
+| 5 | `--check` mode | ✅ added — runs validation + risk sizing + a **real** `order_check` against the live broker, no `order_send` |
+| 6 | Real Windows DEMO `order_check` | ⚠️ Built and mock-tested (`dry_broker_check()`, 2 tests verifying it calls `order_check` and surfaces retcode/comment, and that it stops before `order_check` if risk sizing fails) — **not yet exercised against a live accepted signal**. The 07:00–16:00 UTC execution window closed before a real signal appeared today. |
+| 7 | Capture broker retcode/comment/request | ✅ `dry_broker_check()` returns all three in its result dict |
+| 8 | One tiny controlled DEMO `order_send` | ✅ **Done, later same day** — via a clearly-labeled synthetic test harness (`scripts/test_demo_execution_harness.py`), not a natural signal; see "Execution infrastructure validated" below |
+| 9 | Reconcile order/deal/position | ✅ `reconcile_position()` — independently re-queries the broker rather than trusting the retcode; see below |
+| 10 | Restart/retry idempotency | ⚠️ Partial — the durable ledger check (`execution_already_committed()`) is proven; a genuine kill-and-restart-mid-send test has not been run |
+| 11 | Real 4R → 75% partial | ❌ Not done — deliberately out of scope for the current contract |
+| 12 | Runner SL → breakeven | ❌ Not done |
+| 13 | Close remaining 25% at 5R | ❌ Not done |
+| 14 | Forward-test on demo | ❌ Not started — blocked on Phase C below |
+
+### Execution infrastructure validated — later 2026-08-25
+
+**Two real bugs found and fixed, not cosmetic:**
+1. `RequestBuilder.build()` was building every order as a market BUY regardless of `intent.direction`/`entry_type` (and using the wrong MT5 dict key, `"order_type"` instead of `"type"`, which likely would have dropped the field entirely). Would have sent the wrong side/type of order for any SHORT or LIMIT intent — found and fixed before any live test, not discovered live.
+2. Session quota was gated on `journal.trades_this_session()` (any printed ticket, including dry runs), not on whether an order was actually sent. This had already silently consumed today's one real EURUSD signal's quota via an earlier routine `sspf.py analyze` call, before `execute_session_signal.py` existed. Fixed by gating on the execution ledger (`has_committed_execution_today()`) instead.
+
+**Proven live against the real broker** (`scripts/test_demo_execution_harness.py`, magic `999999`, tagged `TEST_EXEC_NO_SIGNAL` — never counted toward strategy statistics): `order_check` PASS both directions, one `order_send` (retcode `10009`/DONE), broker created a real pending LIMIT order with entry/SL/TP matching the request exactly (verified by independent re-query, not by trusting the retcode), then cancelled cleanly. Correction to the terminology used when this was first reported: a pending LIMIT order is a confirmed **order**, not a confirmed **position** — those stay distinct states (`PENDING_ORDER_CONFIRMED` vs `POSITION_CONFIRMED` in the ledger) since a fill can still turn into `FILLED → POSITION_OPEN → POSITION_CLOSED` or `CANCELLED/EXPIRED/REJECTED` later.
+
+**Status, precisely** (broken into two axes — do not conflate them):
+
+```
+EXECUTION INFRASTRUCTURE                        STRATEGY END-TO-END
+────────────────────────                        ────────────────────────
+Signal → Intent                    PASS          Natural strategy signal
+Risk sizing                        PASS            → intent → risk → order_check
+Request construction               PASS            → order_send → broker ack
+Duplicate controls                 PASS            → fill/no-fill → exit
+Real DEMO account verification     PASS            → journal reconciliation
+Real order_check                   PASS                                    NOT YET PROVEN
+Real order_send                    PASS
+Pending-order broker confirmation  PASS          FORWARD_TEST_INFRASTRUCTURE_READY = YES
+SL/TP reconciliation               PASS          NATURAL_SIGNAL_E2E_VALIDATED      = NO
+                                                  LIVE_READY                        = NO
+Freeze label: DEMO_EXECUTION_INFRASTRUCTURE_VALIDATED_V1
+```
+
+**Architecture note — durable vs. in-process protection, clarified 2026-08-25**: `submit_one_order()`'s
+module-level `_orders_sent_this_run` counter is **process-local only** — it protects against a bug
+sending two orders within one script invocation, nothing more. It resets on every process start and
+provides zero protection across restarts or concurrent invocations. **The durable, cross-process
+authority is `execution_already_committed()`**, checked *before* `submit_one_order()` is ever
+called — it consults the SQLite execution ledger (survives restarts, `signal_id` is the primary key)
+and the broker's own position/deal history. One known, undefended gap: there is a narrow window
+between `execution_already_committed()` returning clear and `ledger.mark_send_requested()` actually
+writing — two genuinely concurrent invocations for the same signal could both pass the check before
+either writes. Not defended against today; acceptable for a manually-triggered, one-invocation-at-a-time
+command, but would need a proper `INSERT ... WHERE NOT EXISTS`-style atomic claim before this could
+ever run unattended or concurrently.
+
+**Test suite, precisely classified**: **260 passed, 4 known failures, 0 new regressions** — see
+`KNOWN_TEST_FAILURES.md`. Not simply "passing"; each of the 4 stays failing until it is corrected,
+intentionally retired, or (for the golden-fixtures/safety/source_v1 three) independently addressed,
+per that file's classification. `pytest tests/test_execute_session_signal.py
+tests/test_execution_ledger.py tests/test_reconciliation.py tests/test_execution_gates.py` — the
+execution-specific suite — is 100% green (61/61).
+
+### Phase C — next: a genuine natural signal, not another synthetic test
+
+Do not build more execution features before this. Next trading-window opportunity:
+`sspf.py analyze`/`execute_session_signal.py --check` must originate the signal itself — no
+manually-constructed entry price, no test harness. Full lifecycle target:
+`SIGNAL → INTENT → VALIDATED → CHECKED → SENT → ORDER_CONFIRMED → PENDING → (FILLED → POSITION_OPEN
+→ POSITION_CLOSED) | (CANCELLED/EXPIRED/REJECTED)`. Log one full reconciliation record (signal
+identity, sized volume, pre-send tick, request vs. broker-confirmed price/SL/TP, fill details, exit
+reason, realized R) proving semantic continuity end to end. Only after that does the project move
+from `DEMO_EXECUTION_INFRASTRUCTURE_VALIDATED_V1` to `DEMO_FORWARD_TEST_ACTIVE`. Not doing yet:
+real accounts, higher submission quotas, concurrent orders, partial exits/BE/trailing, or further
+refactoring of the now-proven send path.
+
+**Regression found and fixed while running the full suite after this work**: `config/strategy.yaml`'s
+`account_guard` fix (above, earlier 2026-08-25) had broken 5 previously-passing tests in
+`tests/test_engine.py` — their fixtures hardcoded the old placeholder server (`VTMarkets-Demo`) and
+login suffix (`985`), which no longer matched the corrected real values. Fixed the fixtures to use
+the real account (`VantageMarkets-Demo`, login `25972746`/suffix `746`) instead of reverting the
+config. Test suite is back to exactly the pre-existing 3 known failures
+(`test_golden_fixtures`, `test_safety`, `test_source_v1`) plus the expected, real
+`test_governance_approves_stage_2_baseline_and_locks_optimization` failure — that one is intentional:
+it detects the same signoff-hash drift documented above and should keep failing until you actually
+re-approve the config. **241 passed, 4 failed** as of this update (was 228/3 before this session's
+work; +14 for the new test file, +1 legitimately-failing governance test).
 
 ## MT5 demo account guard — validated and fixed 2026-08-25
 
