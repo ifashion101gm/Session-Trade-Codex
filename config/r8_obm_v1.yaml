@@ -8,10 +8,13 @@ source: "External MQL5 EA, discovered running in MT5 terminal 2026-08-25, regist
 # not in this git repository. See R8_OBM_V1_SPEC.md for full detail.
 engine:
   type: MQL5_EXPERT_ADVISOR
-  location: "%APPDATA%\\MetaQuotes\\Terminal\\8EFB2DF501EAEF188AB46828829DBF78\\MQL5\\Experts\\R8_OBM_V1_EA.mq5"
-  compiled: "%APPDATA%\\MetaQuotes\\Terminal\\8EFB2DF501EAEF188AB46828829DBF78\\MQL5\\Experts\\R8_OBM_V1_EA.ex5"
+  location: "%APPDATA%\\MetaQuotes\\Terminal\\8EFB2DF501EAEF188AB46828829DBF78\\MQL5\\Experts\\R8_OBM_V1_EA (1).mq5"
+  compiled: "%APPDATA%\\MetaQuotes\\Terminal\\8EFB2DF501EAEF188AB46828829DBF78\\MQL5\\Experts\\R8_OBM_V1_EA (1).ex5"
   journal: "%APPDATA%\\MetaQuotes\\Terminal\\8EFB2DF501EAEF188AB46828829DBF78\\MQL5\\Files\\R8_OBM_V1_EURUSD_journal.csv"
   tracked_in_this_repo: false
+  # 2026-08-25: a duplicate "R8_OBM_V1_EA.mq5"/".ex5" (no "(1)" suffix) existed alongside this
+  # one, unattached and unused. Deleted for clarity - only the "(1)" copy, which is the one
+  # actually attached to the EURUSD M15 chart, now exists.
 
 strategy:
   symbol: EURUSD

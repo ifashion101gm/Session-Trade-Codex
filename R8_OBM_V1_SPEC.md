@@ -12,9 +12,13 @@ Status: **FORWARD_TEST / SIGNAL_ONLY** — see `STATUS.md`
 folder:
 
 ```
-%APPDATA%\MetaQuotes\Terminal\8EFB2DF501EAEF188AB46828829DBF78\MQL5\Experts\R8_OBM_V1_EA.mq5
-%APPDATA%\MetaQuotes\Terminal\8EFB2DF501EAEF188AB46828829DBF78\MQL5\Experts\R8_OBM_V1_EA.ex5
+%APPDATA%\MetaQuotes\Terminal\8EFB2DF501EAEF188AB46828829DBF78\MQL5\Experts\R8_OBM_V1_EA (1).mq5
+%APPDATA%\MetaQuotes\Terminal\8EFB2DF501EAEF188AB46828829DBF78\MQL5\Experts\R8_OBM_V1_EA (1).ex5
 ```
+
+A duplicate, unattached copy without the `(1)` suffix existed alongside this one and was deleted
+2026-08-25 for clarity — it was not in use. The `(1)` copy above is the one actually attached to
+the EURUSD M15 chart and is now the only copy on disk.
 
 with its own CSV audit journal at
 `MQL5\Files\R8_OBM_V1_EURUSD_journal.csv`. This registration exists so that its lineage, status,

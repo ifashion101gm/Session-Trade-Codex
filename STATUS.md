@@ -57,6 +57,32 @@ execution — **exactly one group can place an order.**
 
 None of these failures are reflected in any other top-level doc's status tables.
 
+## ASIAN_SESSION_V1 execution wiring — built 2026-08-25
+
+Previously, `session_strategy/execution/executor.py` (`DemoExecutor`) existed with proper layered
+safety gates but was **never wired to anything** — the only reference to it anywhere outside its
+own module was its test file. `sspf.py analyze` only ever produced a manual ticket; there was no
+path from "an accepted signal exists" to "an order reaches the broker."
+
+**Added `scripts/execute_session_signal.py`** — a manual-trigger command, by trader decision
+(2026-08-25): run by hand per symbol, not scheduled or continuously polling. Reuses the exact same
+`analyze()` pipeline as `sspf.py analyze` (same gates, same journal recording), and only if the
+result is accepted does it build a `TradeIntent` and hand it to `DemoExecutor`.
+
+**Deliberately narrow scope**: submits a single order with the correct entry/stop and a take-profit
+at the **5R ceiling** (`tp2_5r`) only. It does **not** automate the strategy's real management
+sequence (75% close at 4R, move stop to breakeven, run remainder to 5R) — `TradeIntent`/`RequestBuilder`
+only support one stop and one target each, and building real partial-close automation was explicitly
+deferred. The 4R step remains manual, exactly as `USER_MANUAL.md`'s `monitor` command already assumed.
+
+**Two independent safety switches**, not one: (1) the script's own `--confirm` flag — without it,
+always dry-run, no `order_check`/`order_send` call is even attempted; (2) `DemoExecutor`'s own
+composite gate, which independently requires the `ALLOW_ORDER_SUBMISSION` environment variable to be
+truthy or it fails closed with `SUBMIT_PERMISSION_DENIED`. Both tested 2026-08-25 (dry-run only,
+against live EURUSD/GBPUSD analyses — both correctly returned `NOT_ATTEMPTED` with no signal accepted
+at test time; the `--confirm` + order-submission path has not yet been exercised against a live
+accepted signal).
+
 ## MT5 demo account guard — validated and fixed 2026-08-25
 
 `account_guard.required_server` was `VTMarkets-Demo` and `fallback_account_suffix` was `985`;
