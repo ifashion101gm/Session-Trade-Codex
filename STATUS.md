@@ -226,6 +226,26 @@ per that file's classification. `pytest tests/test_execute_session_signal.py
 tests/test_execution_ledger.py tests/test_reconciliation.py tests/test_execution_gates.py` — the
 execution-specific suite — is 100% green (61/61).
 
+### SESSION_SIMPLE_V1_HOST — status display, 2026-08-26
+
+`SESSION_SIMPLE_V1` is Python-driven, not an MT5 EA — it never appears under Navigator →
+Expert Advisors, and that's correct, not a gap. The real gap was usability: no way to see from
+MT5 whether it had been checked recently or what it found. Added a **display-only** bridge:
+
+- `scripts/execute_session_signal.py` now writes `write_host_status()` to
+  `MQL5/Files/SESSION_SIMPLE_V1_status.json` at every meaningful exit point (`NOT_ATTEMPTED`,
+  `DUPLICATE_BLOCKED`, `DRY_RUN`, both `REFUSED` cases, `ATTEMPTED`). Best-effort, wrapped in
+  try/except — a write failure never affects the actual gate outcome or exit code.
+- New MT5 indicator `MQL5/Indicators/SessionSimpleHost/SESSION_SIMPLE_V1_HOST.mq5` (0
+  errors/0 warnings) reads that file and displays a top-right panel. **Deliberately a last-check
+  snapshot, not a live feed** — trader chose this over building a persistent watcher process
+  (bigger scope, would have reopened the earlier "manual trigger, not continuous polling"
+  decision). Shows `last checked Ns ago` / `STALE (Nmin ago)` rather than a fake ONLINE/OFFLINE.
+  Zero trading calls, zero strategy logic — pure display, namespaced `SSHOST_*` objects, doesn't
+  touch `SBV1_*` (SessionBoxes_V1) or anything belonging to `R8_OBM_V1_EA`.
+- Tests: 263 passed, 4 known failures, 0 new regressions (status-write logic itself has no
+  dedicated unit test — it's a best-effort side-effect, not a gate; verified by live run instead).
+
 ### Phase C — next: a genuine natural signal, not another synthetic test
 
 Do not build more execution features before this. Next trading-window opportunity:

@@ -78,8 +78,32 @@ from session_strategy.execution.reconciliation import (  # noqa: E402
 
 ASIAN_SESSION_V1_MAGIC = 123456  # matches RequestBuilder.build() -- kept in sync manually
 LEDGER_PATH = ROOT / "data" / "execution_ledger.sqlite3"
+# Where SESSION_SIMPLE_V1_HOST.mq5 (MT5 indicator, MQL5/Indicators/SessionSimpleHost/) reads
+# from. This is a LAST-CHECK SNAPSHOT, not a live feed -- there is no persistent Python process;
+# the host must show staleness, not a fake ONLINE, if this file is old. See STATUS.md 2026-08-26.
+HOST_STATUS_PATH = (
+    Path.home() / "AppData" / "Roaming" / "MetaQuotes" / "Terminal"
+    / "8EFB2DF501EAEF188AB46828829DBF78" / "MQL5" / "Files" / "SESSION_SIMPLE_V1_status.json"
+)
 
 _orders_sent_this_run = 0  # module-level; one script invocation, at most one order_send
+
+
+def write_host_status(**fields) -> None:
+    """Best-effort snapshot write for the MT5-side status host. Never raises --
+    a failure here must not affect the actual analyze/execute outcome or exit
+    code. This is observability only, not part of any gate."""
+    try:
+        payload = {
+            "generated_utc": datetime.now(timezone.utc).isoformat(),
+            "trading_mode": "demo",
+            "live_blocked": True,
+            **fields,
+        }
+        HOST_STATUS_PATH.parent.mkdir(parents=True, exist_ok=True)
+        HOST_STATUS_PATH.write_text(json.dumps(payload, indent=2, default=str), encoding="utf-8")
+    except OSError:
+        pass
 
 
 def _load_news_calendar(config) -> tuple[list[dict], bool]:
@@ -298,8 +322,20 @@ def main() -> int:
             journal.record(result, paths)
             print(markdown(result))
 
+            window_open = exec_start <= now < exec_end
+            base_status = dict(
+                symbol=symbol, asian_status="COMPLETE" if session_candles else "BUILDING",
+                asian_high=result.asian_high, asian_low=result.asian_low,
+                regime=result.session_type, setup=result.setup, direction=result.direction,
+                entry=result.entry, stop_price=result.stop_loss, target_price_5r=result.tp2_5r,
+                risk_percent=config.risk_percent_per_trade,
+                execution_window_open=window_open,
+                quota_taken=taken, quota_allowed=1,
+            )
+
             if not result.accepted:
                 print(json.dumps({"execution": "NOT_ATTEMPTED", "reason": "no accepted signal"}, indent=2))
+                write_host_status(last_action="NOT_ATTEMPTED", order_check_ready=False, **base_status)
                 return 3
 
             intent = build_intent(result)
@@ -313,6 +349,7 @@ def main() -> int:
                     "signal_id": sig_id,
                     "reason": reason,
                 }, indent=2))
+                write_host_status(last_action="DUPLICATE_BLOCKED", order_check_ready=False, **base_status)
                 return 1
 
             if not args.confirm:
@@ -329,9 +366,13 @@ def main() -> int:
                     "to_actually_submit": "re-run with --confirm and ALLOW_ORDER_SUBMISSION=true "
                                           "and ALLOW_ONE_DEMO_ORDER=true set",
                 }
+                order_check_ready = None
                 if args.check:
-                    payload["broker_check"] = dry_broker_check(config, gateway, intent)
+                    check_result = dry_broker_check(config, gateway, intent)
+                    payload["broker_check"] = check_result
+                    order_check_ready = check_result.get("retcode") == 0
                 print(json.dumps(payload, indent=2))
+                write_host_status(last_action="DRY_RUN", order_check_ready=order_check_ready, **base_status)
                 return 0
 
             if not allow_order_submission():
@@ -339,6 +380,7 @@ def main() -> int:
                     "execution": "REFUSED", "signal_id": sig_id,
                     "reason": "ALLOW_ORDER_SUBMISSION is not set truthy",
                 }, indent=2))
+                write_host_status(last_action="REFUSED_ALLOW_ORDER_SUBMISSION", order_check_ready=None, **base_status)
                 return 1
             if os.environ.get("ALLOW_ONE_DEMO_ORDER", "").lower() not in ("true", "1", "yes"):
                 print(json.dumps({
@@ -347,12 +389,19 @@ def main() -> int:
                               "independent one-shot switch and is required in addition to "
                               "--confirm and ALLOW_ORDER_SUBMISSION",
                 }, indent=2))
+                write_host_status(last_action="REFUSED_ALLOW_ONE_DEMO_ORDER", order_check_ready=None, **base_status)
                 return 1
 
             outcome = submit_one_order(config, gateway, ledger, sig_id, attempt_id, intent)
             print(json.dumps({"execution": "ATTEMPTED", "signal_id": sig_id, **outcome}, indent=2, default=str))
-            return 0 if outcome.get("outcome") in (
-                "CONFIRMED", "CONFIRMED_VIA_DEAL_HISTORY", "PENDING_ORDER_CONFIRMED") else 1
+            success = outcome.get("outcome") in ("CONFIRMED", "CONFIRMED_VIA_DEAL_HISTORY", "PENDING_ORDER_CONFIRMED")
+            write_host_status(
+                last_action=f"SUBMITTED_{outcome.get('outcome', outcome.get('stage', 'UNKNOWN'))}",
+                order_check_ready=True, order_ticket=outcome.get("order", {}).get("ticket")
+                if isinstance(outcome.get("order"), dict) else outcome.get("order_ticket"),
+                **base_status,
+            )
+            return 0 if success else 1
     finally:
         ledger.close()
         journal.close()
