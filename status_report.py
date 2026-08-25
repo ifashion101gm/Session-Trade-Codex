@@ -1,10 +1,20 @@
+import os
 import MetaTrader5 as mt5
 import json
 from pathlib import Path
 from datetime import datetime
 
 def generate_report():
-    if not mt5.initialize(login=1144985, password="***REMOVED_CREDENTIAL***", server="VTMarkets-Demo"):
+    login = os.getenv("MT5_DEMO_LOGIN")
+    password = os.getenv("MT5_DEMO_PASSWORD")
+    server = os.getenv("MT5_DEMO_SERVER")
+    if login and password and server:
+        connected = mt5.initialize(login=int(login), password=password, server=server, timeout=5000)
+    else:
+        # No explicit credentials supplied: attach to the already-running, already
+        # logged-in MT5 terminal instead of asserting a specific account.
+        connected = mt5.initialize()
+    if not connected:
         print(f"Failed to initialize MT5, error code: {mt5.last_error()}")
         return
 
