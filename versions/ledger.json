@@ -254,6 +254,29 @@
       "hypotheses": [],
       "results": [],
       "transitions": []
+    },
+    {
+      "id": "7728ae9d414865d7",
+      "name": "R8_OBM_V1",
+      "registered": "2026-08-25T15:16:18.514785Z",
+      "parent": null,
+      "stage": "research",
+      "supersedes": null,
+      "note": "External MQL5 EA discovered running live-attached to EURUSD M15 in MT5 terminal, magic 8101501. Signal-only forward test (InpAllowDemoTrading=false confirmed), 0 trades. Related to ST-01 RANGE8 MOMENTUM external backtest finding (REJECT V1, bid/ask PF 0.81). Not tracked in this repo - lives in MT5 terminal data folder.",
+      "artifacts": {
+        "spec": {
+          "file": "R8_OBM_V1_SPEC.md",
+          "sha256": "04b53ac8786196b4151385d1252e4fb2da8ee8f44ee3f6fd94052b91f15c70dd"
+        },
+        "engine": {
+          "file": "C:\\Users\\aungp\\AppData\\Roaming\\MetaQuotes\\Terminal\\8EFB2DF501EAEF188AB46828829DBF78\\MQL5\\Experts\\R8_OBM_V1_EA.mq5",
+          "sha256": "888a8918aeb2548922beafcf972e111f75697759936a42321e768f35114ecbc5"
+        }
+      },
+      "code": "8773db2-DIRTY",
+      "hypotheses": [],
+      "results": [],
+      "transitions": []
     }
   ]
 }

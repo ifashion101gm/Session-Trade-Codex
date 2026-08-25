@@ -269,6 +269,39 @@ No MT5 calls anywhere in the engine (read or write). Not authorized for demo or 
 
 ---
 
+## `7728ae9d414865d7` · R8_OBM_V1
+
+**Registered** 2026-08-25 · stage `research` · **not a Python component of this repo.**
+
+A compiled MQL5 Expert Advisor (`R8_OBM_V1_EA`, magic `8101501`) discovered live-attached to a
+EURUSD M15 chart in the MT5 terminal itself. Source, binary, and audit journal live in the
+terminal's own data folder (`%APPDATA%\MetaQuotes\Terminal\...\MQL5\Experts\`), not in this git
+repository — this ledger entry exists only to track its governance status in one place. Full
+detail: `R8_OBM_V1_SPEC.md`, `config/r8_obm_v1.yaml`.
+
+Same underlying idea as `mt5_range_bar_live.py` (tick-built synthetic range bars, one-bar
+momentum, fixed R:R) but an independent implementation — different magic number, no shared code,
+and materially better safety design: an unconditional hard-coded real-account block plus an
+`InpAllowDemoTrading` gate (default and, as of this validation, actually set to `false`) that
+keeps it signal-only-logging even on a permitted demo account.
+
+Related to (not a revision of) the trader's own external research finding `ST-01 RANGE8
+MOMENTUM → REJECT V1` (bid/ask-realistic PF 0.81) — this EA appears to forward-test that same
+idea live, in signal-only mode, which is reasonable as a sanity check but must not be treated as
+relitigating that rejection without a real forward-test sample and review.
+
+**Validated 2026-08-25**: currently on the correct demo account (`VantageMarkets-Demo`,
+`...746`), `InpAllowDemoTrading=false` confirmed via both the chart panel and terminal log,
+journal shows 6 completed range bars / 0 orders attempted since 2026-08-24. **Also found**: the
+terminal was briefly attached to a REAL account the same day (`MQL5/logs/20260825.log`,
+19:00:27, `"Account mode: REAL"`) while this EA was loaded — its hard block correctly prevented
+any order, but it is the first evidence any trading component in or around this project has been
+attached to a real account, even momentarily.
+
+No trades, no hypotheses, no results recorded — nothing to promote yet.
+
+---
+
 ## Out-of-sample reserve
 
 `data/sealed/` — May–Aug 2026, four symbols, 4 datasets, **unopened**. Every number

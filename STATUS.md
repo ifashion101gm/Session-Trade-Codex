@@ -31,8 +31,9 @@ invoke it automatically.
 
 ## Full strategy inventory (audited 2026-08-25, simplified)
 
-13 strategy identities exist across `config/*.yaml` and the ledger. Grouped by lineage/purpose
-and arranged by proximity to execution — **exactly one group can place an order.**
+14 strategy identities exist across `config/*.yaml`, the ledger, and (as of this update) one
+external MT5 terminal artifact. Grouped by lineage/purpose and arranged by proximity to
+execution — **exactly one group can place an order.**
 
 | Group | Members | Status |
 |---|---|---|
@@ -44,6 +45,7 @@ and arranged by proximity to execution — **exactly one group can place an orde
 | **6 · SSPF v2.3 research line** | `SSPF_V2_3_RESEARCH` → `_REFINED_RESEARCH` → `_PRODUCTION_CANDIDATE` (all in one file, `config/no_trade_research.yaml`) | A separate ATR/DOM-based research line, unrelated to the session-box lineage above. All three variants set `execution.submit_orders/modify_orders/close_positions: false`; even the "production candidate" is only `APPROVED_FOR_EXTENDED_READ_ONLY_BACKTEST`. |
 | **7 · Standalone experiments** | `SESSION_SWEEP_ENTRY_EXPERIMENT` (`config/sweep_entry_experiment.yaml`), `ST04_07_EXECUTION_ATTRIBUTION_V1` (`c121748f69283b55`, registered 2026-08-25) | Small, deliberately side-by-side studies that don't replace anything — one on sweep-entry variants, one on execution-fill attribution for Entry-2 signals. Both `RESEARCH_ONLY`, neither has a promoted result. |
 | **8 · Ungoverned** ⚠️ | `mt5_range_bar_live.py` (repo root, untracked) | Not in `config/` at all — no `strategy_version.py` registration, no lifecycle gates, no spec. A synthetic range-bar momentum executor that **can** call `mt5.order_send` on the demo account (magic `108801`) if run directly. Every other group above is blocked by its own config; this one is only blocked by nobody having run it — the one real governance gap found in this audit. |
+| **9 · External terminal artifact** | `R8_OBM_V1` (`7728ae9d414865d7`, registered 2026-08-25) | A compiled MQL5 EA (magic `8101501`) running **inside the MT5 terminal itself**, not in this repo — source/binary/journal live in the terminal's MQL5 data folder. Currently signal-only (`InpAllowDemoTrading=false`, verified live), 0 trades. Related to the trader's own external `ST-01 RANGE8 MOMENTUM → REJECT V1` research finding. **Validation also found the terminal was briefly attached to a REAL account on 2026-08-25** while this EA was loaded — its own hard-coded real-account block correctly prevented any order, but this is the first evidence any component near this project touched a live account. See `R8_OBM_V1_SPEC.md`. |
 
 ## Test suite (2026-08-25)
 
