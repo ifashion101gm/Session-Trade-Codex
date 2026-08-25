@@ -1,0 +1,85 @@
+strategy_id: ST04_07_EXECUTION_ATTRIBUTION_V1
+strategy_version: "1.0"
+status: RESEARCH_ONLY
+source: "Trader-supplied architecture, registered 2026-08-25"
+
+# This is a research/attribution study, not a live or demo-executable strategy. It is
+# deliberately side-by-side with ASIAN_SESSION_V1 and the SESSION_V2 research track. It does
+# not replace either, and reuses ER_ONLY_V2 / the SESSION_FLOW_V2_SIMPLE Sweep concept as an
+# independent implementation for one narrow question: signal edge vs execution fill model for
+# Entry 2 (Sweep) signals.
+data:
+  timeframe: M15
+  timezone: UTC
+  reference_window: "00:00-07:00"
+  execution_data_resolution: M1
+  source_timezone: BROKER_SERVER
+
+regime:
+  classifier: ER_ONLY_V2
+  er_formula: "abs(box_close - box_open) / sum(high_i - low_i)"
+  trend_threshold: 0.40
+  trend_routes_to: ENTRY_1  # excluded from this study
+  range_routes_to: SWEEP_QUALIFICATION
+
+entry2_qualification:
+  max_signals_per_session: 1
+  bearish_sweep: "high > box_high AND close < box_high"
+  bullish_sweep: "low < box_low AND close > box_low"
+
+ledger:
+  output_csv: ST04_07_SWEEP_SIGNAL_LEDGER.csv
+  immutable: true
+  shared_by_both_contracts: true
+
+execution_contracts:
+  E2-A_NEXT_MARKET:
+    role: CONTROL
+    trigger: sweep_m15_bar_close
+    fill: first_subsequent_m1_open
+    fill_rate_assumption: 1.0
+  E2-B_SWEEP_REFERENCE_LIMIT:
+    role: CHALLENGER
+    trigger: sweep_m15_bar_close
+    order_type: LIMIT
+    limit_price: reference_level
+    expiry_minutes: 60
+    unfilled_policy: NO_FILL_OPPORTUNITY_COST
+
+risk:
+  sl_buffer_pips: 1.0
+  stop_basis: sweep_extreme
+  target_r: 1.5
+  spread_pips_default: 0.8
+
+funnel_gates:
+  reject: "PF <= 1.00 OR expectancy <= 0"
+  archive: "PF in (1.00, 1.15]"
+  research: "PF > 1.15 AND expectancy > 0.05R AND N < 100"
+  layer_c_promotion: "PF > 1.15 AND expectancy > 0.05R AND N >= 100"
+  # Additional checks required before ANY promotion, not just the PF/expectancy/N gate above.
+  # These need a dated, per-trade result set to evaluate and are not yet auto-computed — treat
+  # as a manual review step until implemented.
+  additional_required_checks:
+    - no_single_month_dependence   # result must not be carried by one calendar month
+    - no_catastrophic_directional_asymmetry  # LONG-only or SHORT-only should not carry the result
+  limit_promotion_gate:
+    min_fill_rate: 0.50
+    min_net_r_vs_market: true
+
+reconciliation:
+  required_before_first_use: true
+  note: >
+    Before trusting ST04_07_SWEEP_SIGNAL_LEDGER.csv as an evidence source, reconcile its
+    RANGE-classified / Sweep-qualified signal count against session_strategy's own engine
+    output for the same dataset. A mismatch means this module's independent reimplementation
+    of ER_ONLY_V2/Sweep-qualification has drifted from the governed engine and must be fixed
+    before any result is recorded.
+
+governance:
+  baseline_mutation_allowed: false
+  sealed_data_allowed: false
+  promotion_allowed_from_this_sample: false
+  live_execution_authorized: false
+  demo_execution_authorized: false
+  note: "Pure historical-data attribution study. No MT5 calls (read or write) anywhere in the engine."

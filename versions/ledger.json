@@ -231,6 +231,29 @@
         }
       ],
       "transitions": []
+    },
+    {
+      "id": "c121748f69283b55",
+      "name": "ST04_07_EXECUTION_ATTRIBUTION_V1",
+      "registered": "2026-08-25T12:51:39.618710Z",
+      "parent": null,
+      "stage": "research",
+      "supersedes": null,
+      "note": "Entry 2 (Sweep) fill-execution attribution study: E2-A_NEXT_MARKET (control) vs E2-B_SWEEP_REFERENCE_LIMIT (challenger) on a shared immutable signal ledger. Research only; reuses ER_ONLY_V2/Sweep concepts independently of SESSION_FLOW_V2_SIMPLE and ASIAN_SESSION_V1, does not mutate either.",
+      "artifacts": {
+        "spec": {
+          "file": "ST04_07_EXECUTION_ATTRIBUTION_V1_SPEC.md",
+          "sha256": "ec035dd17aef3b93a9aab83301ed2fe7866e512079f9906c9115a007191a1f04"
+        },
+        "engine": {
+          "file": "scripts\\st04_07_execution_attribution_v1.py",
+          "sha256": "fe3f6b8e9e344625ba2b60aba9f4dea9dc755c716803487af49d7cc5312e02f5"
+        }
+      },
+      "code": "a72bcc7-DIRTY",
+      "hypotheses": [],
+      "results": [],
+      "transitions": []
     }
   ]
 }

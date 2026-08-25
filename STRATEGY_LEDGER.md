@@ -238,6 +238,37 @@ Oct-2022 result stands at t=1.46 and the 12-month at t=0.40.
 
 ---
 
+## `c121748f69283b55` · ST04_07_EXECUTION_ATTRIBUTION_V1
+
+**Registered** 2026-08-25 · stage `research`.
+
+Not a successor to `SESSION_FLOW_V1` or any other entry in this ledger — a standalone research
+study, side-by-side with `ASIAN_SESSION_V1` and the `SESSION_V2` research track, answering one
+narrow question: for Entry 2 (Sweep) signals only, how much of the realized edge is signal versus
+execution fill model. Spec: `ST04_07_EXECUTION_ATTRIBUTION_V1_SPEC.md`. Engine:
+`scripts/st04_07_execution_attribution_v1.py`. Config: `config/st04_07_execution_attribution_v1.yaml`.
+
+Reuses the `ER_ONLY_V2` regime classifier (`ER < 0.40` → RANGE → Sweep-qualification, same
+threshold family as `SESSION_FLOW_V2_SIMPLE`) and a completed-Asian-box Sweep-qualification rule,
+but as an independent implementation — it does not call into `session_strategy/` and mutates
+nothing in `config/strategy.yaml`.
+
+Compares two fill models on one shared, immutable signal ledger
+(`ST04_07_SWEEP_SIGNAL_LEDGER.csv`):
+
+- **`E2-A_NEXT_MARKET`** (control) — fills at the first M1 quote after the sweep bar closes.
+- **`E2-B_SWEEP_REFERENCE_LIMIT`** (challenger) — resting limit at the swept reference level,
+  60-minute expiry, unfilled orders tracked as opportunity cost rather than a loss.
+
+Fixed risk geometry across both (`SL = sweep extreme ± 1.0 pip`, `TP = 1.5R`) isolates execution
+attribution from trade-management variables. No result has been recorded yet — `promotion_allowed_
+from_this_sample: false` and no hypotheses are registered until the funnel in the spec §8 is run
+against authoritative M1 data.
+
+No MT5 calls anywhere in the engine (read or write). Not authorized for demo or live execution.
+
+---
+
 ## Out-of-sample reserve
 
 `data/sealed/` — May–Aug 2026, four symbols, 4 datasets, **unopened**. Every number

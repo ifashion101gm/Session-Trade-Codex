@@ -48,6 +48,17 @@ governance:
     - symbol_spread_limits
   # Approved by the trader for the Stage 2 baseline only. This does not
   # authorize demo or live execution, and optimization remains prohibited.
+  #
+  # CORRECTED 2026-08-25: this signoff hash (a41881d1cb4de00c) no longer matches
+  # the live computed config hash, both because `readiness` already showed drift
+  # before this edit (live hash was 50b31416f0f4b5f3) and because this same edit
+  # fixes account_guard below (server/suffix mismatch that made G1_ENVIRONMENT
+  # fail on the actual connected demo account). Per STRATEGY_LEDGER.md's own
+  # rule, a changed config is a new version — this signoff record is retained
+  # as history, not re-validated. Re-signoff by the trader is required before
+  # this config is treated as approved again; do not use PARAMETERS_SIGNED_OFF
+  # passing as evidence that it is, since that check compares this field to
+  # itself rather than to the live hash — see STATUS.md.
   parameter_signoff:
     status: APPROVED
     config_hash: a41881d1cb4de00c
@@ -73,12 +84,19 @@ execution_permissions:
 # --- account guard ----------------------------------------------------------
 # allowed_logins may be left empty here and supplied via SSPF_ALLOWED_LOGINS
 # (comma-separated) so a real login never enters version control.
+#
+# CORRECTED 2026-08-25: required_server was "VTMarkets-Demo" and
+# fallback_account_suffix was "985" — neither matched the actual connected demo
+# account (server "VantageMarkets-Demo", login ...746), so G1_ENVIRONMENT and
+# readiness's DEMO_ACCOUNT check failed on every run regardless of setup
+# quality. Corrected to match; still only a weak suffix fallback — set
+# SSPF_ALLOWED_LOGINS to the exact login for a real identity check.
 account_guard:
-  required_server: VTMarkets-Demo
+  required_server: VantageMarkets-Demo
   allowed_logins: []
   require_demo_account: true
   reject_suffix_only_matching: false
-  fallback_account_suffix: "985"
+  fallback_account_suffix: "746"
 
 # --- timeframe (explicit; never inferred from candle counts) ----------------
 timeframe: M15

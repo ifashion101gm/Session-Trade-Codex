@@ -1,5 +1,10 @@
 # MT5 MCP — decision and setup
 
+> **Note (2026-08-25):** "automated execution" below means the demo-only execution layer added
+> 2026-08-22 exists and *can* submit orders — it does not mean anything runs unattended today, and
+> live-account execution is explicitly disabled (`live_execution_authorized: false` in
+> `config/strategy.yaml`). See `STATUS.md` for the current runtime state.
+
 **DECIDED 2026-08-22: enable MTX/MBT for automated execution.**
 
 The system is now configured for automated execution. We have lifted the prohibition on algorithmic trading.

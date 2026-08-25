@@ -1,5 +1,15 @@
 # User Manual — SESSION_FLOW_V1
 
+> **Stale as of 2026-08-25 — see [`STATUS.md`](STATUS.md) for the current contract.**
+> `SESSION_FLOW_V1` failed its Stage 2 backtest verdict on 2026-08-16/17. The live, demo-authorized
+> contract is `ASIAN_SESSION_V1` (`config/strategy.yaml`), and the CLI commands below (`sspf.py
+> analyze`, `sspf.py monitor`, etc.) have not been re-verified against it. The manual's "the engine
+> automatically places the order" / "fully automated" claims were never validated for
+> `SESSION_FLOW_V1` and do not describe the current runtime, where
+> `live_execution_authorized: false` and no process is scheduled to trade unattended. Treat this
+> document as a description of the retired contract's intended workflow, not an operating guide
+> for today.
+
 How to run Session Trade Codex day to day. For the rules it applies see `SESSION_FLOW_V1_SPEC.md`;
 for what it needs to run see `RESOURCES.md`.
 

@@ -1,36 +1,39 @@
 # Session Trade Codex
 
 > **Start with [`STATUS.md`](STATUS.md)** — current contract, current evidence, open decisions.
-> Most other documents in this folder predate the 2026-08-15 corrections.
+> `SESSION_FLOW_V1` (below and in most other documents in this folder) **failed its Stage 2
+> backtest verdict on 2026-08-16/17 and is not the live contract.** The project reverted to
+> `ASIAN_SESSION_V1` and, separately, opened a newer `SESSION_V2` research track that is currently
+> execution-blocked. `STATUS.md` is authoritative on all of this; the rest of this file predates
+> that pivot and is kept for the strategy walkthrough only.
 
 | | |
 |---|---|
-| Active contract | **`SESSION_FLOW_V1`** — [`SESSION_FLOW_V1_SPEC.md`](SESSION_FLOW_V1_SPEC.md) |
-| Engine | `scripts/session_flow.py` |
-| Desk report | `scripts/engine_report.py` — runs at 07:00 and 12:00 UTC |
-| Backtest | `scripts/backtest_session_flow.py` |
+| Live, demo-authorized contract | **`ASIAN_SESSION_V1`** — `config/strategy.yaml`, hash `a41881d1cb4de00c` |
+| Legacy contract on this page (`SESSION_FLOW_V1`) | **rejected at Stage 2** — see `STATUS.md` / `ROADMAP.md` |
+| Active research track | `SESSION_V2` (`session_strategy/v2_research.py`) — `RESEARCH / EXECUTION_BLOCKED` |
+| Newest registered study | `ST04_07_EXECUTION_ATTRIBUTION_V1` — [`ST04_07_EXECUTION_ATTRIBUTION_V1_SPEC.md`](ST04_07_EXECUTION_ATTRIBUTION_V1_SPEC.md), stage `research`, no MT5 calls |
 | Data contract | [`data/README.md`](data/README.md) |
 | Adding symbols | [`EXPORT_INSTRUCTIONS.md`](EXPORT_INSTRUCTIONS.md) |
 | What to do next | [`ROADMAP.md`](ROADMAP.md) |
 
-Analysis only. No order-mutating call exists in this codebase.
+An execution layer capable of submitting/modifying/closing **demo** orders was added 2026-08-22
+(`session_strategy/execution/`); live-account execution remains disabled
+(`live_execution_authorized: false`). The claim that "no order-mutating call exists in this
+codebase" — still made below and in `PROJECT_CHARTER.md`/`USER_MANUAL.md` — is no longer true for
+that layer; see `STATUS.md` for the currently-failing safety test that used to prove it.
 
 ---
 
-A local, read-only MetaTrader 5 assistant that applies **the trader's own** Asian Session strategy.
-It builds the 22:00–07:00 UTC Asian range, classifies the session, watches the 07:00–16:00 UTC
-execution window for one of three setups, and writes a recommendation for a human to verify and
-execute manually.
+A local MetaTrader 5 assistant built around **the trader's own** session-based trading rules. The
+walkthrough below describes the `SESSION_FLOW_V1` contract as originally designed — read-only,
+manual-execution, 22:00–07:00 UTC Asian range. It is retained for the strategy explanation only;
+it does not describe what is currently live. For the live contract's actual session window
+(`00:00–07:00 UTC`, 28 candles) and execution status, see `STATUS.md`.
 
 **This project does not create or optimise a trading strategy.** The rulebook is an input,
 transcribed in `STRATEGY_SPEC.md` §0. Any divergence between the code and that specification is a
 defect, even when it looks like an improvement.
-
-**It never places, modifies, cancels, or closes an order.** The boundary is asserted at connect
-time and enforced by tests. MT5 algorithmic trading is not required and should stay off.
-
-Strategy: `ASIAN_SESSION_V1` v1.0 · **M15 only** · 124 tests pass. Run `python sspf.py readiness`
-for the active config hash and release state.
 
 > Supersedes SSPF v2.2. Different session window, classification metric, entry model, partial
 > target and risk fraction — evidence from the old contract does not transfer.

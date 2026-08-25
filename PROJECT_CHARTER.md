@@ -1,5 +1,15 @@
 # Session Trade Codex — Project Charter
 
+> **Stale as of 2026-08-25 — see [`STATUS.md`](STATUS.md) for the current contract.**
+> `SESSION_FLOW_V1` (named below) failed its Stage 2 backtest verdict on 2026-08-16/17 and is not
+> executable. The project reverted to `ASIAN_SESSION_V1` (`config/strategy.yaml`, hash
+> `a41881d1cb4de00c`, Asian window `00:00–07:00 UTC`/28 candles) and opened a newer `SESSION_V2`
+> research track that is currently execution-blocked. The "automated execution" claims below
+> describe an intent that was never validated for `SESSION_FLOW_V1`; a demo-only execution layer
+> was later added under `ASIAN_SESSION_V1` in 2026-08-22, but live execution remains disabled and
+> nothing runs unattended. Everything past this notice describes the superseded contract as
+> written at charter time and should not be treated as current.
+
 Project: **SESSION_FLOW_V1** (supersedes ASIAN_SESSION_V1, which superseded SSPF v2.2)
 Owner: Aung · Status: demo / shadow only · Charter date: 2026-08-11 · Config hash `2530b751134fbf6e`
 
