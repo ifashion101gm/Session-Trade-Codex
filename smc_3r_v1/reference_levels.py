@@ -1,5 +1,6 @@
 from typing import NamedTuple, Optional
 import pandas as pd
+from .canonical_sessions import asian_window
 
 
 class SessionLevels(NamedTuple):
@@ -16,18 +17,22 @@ def compute_reference_levels(
     min_daily_coverage_pct: float = 0.95
 ) -> SessionLevels:
     """
-    Computes Asian Session (00:00-06:00 UTC) and Prior Trading Day levels.
+    Computes Asian Session (CANONICAL_SESSION_WINDOWS_V1, config/canonical_sessions.yaml)
+    and Prior Trading Day levels.
     Walks backward through prior calendar dates until finding a session meeting >=95% coverage.
     """
     current_date = current_ts.floor('D')
 
-    # 1. Asian Session (00:00 - 06:00 UTC = exact 72 M5 bars)
-    asian_start = current_date + pd.Timedelta(hours=0)
-    asian_end = current_date + pd.Timedelta(hours=6)
+    # Asian Session window from the canonical session contract, expressed in M5 bars
+    # (canonical bar counts are M15; multiply by 3 for the M5 timeframe used here).
+    window = asian_window()
+    expected_m5_bars = window.expected_m15_bars * 3
+    asian_start = current_date + pd.Timedelta(hours=window.start_hour)
+    asian_end = current_date + pd.Timedelta(hours=window.end_hour)
     asian_bars = df_m5[(df_m5.index >= asian_start) & (df_m5.index < asian_end)]
 
-    asian_high = asian_bars['high'].max() if len(asian_bars) == 72 else None
-    asian_low = asian_bars['low'].min() if len(asian_bars) == 72 else None
+    asian_high = asian_bars['high'].max() if len(asian_bars) == expected_m5_bars else None
+    asian_low = asian_bars['low'].min() if len(asian_bars) == expected_m5_bars else None
 
     # 2. Prior Trading Day (Iterative backward walk)
     prior_dates = df_m5[df_m5.index < current_date].index.floor('D').unique().sort_values(ascending=False)

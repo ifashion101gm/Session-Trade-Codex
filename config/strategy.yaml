@@ -1,10 +1,25 @@
-mode: trading_enabled
+# STATUS: LEGACY_FROZEN, 2026-08-26 (CANONICAL_SESSION_MIGRATION_REPORT.md,
+# CANONICAL_STRATEGY_VERSION_MAP.md). Per the owner's force-canonical-migration decision, this
+# engine's session_start_utc/session_end_utc (00:00-07:00, 28 M15 candles) are NOT force-migrated
+# to CANONICAL_SESSION_WINDOWS_V1 (Asian 00:00-06:00 UTC, 24 M15 candles) -- they are the
+# trader-confirmed truth-source window for 2022-10-03 (exhaustive search against the trader's own
+# MT5 export; golden fixtures and benchmarks/truth_source_setups.json are calibrated against it).
+# Rewriting them would fabricate a "confirmed truth" for a window nobody has verified.
+#
+# Instead this config is frozen byte-for-byte for historical reproducibility, and its execution
+# authority is explicitly revoked below (mode: analysis_only; execution_permissions.submit_orders/
+# modify_orders/close_positions: false) -- it is no longer an active competing session authority.
+# The canonical-session successor is config/strategy_v2.yaml (ASIAN_SESSION_V2, status: RESEARCH,
+# Asian 00:00-06:00, also execution-authority NONE pending its own validation). Re-enabling this
+# engine's execution authority requires an explicit, separate decision -- it does not happen as a
+# side effect of V2 existing, or of canonical migration succeeding.
+mode: analysis_only
 trading_mode: demo
 strategy_id: ASIAN_SESSION_V1
 contract_version: "1.0"
 
-# ASIAN_SESSION_V1 is the only executable contract in this runtime.
-# Configuration validation rejects a superseded engine before MT5 is contacted.
+# ASIAN_SESSION_V1 is LEGACY_FROZEN (see STATUS above) -- historical evidence, execution authority
+# NONE. session_strategy/config.py's SSOT validator still enforces its exact frozen values.
 system:
   engine_version: "v1.0"
   active_strategy: ASIAN_SESSION_V1
@@ -20,6 +35,20 @@ session_contract:
   asian_end_utc: "07:00"
   required_m15_candles: 28
   sweep_window_hours: 9
+  # --- canonical-session cross-reference (CANONICAL_SESSION_MIGRATION_REPORT.md) ------------
+  reference_session: asian
+  status: LEGACY_FROZEN
+  execution_authority: NONE
+  canonical_successor: config/strategy_v2.yaml (ASIAN_SESSION_V2)
+  session_window_migration_reason: >
+    asian_start_utc/asian_end_utc above are the trader-confirmed truth-source window for
+    2022-10-03 -- determined, per the CORRECTED 2026-08-15 note below, by exhaustive search
+    against the trader's own MT5 export. Golden fixtures (tests/test_golden_fixtures.py) and
+    benchmarks/truth_source_setups.json are calibrated against that same 00:00-07:00 window.
+    Frozen here rather than rewritten to CANONICAL_SESSION_WINDOWS_V1's 00:00-06:00, so that
+    evidence stays reproducible; execution authority is revoked instead (mode: analysis_only,
+    execution_permissions below) so this is no longer an active competing session definition.
+    See CANONICAL_SESSION_MIGRATION_REPORT.md and CANONICAL_STRATEGY_VERSION_MAP.md.
 # Exact broker input -> normalized strategy symbol.  MT5 queries still use the
 # configured broker symbol, so XAUUSD.crp is never queried as bare XAUUSD.
 symbol_mapping:
@@ -33,7 +62,10 @@ governance:
   specification_status: APPROVED_FOR_STAGE_2_BASELINE
   implementation_authorized: true
   backtest_authorized_after_schema_validation: true
-  demo_execution_authorized: true
+  # CHANGED 2026-08-26: was true. Execution authority revoked as part of freezing this engine
+  # to LEGACY_FROZEN status (see session_contract.status above) -- re-enabling requires an
+  # explicit, separate decision, not a side effect of this migration.
+  demo_execution_authorized: false
   live_execution_authorized: false
   research_status: PROVISIONAL_LOCKED_FOR_BASELINE
   optimization_allowed: false
@@ -74,12 +106,15 @@ governance:
     - sealed_out_of_sample_pass
 
 # --- execution boundary (mechanically enforced, not a label) ----------------
+# CHANGED 2026-08-26: submit_orders/modify_orders/close_positions were true. LEGACY_FROZEN status
+# (session_contract.status above) revokes execution authority explicitly rather than leaving it to
+# the already-stale governance signoff hash to gate implicitly.
 execution_permissions:
   calculate_signals: true
   calculate_hypothetical_volume: true
-  submit_orders: true
-  modify_orders: true
-  close_positions: true
+  submit_orders: false
+  modify_orders: false
+  close_positions: false
 
 # --- account guard ----------------------------------------------------------
 # allowed_logins may be left empty here and supplied via SSPF_ALLOWED_LOGINS

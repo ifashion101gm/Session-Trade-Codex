@@ -11,12 +11,26 @@ the code does," not "what was intended."
 ## Data / timeframes
 
 - M5 bars for signal detection, M1 bars for fill/exit simulation (`smc_3r_v1/matcher.py`).
-- Asian session reference: `[00:00, 06:00)` UTC, requires exactly 72 M5 bars or the level is
-  `None` for that day (`reference_levels.compute_reference_levels`).
+- Session windows (Asian reference, London AM, New York AM) are read from
+  `config/canonical_sessions.yaml` (`CANONICAL_SESSION_WINDOWS_V1`) via
+  `smc_3r_v1/canonical_sessions.py`, not hardcoded in this package. As of 2026-08-26 that file
+  defines, in UTC, half-open `[start, end)`:
+  - Asian reference: `[00:00, 06:00)` — requires exactly 72 M5 bars (24 M15 bars × 3) or the
+    level is `None` for that day (`reference_levels.compute_reference_levels`).
+  - London AM: `[06:00, 11:00)`
+  - New York AM: `[12:00, 15:00)`
+
+  **Correction, 2026-08-26**: London AM was originally hardcoded here as `07:00–10:00` UTC,
+  which conflicted with the trader-supplied canonical session table (`06:00–11:00`). Fixed as
+  part of canonical-session reconciliation — see `config/canonical_sessions.yaml` and
+  `STRATEGY_LEDGER.md`. Other strategies in this repo (`ASIAN_SESSION_V1`, `SESSION_FLOW_V2_SIMPLE`,
+  `SESSION_STRATEGY_V2_RESEARCH`, `SESSION_SOURCE_V1`) still use their own, different session
+  windows and were intentionally left unchanged to preserve reproducibility of past backtests —
+  see `legacy_session_windows` in `config/canonical_sessions.yaml`.
 - Prior Trading Day (PDH/PDL): most recent prior calendar date with ≥95% of 288 expected M5 bars,
   found by walking backward.
-- Session windows strategy will evaluate in: `07:00–10:00` UTC and `12:00–15:00` UTC
-  (`SMCStateMachine.is_in_session_window`). State resets to `SEARCH_SWEEP` outside these windows.
+- Session windows strategy will evaluate in: London AM and New York AM (`SMCStateMachine.
+  is_in_session_window`). State resets to `SEARCH_SWEEP` outside these windows.
 
 ## State machine (`smc_3r_v1/smc_state_machine.py`)
 

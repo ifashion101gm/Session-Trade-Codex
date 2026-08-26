@@ -2,7 +2,9 @@
 
 This module deliberately does not integrate with the live analysis CLI.  Source
 rules, deterministic interpretations, and unresolved terms are recorded in
-config/source_v1.yaml.  It never submits or modifies an MT5 order.
+archive/session_configs/source_v1.yaml (archived 2026-08-26 as a non-canonical historical
+replay artifact -- see CANONICAL_SESSION_MIGRATION_REPORT.md).  It never submits or modifies
+an MT5 order.
 """
 
 from __future__ import annotations

@@ -234,9 +234,19 @@ class TestCompositeExecutionGates(unittest.TestCase):
     # ------------------------------------------------------------------
 
     def test_gate_order_check_nonzero_retcode_blocks_order_send(self):
-        """order_check retcode != 0 must block submission at step 5."""
+        """order_check retcode != 0 must block submission at step 5.
+
+        Uses a submit_orders=True variant of self.config: config/strategy.yaml (ASIAN_SESSION_V1)
+        was frozen to submit_orders=False as part of CANONICAL_SESSION_MIGRATION_REPORT.md's
+        LEGACY_FROZEN status, but this test exercises gate 5 specifically, which only runs once
+        gate 4 (submit_orders) has already passed -- see test_gate_submit_orders_false_blocks_order_send
+        for that gate's own dedicated test.
+        """
         self.gateway.order_check.return_value = {"retcode": 10}
-        executor = _make_executor(self.config, self.gateway)
+        permissive_config = replace(self.config, execution_permissions={
+            **self.config.execution_permissions, "submit_orders": True,
+        })
+        executor = _make_executor(permissive_config, self.gateway)
         with patch.dict(os.environ, {"ALLOW_ORDER_SUBMISSION": "true"}):
             report = executor.execute(_valid_intent())
         self.assertEqual(report.validation, ValidationResult.MARKET_DATA_STALE)
@@ -247,8 +257,15 @@ class TestCompositeExecutionGates(unittest.TestCase):
     # ------------------------------------------------------------------
 
     def test_positive_path_all_gates_pass_reaches_order_send_exactly_once(self):
-        """When all gates pass, exactly one order_send call is made."""
-        executor = _make_executor(self.config, self.gateway)
+        """When all gates pass, exactly one order_send call is made.
+
+        See test_gate_order_check_nonzero_retcode_blocks_order_send above for why this uses a
+        submit_orders=True variant of self.config rather than self.config directly.
+        """
+        permissive_config = replace(self.config, execution_permissions={
+            **self.config.execution_permissions, "submit_orders": True,
+        })
+        executor = _make_executor(permissive_config, self.gateway)
         with patch.dict(os.environ, {"ALLOW_ORDER_SUBMISSION": "true"}):
             report = executor.execute(_valid_intent())
         self.assertEqual(report.validation, ValidationResult.SUCCESS)

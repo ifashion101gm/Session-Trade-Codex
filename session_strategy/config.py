@@ -256,39 +256,79 @@ def allow_order_submission() -> bool:
     return val in ("true", "1", "yes")
 
 
+# CORRECTED 2026-08-19 (C-33): these literals still asserted the superseded 22:00-07:00 /
+# 36-candle window after config/strategy.yaml was corrected on 2026-08-15 to 00:00-07:00 / 28.
+# The validator therefore rejected its own SSOT before any engine logic ran. Authority for
+# 00:00-07:00 / 28: config/strategy.yaml L85-90, SESSION_FLOW_V1_SPEC.md, STRATEGY_SPEC.md S10.
+# No strategy behaviour depends on session_contract; it is asserted here and never read
+# elsewhere.
+_SESSION_CONTRACT_REGISTRY: dict[str, dict[str, Any]] = {
+    # LEGACY_FROZEN, 2026-08-26 (CANONICAL_SESSION_MIGRATION_REPORT.md): this engine's own
+    # Asian window is the trader-confirmed truth source for 2022-10-03 (exhaustive search
+    # against the trader's own MT5 export; see the C-33 note above). It is frozen here
+    # byte-for-byte, not force-migrated, so historical evidence and this engine's identity
+    # stay reproducible. ASIAN_SESSION_V2 below is the canonical-session successor; it does
+    # NOT reuse this window.
+    "ASIAN_SESSION_V1": {
+        "engine_version": "v1.0",
+        "contract_version": "1.0",
+        "status": "LEGACY_FROZEN",
+        "session_contract": {
+            "asian_start_utc": "00:00", "asian_end_utc": "07:00",
+            "required_m15_candles": 28, "sweep_window_hours": 9,
+        },
+        "runtime_window": ("00:00", "07:00", 28, "07:00", "16:00", 36),
+    },
+    # RESEARCH, 2026-08-26: canonical-session successor. Asian window and bar count come from
+    # CANONICAL_SESSION_WINDOWS_V1 (config/canonical_sessions.yaml); the 9-hour execution
+    # window duration is preserved from V1 (sweep_window_hours: 9) but re-anchored to the new
+    # session close (06:00, not 07:00) rather than reusing V1's absolute clock times. No
+    # execution authority: see config/strategy_v2.yaml's execution_permissions/governance.
+    "ASIAN_SESSION_V2": {
+        "engine_version": "v2.0",
+        "contract_version": "2.0",
+        "status": "RESEARCH",
+        "session_contract": {
+            "asian_start_utc": "00:00", "asian_end_utc": "06:00",
+            "required_m15_candles": 24, "sweep_window_hours": 9,
+            "canonical_session_version": "CANONICAL_SESSION_WINDOWS_V1",
+            "reference_session": "asian",
+        },
+        "runtime_window": ("00:00", "06:00", 24, "06:00", "15:00", 36),
+    },
+}
+
+
 def _validate(config: StrategyConfig) -> None:
     """Fail loudly on a configuration that cannot express the specification."""
     problems: list[str] = []
 
     system = config.system
     contract = config.session_contract
-    if system.get("engine_version") != "v1.0" or system.get("active_strategy") != "ASIAN_SESSION_V1":
-        problems.append("system must select ASIAN_SESSION_V1 engine version v1.0")
-    if system.get("supersede_legacy") is not True:
-        problems.append("system.supersede_legacy must be true")
-    if config.strategy_id != "ASIAN_SESSION_V1" or config.contract_version != "1.0":
-        problems.append("strategy_id/contract_version must be ASIAN_SESSION_V1/1.0")
-    # CORRECTED 2026-08-19 (C-33): these literals still asserted the superseded
-    # 22:00-07:00 / 36-candle window after config/strategy.yaml was corrected on
-    # 2026-08-15 to 00:00-07:00 / 28. The validator therefore rejected its own SSOT
-    # before any engine logic ran. Authority for 00:00-07:00 / 28:
-    # config/strategy.yaml L85-90, SESSION_FLOW_V1_SPEC.md, STRATEGY_SPEC.md S10.
-    # sweep_window_hours stays 9 — it describes the 07:00-16:00 execution window,
-    # which is unchanged. No strategy behaviour depends on session_contract; it is
-    # asserted here and never read elsewhere.
-    expected_contract = {
-        "asian_start_utc": "00:00",
-        "asian_end_utc": "07:00",
-        "required_m15_candles": 28,
-        "sweep_window_hours": 9,
-    }
-    for key, value in expected_contract.items():
-        if contract.get(key) != value:
-            problems.append(f"session_contract.{key} must be {value!r} for ASIAN_SESSION_V1")
-    if (config.session_start_utc, config.session_end_utc, config.session_candles,
-            config.execution_start_utc, config.execution_end_utc, config.post_session_candles) != (
-                "00:00", "07:00", 28, "07:00", "16:00", 36):
-        problems.append("runtime session window must be 00:00-07:00 plus 07:00-16:00 UTC (28 + 36 M15 candles)")
+
+    entry = _SESSION_CONTRACT_REGISTRY.get(config.strategy_id)
+    if entry is None:
+        problems.append(
+            f"strategy_id {config.strategy_id!r} is not a known session contract "
+            f"({', '.join(_SESSION_CONTRACT_REGISTRY)})"
+        )
+    else:
+        if system.get("engine_version") != entry["engine_version"] or system.get("active_strategy") != config.strategy_id:
+            problems.append(f"system must select {config.strategy_id} engine version {entry['engine_version']}")
+        if system.get("supersede_legacy") is not True:
+            problems.append("system.supersede_legacy must be true")
+        if config.contract_version != entry["contract_version"]:
+            problems.append(f"contract_version must be {entry['contract_version']!r} for {config.strategy_id}")
+        for key, value in entry["session_contract"].items():
+            if contract.get(key) != value:
+                problems.append(f"session_contract.{key} must be {value!r} for {config.strategy_id}")
+        if (config.session_start_utc, config.session_end_utc, config.session_candles,
+                config.execution_start_utc, config.execution_end_utc, config.post_session_candles) != entry["runtime_window"]:
+            start, end, candles, ex_start, ex_end, post = entry["runtime_window"]
+            problems.append(
+                f"runtime session window for {config.strategy_id} must be {start}-{end} plus "
+                f"{ex_start}-{ex_end} UTC ({candles} + {post} M15 candles)"
+            )
 
     if config.timeframe_seconds <= 0:
         problems.append("timeframe_seconds must be positive")

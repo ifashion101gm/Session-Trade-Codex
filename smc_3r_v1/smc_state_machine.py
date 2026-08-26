@@ -4,6 +4,7 @@ from typing import List, Optional
 import pandas as pd
 from .reference_levels import compute_reference_levels
 from .smc_features import extract_smc_features
+from .canonical_sessions import london_am_window, new_york_am_window
 
 
 class OrderSide(str, Enum):
@@ -56,8 +57,11 @@ class SMCStateMachine:
         self.max_sweep_bars = max_sweep_bars
 
     def is_in_session_window(self, ts: pd.Timestamp) -> bool:
+        # CANONICAL_SESSION_WINDOWS_V1 (config/canonical_sessions.yaml): London AM and New York AM.
         hour = ts.hour
-        return (7 <= hour < 10) or (12 <= hour < 15)
+        london = london_am_window()
+        new_york = new_york_am_window()
+        return (london.start_hour <= hour < london.end_hour) or (new_york.start_hour <= hour < new_york.end_hour)
 
     def scan_dataset(self, df_m5: pd.DataFrame, model_id: str = "EXP-D") -> List[PendingOrder]:
         df = extract_smc_features(df_m5)

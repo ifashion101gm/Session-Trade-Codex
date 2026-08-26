@@ -1,3 +1,17 @@
+# ARCHIVED, 2026-08-26 (CANONICAL_SESSION_MIGRATION_REPORT.md): session_start_utc/session_end_utc
+# below (22:00 prior day-07:00) predate CANONICAL_SESSION_WINDOWS_V1
+# (config/canonical_sessions.yaml: Asian 00:00-06:00 UTC) and disagree with it.
+#
+# Deliberately NOT force-migrated to canonical hours, and this is a documented exception, not an
+# oversight: this file and session_strategy/source_v1.py replay one specific, already-published
+# historical episode ("1BullBear Episode 18: Asian Session Trading", mode:
+# historical_research_only) whose defining characteristic *is* its own window (an explicit
+# 2026-08-15 user revision to 22:00-07:00, chosen to reproduce that episode's own reference
+# levels). Forcing this to 00:00-06:00 would not make it "canonical" -- it would corrupt the
+# episode replay's fidelity to the thing it is reproducing. No order-submitting code path reads
+# this file or session_strategy/source_v1.py (replay_source_v1.py uses MT5ReadOnlyGateway only).
+# Moved out of config/ to make its non-canonical, replay-only status explicit; not to be read as
+# current session timing by any new work.
 mode: historical_research_only
 strategy_id: SESSION_SOURCE_V1
 contract_version: "1.0-research"

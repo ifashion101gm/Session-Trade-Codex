@@ -17,6 +17,8 @@ Construct session boxes as immutable data objects before adding strategy annotat
 
 Do not infer an unspecified session schedule from Trend/Range, Sweep, entry, or outcome data. If the requested window or timezone is ambiguous, obtain or report the missing contract.
 
+For the standard Asian / London AM / New York AM boxes, the schedule is `config/canonical_sessions.yaml` (`CANONICAL_SESSION_WINDOWS_V1`, fixed UTC, half-open, no DST) — read it via `session_clock.get_session_bounds(date, name)` rather than hardcoding hours here or in any strategy-specific skill. Only use a different window when the caller explicitly supplies one for a non-canonical or historical box.
+
 ## Authoritative workflow
 
 1. Use completed M15 candles only. Select candles by the half-open rule:

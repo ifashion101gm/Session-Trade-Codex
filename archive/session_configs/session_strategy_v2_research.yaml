@@ -1,3 +1,9 @@
+# ARCHIVED, 2026-08-26 (CANONICAL_SESSION_MIGRATION_REPORT.md): ASIAN_REFERENCE (00:00-07:00) and
+# LONDON_REFERENCE (07:00-12:00) below predate CANONICAL_SESSION_WINDOWS_V1
+# (config/canonical_sessions.yaml: Asian 00:00-06:00, London AM 06:00-11:00) and disagree with
+# it. Moved out of config/ because it had zero active runtime consumers (no script, module, or
+# test loads this file by path). Preserved verbatim for reproducibility of past research; not
+# canonical session timing.
 contract_id: SESSION_STRATEGY_V2_RESEARCH
 contract_version: 2.0-research
 status: RESEARCH_CONTRACT_NOT_EXECUTION_AUTHORITY

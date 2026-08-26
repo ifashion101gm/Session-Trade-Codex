@@ -122,7 +122,7 @@ class SessionFlowV2ContractTests(unittest.TestCase):
         self.assertEqual(leg.activation_utc(self.day).time(), dt.time(12, 0))
 
     def test_machine_contract_uses_waterfall_and_signed_common_management(self):
-        path = Path(__file__).resolve().parents[1] / "config" / "session_flow_v2.yaml"
+        path = Path(__file__).resolve().parents[1] / "archive" / "session_configs" / "session_flow_v2.yaml"
         contract = yaml.safe_load(path.read_text(encoding="utf-8"))
         classifier = contract["classifier"]
         frozen_classifier = contract["session_classifier"]

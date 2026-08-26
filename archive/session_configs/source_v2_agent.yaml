@@ -1,3 +1,10 @@
+# ARCHIVED, 2026-08-26 (CANONICAL_SESSION_MIGRATION_REPORT.md): asian_start_local/asian_end_local
+# below (00:00-08:00 Europe/London local) predate CANONICAL_SESSION_WINDOWS_V1
+# (config/canonical_sessions.yaml: Asian 00:00-06:00 UTC, fixed, no DST shift) and disagree with
+# it in both timezone basis and hours. Moved out of config/ because its only runtime consumer was
+# its own schema-conformance test (tests/test_source_v2_agent_contract.py, now pointed at this
+# archived path); activation_status was already BLOCKED_FROM_EXECUTION_PENDING_WORKFLOW_AND_APPROVAL
+# before this migration. Preserved verbatim for reproducibility; not canonical session timing.
 mode: analysis_only
 strategy_id: SESSION_USER_RESOLVED_V2_AGENT
 contract_version: "2.2-backtest"

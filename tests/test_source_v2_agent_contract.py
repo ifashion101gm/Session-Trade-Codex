@@ -6,7 +6,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def contract():
-    return yaml.safe_load((ROOT / "config" / "source_v2_agent.yaml").read_text())
+    return yaml.safe_load((ROOT / "archive" / "session_configs" / "source_v2_agent.yaml").read_text())
 
 
 def test_contract_is_analysis_only_and_cannot_mutate_mt5():

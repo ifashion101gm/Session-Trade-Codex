@@ -1,3 +1,10 @@
+# ARCHIVED, 2026-08-26 (CANONICAL_SESSION_MIGRATION_REPORT.md): this contract's post_asian
+# (00:00-08:00) and post_london (07:00-12:00) predate CANONICAL_SESSION_WINDOWS_V1
+# (config/canonical_sessions.yaml: Asian 00:00-06:00, London AM 06:00-11:00) and disagree with
+# it. Moved out of config/ because its only runtime consumer was its own schema-conformance test
+# (tests/test_session_flow_v2_contract.py, now pointed at this archived path) -- no strategy
+# engine, CLI, or backtest reads this file. Preserved verbatim for reproducibility of past
+# analysis; not canonical session timing. Do not source active session hours from this file.
 contract_id: SESSION_FLOW_V2_SIMPLE
 contract_version: 2.1-simple
 timeframe: M15

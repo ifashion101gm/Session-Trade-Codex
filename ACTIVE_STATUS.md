@@ -1,27 +1,23 @@
 # MT5 Active Status Report
+*Generated: 2026-08-26 17:18:38*
 
-*This is an auto-generated account snapshot, not a project status document. For project status,
-open contracts, test results, and known issues, see [`STATUS.md`](STATUS.md).*
+## 🏦 Account Overview
+- **Balance:** 999.37 USD
+- **Equity:** 998.24 USD
+- **Free Margin:** 995.91 USD
+- **Floating P/L:** -1.13 USD
+- **Algorithmic Trading:** ✅ ENABLED
 
-*Last successful read: 2026-08-25 (this session, via `mt5_status_check.py`).*
-*A follow-up live re-check the same day failed with `MT5 initialization failed: (-10005, 'IPC
-timeout')` — if this recurs, restart the MT5 terminal and re-run `mt5_status_check.py`.*
+## 📊 Active Strategies (Open Positions)
+| Ticket | Symbol | Type | Volume | Entry | SL | TP | Profit | Strategy (Comment) | Magic |
+|---|---|---|---|---|---|---|---|---|---|
+| 1858633127 | EURUSD | BUY | 0.01 | 1.16744 | 1.16594 | 1.1697 | -1.13 | R8-OBM-V1 | 8101501 |
 
-## Account overview
+## ⏳ Pending Orders (Limits/Stops)
+| Ticket | Symbol | Type | Volume | Setup Price | SL | TP | Strategy (Comment) | Magic |
+|---|---|---|---|---|---|---|---|---|
+| 1857968628 | EURUSD | BUY LIMIT | 0.03 | 1.16623 | 1.16582 | 1.16764 | manual-TP1-75pct-reopen | 777001 |
+| 1857968643 | EURUSD | BUY LIMIT | 0.01 | 1.16623 | 1.16582 | 1.16828 | manual-TP2-runner25pct-reopen | 777001 |
 
-- **Login:** \*\*\*746 (masked) · **Type:** demo · **Server:** VTMarkets-Demo
-- **Balance:** 1,000.00 USD
-- **Equity:** 1,000.00 USD
-- **Floating P/L:** 0.00 USD
-
-## Positions and orders
-
-- **Open positions:** 0
-- **Pending orders:** 0
-
-## Active strategies
-
-No process was connected and trading at the time of this snapshot. The only strategy currently
-authorized for demo execution is `ASIAN_SESSION_V1` (`config/strategy.yaml`); nothing is scheduled
-to run it unattended. See `STATUS.md` for the full picture, including the blocked `SESSION_V2`
-research track and the untracked `mt5_range_bar_live.py` experiment.
+## 📁 Recent Analysis Outputs (Today)
+*No analysis runs found for today.*
