@@ -1,0 +1,254 @@
+# STATUS: RESEARCH, 2026-08-26 (CANONICAL_SESSION_MIGRATION_REPORT.md,
+# CANONICAL_STRATEGY_VERSION_MAP.md). Canonical-session successor to ASIAN_SESSION_V1
+# (config/strategy.yaml, now LEGACY_FROZEN). Its Asian reference window and bar count come
+# directly from CANONICAL_SESSION_WINDOWS_V1 (config/canonical_sessions.yaml) rather than
+# duplicating a private value. No execution authority: mode is analysis_only and every
+# execution_permissions flag below is false -- this file cannot submit, modify, or close a
+# broker order regardless of what session_strategy/execution/* would otherwise allow, and
+# governance below has not been signed off (unlike V1's now-stale prior signoff, this file has
+# never claimed one).
+mode: analysis_only
+trading_mode: demo
+strategy_id: ASIAN_SESSION_V2
+contract_version: "2.0"
+
+# ASIAN_SESSION_V2 is the canonical-session successor engine. It shares session_strategy/config.py
+# and session_strategy/engine.py with ASIAN_SESSION_V1 (same pure-function analysis engine,
+# different session_contract) -- see session_strategy/config.py's _SESSION_CONTRACT_REGISTRY.
+system:
+  engine_version: "v2.0"
+  active_strategy: ASIAN_SESSION_V2
+  supersede_legacy: true
+session_contract:
+  asian_start_utc: "00:00"
+  asian_end_utc: "06:00"
+  required_m15_candles: 24
+  sweep_window_hours: 9
+  # --- canonical-session cross-reference (CANONICAL_SESSION_MIGRATION_REPORT.md) ------------
+  reference_session: asian
+  canonical_session_version: CANONICAL_SESSION_WINDOWS_V1
+  predecessor: config/strategy.yaml (ASIAN_SESSION_V1, LEGACY_FROZEN)
+  session_window_note: >
+    Asian window and bar count are CANONICAL_SESSION_WINDOWS_V1's own (00:00-06:00, 24 M15
+    candles) -- not recomputed or approximated from V1's 00:00-07:00 window. The 9-hour
+    execution-window duration is preserved from V1 (sweep_window_hours: 9) but re-anchored to
+    this session's own close (06:00), giving execution_start_utc/execution_end_utc of
+    06:00-15:00 below, not V1's 07:00-16:00. All setup geometry (range, mid, bias, stop,
+    target) is recomputed from this box; none of V1's historical levels are reused.
+# Exact broker input -> normalized strategy symbol. Unchanged from V1 -- not session-dependent.
+symbol_mapping:
+  EURUSD: EURUSD
+  GBPUSD: GBPUSD
+  USDJPY: USDJPY
+  XAUUSD.crp: XAUUSD
+
+# --- governance -------------------------------------------------------------
+governance:
+  specification_status: RESEARCH_DRAFT_PENDING_VALIDATION
+  implementation_authorized: true
+  backtest_authorized_after_schema_validation: true
+  demo_execution_authorized: false
+  live_execution_authorized: false
+  research_status: UNVALIDATED
+  optimization_allowed: false
+  provisional_parameters:
+    - efficiency_ratio_threshold
+    - close_location_trend
+    - sweep_buffer_fraction
+    - stop_buffer_fraction
+    - touch_tolerance_fraction
+    - rejection_quality_fraction
+    - symbol_range_limits
+    - symbol_spread_limits
+  # No signoff record: unlike V1 (which has a stale-but-real prior approval), this config has
+  # never been reviewed or approved by the trader. Do not add a parameter_signoff block here
+  # until an actual review happens -- an empty/absent one is honest; a fabricated one is not.
+  promotion_requirements:
+    - deterministic_unit_tests_pass
+    - golden_cases_pass
+    - no_lookahead_audit_pass
+    - baseline_backtest_complete
+    - transaction_cost_stress_pass
+    - walk_forward_pass
+    - sealed_out_of_sample_pass
+    - canonical_session_differential_review
+
+# --- execution boundary (mechanically enforced, not a label) ----------------
+execution_permissions:
+  calculate_signals: true
+  calculate_hypothetical_volume: true
+  submit_orders: false
+  modify_orders: false
+  close_positions: false
+
+# --- account guard ----------------------------------------------------------
+account_guard:
+  required_server: VantageMarkets-Demo
+  allowed_logins: []
+  require_demo_account: true
+  reject_suffix_only_matching: false
+  fallback_account_suffix: "746"
+
+# --- timeframe (explicit; never inferred from candle counts) ----------------
+timeframe: M15
+timeframe_seconds: 900
+use_closed_candles_only: true
+interval_semantics: left_closed_right_open
+candle_timestamp_semantics: bar_open_time
+
+# --- time model (UTC internally; Myanmar time is display only) --------------
+# CANONICAL_SESSION_WINDOWS_V1: Asian = [00:00, 06:00) UTC, half-open, fixed UTC (no DST).
+# Execution window re-anchored to this session's own close -- see session_window_note above.
+session_start_utc: "00:00"
+session_end_utc: "06:00"
+session_candles: 24
+execution_start_utc: "06:00"
+execution_end_utc: "15:00"
+post_session_candles: 36
+
+# --- live data --------------------------------------------------------------
+live_data:
+  maximum_tick_age_seconds: 60
+  stale_tick_policy: NO_GO
+
+# --- data quality -----------------------------------------------------------
+data_quality:
+  require_exact_candle_count: true
+  require_unique_timestamps: true
+  require_contiguous_intervals: true
+  reject_zero_ohlc: true
+  reject_non_monotonic_timestamps: true
+  reject_future_timestamps: true
+  missing_candle_policy: REJECT_SESSION
+  duplicate_candle_policy: REJECT_SESSION
+  zero_range_policy: REJECT_SESSION
+
+# --- classification (signed rule, unchanged by session migration; recomputed from new box) --
+classification:
+  efficiency_ratio_threshold: 0.35
+  close_location_trend: 0.65
+  ambiguous_classification: UNCERTAIN
+  trade_uncertain_sessions: false
+
+# --- setups (signed rules, unchanged by session migration; recomputed from new box) ---------
+setups:
+  priority: [SWEEP, RANGE_REJECTION, TREND_CONTINUATION]
+  maximum_accepted_setups_per_session: 1
+  sweep:
+    enabled: true
+    session_types: [RANGE]
+    confirmation: CLOSE_BACK_INSIDE
+    entry_price: SWEEP_CANDLE_BODY_NEAR_EDGE
+    require_structural_stop_clearance: true
+  range_rejection:
+    enabled: true
+    session_types: [RANGE]
+    confirmation: BOUNDARY_TOUCH_AND_DIRECTIONAL_CLOSE
+    entry_price: SESSION_BOUNDARY
+    disallow_after_confirmed_sweep: true
+  trend_continuation:
+    enabled: true
+    session_types: [BULLISH_TREND, BEARISH_TREND]
+    confirmation: MIDPOINT_RETRACE_DIRECTIONAL_CLOSE_NO_OPPOSITE_QUARTILE_VIOLATION
+    entry_price: SESSION_MIDPOINT_50_PERCENT
+
+# --- stop geometry (signed rule; distance_source now means the new canonical Asian range) ---
+fixed_stop_policy:
+  distance_source: ASIAN_RANGE
+  stop_range_fraction: 0.25
+  structural_clearance_required: true
+  on_clearance_failure: REJECT_TRADE
+  widening_allowed: false
+
+# --- setup geometry (research preset, carried over unchanged -- not session-dependent) -------
+midpoint_zone_low_fraction: 0.45
+midpoint_zone_high_fraction: 0.55
+sweep_buffer_fraction: 0.02
+stop_buffer_fraction: 0.02
+touch_tolerance_fraction: 0.05
+rejection_quality_fraction: 0.50
+
+# --- management ---------------------------------------------------------------------------
+management:
+  partial_target_r: 4.0
+  partial_close_percent: 75.0
+  move_stop_after_partial: BREAKEVEN
+  breakeven_price_basis: ACTUAL_WEIGHTED_ENTRY
+  final_target_r: 5.0
+  trailing_stop_enabled: false
+  intrabar_collision_policy: STOP_FIRST
+  gap_fill_policy: NEXT_AVAILABLE_MARKET_PRICE
+  partial_volume_rounding: DOWN_TO_VOLUME_STEP
+  remainder_below_minimum_volume_policy: CLOSE_FULL_AT_TP1
+
+# --- deterministic high-impact news gate ----------------------------------------------------
+news_filter:
+  enabled: true
+  source: config/news_events.json
+  unavailable_policy: NO_TRADE
+  minutes_before: 30
+  minutes_after: 30
+  symbol_currencies:
+    EURUSD: [EUR, USD]
+    GBPUSD: [GBP, USD]
+    USDJPY: [USD, JPY]
+    XAUUSD: [USD]
+
+# --- transaction costs -----------------------------------------------------------------------
+cost_model:
+  spread_source: HISTORICAL_IF_AVAILABLE_ELSE_CONFIGURED
+  commission_per_lot_round_turn: 0.0
+  slippage_model: CONFIGURED_POINTS
+  slippage_points: 1.0
+  financing_enabled: false
+  cost_model_signed_off: true
+  reject_if_cost_model_incomplete: false
+
+# --- risk --------------------------------------------------------------------------------
+risk:
+  risk_basis: LOWER_OF_BALANCE_EQUITY
+  risk_percent_per_trade: 0.5
+  percentage_scale: PERCENT_NOT_DECIMAL
+  daily_risk_limit_percent: 2.0
+  daily_risk_measure: OPEN_PLUS_REALIZED_LOSS_AND_PENDING_COMMITTED_RISK
+  daily_reset_timezone: UTC
+  maximum_drawdown_percent: 15.0
+  drawdown_reference: HIGH_WATERMARK_EQUITY
+  drawdown_action: DISABLE_NEW_SIGNALS
+  maximum_trades_per_symbol_session: 1
+  maximum_open_positions_per_symbol: 1
+  maximum_portfolio_open_risk_percent: 2.0
+
+# --- symbols -------------------------------------------------------------------------------
+# minimum_range/maximum_range below are copied from V1 unchanged. They are a statistical gate on
+# plausible Asian-range width and were calibrated against V1's 7-hour window; a 6-hour canonical
+# Asian session will plausibly produce a different range distribution. Already listed under
+# governance.provisional_parameters (symbol_range_limits) in both V1 and here, so this is an
+# acknowledged open gap, not a silently inherited assumption -- recalibrating it properly needs a
+# real distributional study against the canonical window, which is research (promotion_requirements
+# above), not something to guess as part of a session-timing migration.
+symbols:
+  EURUSD:
+    broker_symbol: EURUSD
+    display_pip_size: 0.0001
+    minimum_range: 0.0015
+    maximum_range: 0.0120
+    maximum_spread: 0.00030
+  GBPUSD:
+    broker_symbol: GBPUSD
+    display_pip_size: 0.0001
+    minimum_range: 0.0018
+    maximum_range: 0.0150
+    maximum_spread: 0.00040
+  USDJPY:
+    broker_symbol: USDJPY
+    display_pip_size: 0.01
+    minimum_range: 0.150
+    maximum_range: 1.200
+    maximum_spread: 0.035
+  XAUUSD:
+    broker_symbol: XAUUSD.crp
+    display_pip_size: 0.01
+    minimum_range: 2.00
+    maximum_range: 25.00
+    maximum_spread: 0.60

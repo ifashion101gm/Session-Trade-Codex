@@ -367,6 +367,58 @@ change to these is `SMC_3R_V2`, not a revision of this entry.
 
 ---
 
+## `c0765fca04f80794` · ASIAN_SESSION_V2
+
+### 2026-08-26 — canonical-session force migration
+
+Registered as part of the owner-directed force migration onto `CANONICAL_SESSION_WINDOWS_V1`
+(`CANONICAL_SESSION_MIGRATION_REPORT.md`, `CANONICAL_STRATEGY_VERSION_MAP.md`). Successor to
+`ASIAN_SESSION_V1` (`config/strategy.yaml`) — see that engine's own entry immediately below,
+which this migration flipped to `LEGACY_FROZEN`.
+
+`ASIAN_SESSION_V1`'s `00:00-07:00` Asian window is a trader-confirmed truth source (exhaustive
+search against the trader's own MT5 export, 2026-08-15 correction note in `config/strategy.yaml`)
+that golden fixtures and `benchmarks/truth_source_setups.json` depend on. There is no equivalent
+confirmed truth for `00:00-06:00`, so V1 was frozen byte-for-byte rather than renumbered, and this
+new version — same signed setup/risk/cost rules, evaluated on a canonical `[00:00,06:00)` box
+instead — was registered separately rather than silently reusing V1's identity for a materially
+different reference session.
+
+```
+stage                = research
+spec                 = ASIAN_SESSION_V2_SPEC.md (sha256 b47efb75...)
+engine               = session_strategy/engine.py (sha256 e2d48979...)
+supersedes           = ASIAN_SESSION_V1 (config/strategy.yaml, LEGACY_FROZEN 2026-08-26)
+execution_authority  = none  (config/strategy_v2.yaml: mode analysis_only, all
+                               execution_permissions false, no parameter_signoff)
+```
+
+No hypotheses, no backtest result, no MT5 wiring. `symbols.*.minimum_range`/`maximum_range` are
+copied from V1 unrecalibrated for the narrower 6-hour window — flagged, not silently inherited
+(see `governance.provisional_parameters` in `config/strategy_v2.yaml`, and
+`CANONICAL_STRATEGY_VERSION_MAP.md`).
+
+---
+
+## `ASIAN_SESSION_V1` (`config/strategy.yaml`) — status change, no re-registration
+
+### 2026-08-26 — flipped to LEGACY_FROZEN
+
+Pre-dates this ledger tool (never had its own registered id here — see `SESSION_FLOW_V1`'s
+`supersedes` field above, which already names it). As part of the canonical-session force
+migration, its execution authority was explicitly revoked: `mode` changed from `trading_enabled`
+to `analysis_only`, and `execution_permissions.{submit_orders,modify_orders,close_positions}`
+from `true` to `false`. Its session window (`00:00-07:00`, 28 M15 candles) is **not** changed —
+it remains the trader-confirmed truth source golden fixtures and
+`benchmarks/truth_source_setups.json` depend on, frozen for reproducibility, not deleted. This is
+a status change, not a rules change (`session_strategy/config.py`'s SSOT assertion for
+`ASIAN_SESSION_V1` is byte-identical to before this migration), so no new version id is
+warranted — see `CANONICAL_SESSION_MIGRATION_REPORT.md` §4 and `CANONICAL_STRATEGY_VERSION_MAP.md`
+for the full reasoning. Re-enabling execution authority is an explicit, separate decision, not a
+side effect of `ASIAN_SESSION_V2`'s existence or of this migration succeeding.
+
+---
+
 ## Out-of-sample reserve
 
 `data/sealed/` — May–Aug 2026, four symbols, 4 datasets, **unopened**. Every number

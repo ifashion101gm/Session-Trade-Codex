@@ -2,7 +2,7 @@ version: CANONICAL_SESSION_WINDOWS_V1
 status: CANONICAL
 timezone: UTC
 boundary_policy: half_open   # [start, end) -- the end timestamp itself belongs to the NEXT window
-dst_adjustment: false        # fixed UTC clock; do not shift for BST/EDT unless a strategy source requires it
+dst_policy: fixed_utc        # fixed UTC clock; do not shift for BST/EDT unless a strategy source requires it
 timeframe: M15
 
 # Source: trader-supplied narrative-bias reference table (1. NARRATIVE BIAS), 2026-08-26.

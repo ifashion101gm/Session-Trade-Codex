@@ -58,7 +58,8 @@ How a completed reference session becomes a candidate setup in this repository, 
 | `session_clock.py` | Market session | Canonical, authoritative for `smc_3r_v1` and `session_router` |
 | `smc_3r_v1/*` | Market session (Asian, London AM, NY AM) + SMC-specific setup logic (sweep/displacement/CHoCH/FVG) | Research; consumes `session_clock.py`; `SMC_3R_V1_SPEC.md` |
 | `session_router/*` | Strategy setup (classifier + Entry 1/2/3, this doc's diagram) | Research; new in this migration; consumes `session_clock.py` |
-| `config/strategy.yaml` + `session_strategy/*` (`ASIAN_SESSION_V1`) | Market session (own, trader-confirmed, **not yet** canonical — see migration report §4) + setup logic + execution + MT5 | The only live/demo order-submitting path in this repo; governance signoff already stale independent of this migration |
+| `config/strategy.yaml` (`ASIAN_SESSION_V1`) | Market session (own, trader-confirmed, frozen non-canonical) + setup logic + execution + MT5 | `LEGACY_FROZEN`: `mode: analysis_only`, execution authority explicitly revoked 2026-08-26. Governance signoff already stale independent of this migration. Not deleted — golden fixtures depend on its exact window. |
+| `config/strategy_v2.yaml` + `session_strategy/*` (`ASIAN_SESSION_V2`) | Market session (canonical) + same signed setup logic + execution (unused) | Research, canonical `00:00-06:00`, no execution authority (never had one). Shares `session_strategy/engine.py` with V1; `session_strategy/config.py`'s `_SESSION_CONTRACT_REGISTRY` enforces each version's frozen numbers independently. Ledger id `c0765fca04f80794`. |
 | `archive/session_configs/*` | Historical market-session definitions | Archived, not consumed by any active decision |
 
 ## What this is not

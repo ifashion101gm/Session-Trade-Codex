@@ -300,6 +300,29 @@
       "hypotheses": [],
       "results": [],
       "transitions": []
+    },
+    {
+      "id": "c0765fca04f80794",
+      "name": "ASIAN_SESSION_V2",
+      "registered": "2026-08-26T11:20:27.261533Z",
+      "parent": null,
+      "stage": "research",
+      "supersedes": "ASIAN_SESSION_V1 (config/strategy.yaml, LEGACY_FROZEN 2026-08-26)",
+      "note": "Canonical-session successor: Asian [00:00,06:00) UTC / 24 M15, CANONICAL_SESSION_WINDOWS_V1. Same signed setup/risk/cost rules as V1, evaluated on a fresh box. mode: analysis_only, no execution authority. See CANONICAL_SESSION_MIGRATION_REPORT.md, CANONICAL_STRATEGY_VERSION_MAP.md.",
+      "artifacts": {
+        "spec": {
+          "file": "ASIAN_SESSION_V2_SPEC.md",
+          "sha256": "b47efb75bfd92762e96cad11acbbd9f8b5f948d408b4de290e42e897b2c2a29b"
+        },
+        "engine": {
+          "file": "session_strategy\\engine.py",
+          "sha256": "e2d48979dee5cc13b9a02edb69c208a847527bf3b9ce82f8ffa8496c1a11522e"
+        }
+      },
+      "code": "e93245a-DIRTY",
+      "hypotheses": [],
+      "results": [],
+      "transitions": []
     }
   ]
 }

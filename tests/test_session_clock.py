@@ -130,16 +130,16 @@ VALID_SESSIONS = {
 def test_wrong_timezone_is_rejected(tmp_path, monkeypatch):
     _write_and_load(tmp_path, monkeypatch, {
         "version": "CANONICAL_SESSION_WINDOWS_V1", "timezone": "Europe/London",
-        "boundary_policy": "half_open", "dst_adjustment": False, "sessions": VALID_SESSIONS,
+        "boundary_policy": "half_open", "dst_policy": "fixed_utc", "sessions": VALID_SESSIONS,
     })
     with pytest.raises(sc.SessionContractConflict):
         sc.load_canonical_sessions()
 
 
-def test_dst_adjustment_true_is_rejected(tmp_path, monkeypatch):
+def test_dst_policy_not_fixed_utc_is_rejected(tmp_path, monkeypatch):
     _write_and_load(tmp_path, monkeypatch, {
         "version": "CANONICAL_SESSION_WINDOWS_V1", "timezone": "UTC",
-        "boundary_policy": "half_open", "dst_adjustment": True, "sessions": VALID_SESSIONS,
+        "boundary_policy": "half_open", "dst_policy": "europe_london_local", "sessions": VALID_SESSIONS,
     })
     with pytest.raises(sc.SessionContractConflict):
         sc.load_canonical_sessions()
@@ -150,7 +150,7 @@ def test_overlapping_sessions_rejected(tmp_path, monkeypatch):
     overlapping["london_am"] = {"start": "05:00", "end": "11:00", "expected_m15_bars": 24}
     _write_and_load(tmp_path, monkeypatch, {
         "version": "CANONICAL_SESSION_WINDOWS_V1", "timezone": "UTC",
-        "boundary_policy": "half_open", "dst_adjustment": False, "sessions": overlapping,
+        "boundary_policy": "half_open", "dst_policy": "fixed_utc", "sessions": overlapping,
     })
     with pytest.raises(sc.SessionContractConflict):
         sc.load_canonical_sessions()
@@ -161,7 +161,7 @@ def test_bar_count_mismatch_rejected(tmp_path, monkeypatch):
     bad["asian"] = {"start": "00:00", "end": "06:00", "expected_m15_bars": 99}
     _write_and_load(tmp_path, monkeypatch, {
         "version": "CANONICAL_SESSION_WINDOWS_V1", "timezone": "UTC",
-        "boundary_policy": "half_open", "dst_adjustment": False, "sessions": bad,
+        "boundary_policy": "half_open", "dst_policy": "fixed_utc", "sessions": bad,
     })
     with pytest.raises(sc.SessionContractConflict):
         sc.load_canonical_sessions()
@@ -170,7 +170,7 @@ def test_bar_count_mismatch_rejected(tmp_path, monkeypatch):
 def test_wrong_version_rejected(tmp_path, monkeypatch):
     _write_and_load(tmp_path, monkeypatch, {
         "version": "SOME_OTHER_VERSION", "timezone": "UTC",
-        "boundary_policy": "half_open", "dst_adjustment": False, "sessions": VALID_SESSIONS,
+        "boundary_policy": "half_open", "dst_policy": "fixed_utc", "sessions": VALID_SESSIONS,
     })
     with pytest.raises(sc.SessionContractConflict):
         sc.load_canonical_sessions()

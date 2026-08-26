@@ -63,8 +63,8 @@ def load_canonical_sessions() -> dict[str, SessionDefinition]:
         raise SessionContractConflict("SESSION_CONTRACT_CONFLICT: timezone reinterpretation is forbidden (must be UTC)")
     if raw.get("boundary_policy") != "half_open":
         raise SessionContractConflict("SESSION_CONTRACT_CONFLICT: boundary_policy must be half_open")
-    if raw.get("dst_adjustment", False):
-        raise SessionContractConflict("SESSION_CONTRACT_CONFLICT: dst_adjustment must be disabled (fixed UTC clock)")
+    if raw.get("dst_policy") != "fixed_utc":
+        raise SessionContractConflict("SESSION_CONTRACT_CONFLICT: dst_policy must be fixed_utc (no DST/local-time shift)")
 
     sessions_raw = raw.get("sessions") or {}
     missing = [name for name in _REQUIRED_NAMES if name not in sessions_raw]

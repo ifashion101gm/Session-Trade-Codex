@@ -1,6 +1,23 @@
 # CANONICAL_SESSION_MIGRATION_REPORT.md
 
 Force-migration of the repository onto `CANONICAL_SESSION_WINDOWS_V1`, executed 2026-08-26.
+
+**Addendum, same day, Phase 2 (full project upgrade)**: the owner's initial instruction allowed
+`config/strategy.yaml` (`ASIAN_SESSION_V1`) to keep its non-canonical `00:00-07:00` window as a
+documented, blocked exception (see the original §4 below, now superseded). A follow-up
+instruction made the split explicit instead: `ASIAN_SESSION_V1` is now `LEGACY_FROZEN` (execution
+authority explicitly revoked — `mode: analysis_only`, `submit_orders`/`modify_orders`/
+`close_positions: false`, numbers unchanged), and a new `ASIAN_SESSION_V2`
+(`config/strategy_v2.yaml`, `ASIAN_SESSION_V2_SPEC.md`, ledger id `c0765fca04f80794`) is the
+canonical-session successor — `00:00-06:00`, 24 M15, `mode: analysis_only`, no execution
+authority either (never had one). See `CANONICAL_STRATEGY_VERSION_MAP.md` for the full reasoning
+and `STRATEGY_LEDGER.md` for the registration. `session_strategy/config.py`'s SSOT check is now a
+small per-`strategy_id` registry (`_SESSION_CONTRACT_REGISTRY`) instead of one hardcoded
+assertion, so V1's enforced values stayed byte-identical while V2's were added. §4 below is kept
+for its reasoning (why V1's numbers were never rewritten) but its **BLOCKED** framing and
+`ACTIVE_LEGACY_SESSION_DEFINITIONS = 1` conclusion are superseded — see the final status block
+at the end of this file for the current numbers.
+
 Owner-signed contract (verbatim):
 
 ```text
@@ -95,10 +112,16 @@ path, router dispatch for all three branches, ambiguous dual sweep, strict-penet
 lookahead protection (decisions proven unaffected by candles after the qualifying one, and the
 reference box proven built only from its own session's candles), version attribution.
 
-## 4. `ASIAN_SESSION_V1` (`config/strategy.yaml`) — the one BLOCKED item
+## 4. `ASIAN_SESSION_V1` (`config/strategy.yaml`) — originally BLOCKED, now resolved (§ below is historical reasoning)
 
-Section 17 asked to force-migrate this engine's Asian window to `00:00-06:00`. **This was not
-done**, and the reason is load-bearing, not a preference:
+**Resolution, Phase 2 addendum**: rather than leaving this permanently blocked, V1 is now
+`LEGACY_FROZEN` (execution authority explicitly revoked, numbers unchanged) and
+`ASIAN_SESSION_V2` (`config/strategy_v2.yaml`) is the canonical successor — see the addendum at
+the top of this file and `CANONICAL_STRATEGY_VERSION_MAP.md`. The reasoning below for *why V1's
+numbers themselves were never rewritten* still stands and is preserved verbatim.
+
+Section 17 (first instruction) asked to force-migrate this engine's Asian window to
+`00:00-06:00` in place. **That was not done**, and the reason is load-bearing, not a preference:
 
 - This is the only config in the repository with a real execution path
   (`execution_permissions.submit_orders: true`, `demo_execution_authorized: true`) —
@@ -133,8 +156,9 @@ beyond what re-signoff already requires):
 - `session_strategy/config.py`'s SSOT assertion (`00:00-07:00`/28/`07:00-16:00`/36) is
   **unchanged** — the engine still fails closed if `strategy.yaml` drifts from its currently
   trader-confirmed values.
-- This is the **one place** `ACTIVE_LEGACY_SESSION_DEFINITIONS` is not zero (see final report).
-  It is documented, traced, and blocked on a specific human action (trader re-confirms Asian
+- **(Superseded by the Phase 2 addendum above — kept as history.)** This was originally the one
+  place `ACTIVE_LEGACY_SESSION_DEFINITIONS` was not zero. It was documented, traced, and blocked
+  on a specific human action (trader re-confirms Asian
   high/low on their live MT5 chart for a `00:00-06:00` window, then the exhaustive-search
   calibration is re-run) — not silently left ambiguous.
 
@@ -217,8 +241,30 @@ regardless.
 
 ## 8. Safety
 
-No execution permission was changed anywhere in this migration. `config/strategy.yaml`'s
-`execution_permissions` block (`submit_orders: true`, etc.) is untouched; governance's own
-signoff-hash gate already treats the config as unapproved (§6), independent of this work.
-`session_router` never imports an MT5 gateway. See the final status block for explicit
-`READY_FOR_*_ORDER_SEND` values (both `NO`).
+**Updated in the Phase 2 addendum**: `config/strategy.yaml`'s `execution_permissions` block *was*
+changed — `submit_orders`/`modify_orders`/`close_positions` flipped `true` → `false`, `mode`
+`trading_enabled` → `analysis_only`, `governance.demo_execution_authorized` `true` → `false` —
+as an explicit act of freezing `ASIAN_SESSION_V1`'s execution authority (§4 addendum), not as an
+accident. `config/strategy_v2.yaml` was created with no execution authority from the start.
+`session_router` still never imports an MT5 gateway. No order was sent, and nothing in this
+migration authorizes one — see the final status block for explicit `READY_FOR_*_ORDER_SEND`
+values (both `NO`, unchanged from before).
+
+## 9. Final status (Phase 2)
+
+```text
+ACTIVE_LEGACY_SESSION_DEFINITIONS = 0   (was 1 after Phase 1; resolved by freezing V1's
+                                          execution authority instead of leaving it blocked)
+UNKNOWN_SESSION_CONSUMERS         = 0
+CANONICAL_SESSION_MIGRATION       = PASS
+
+ASIAN_SESSION_V1  = LEGACY_FROZEN, execution authority NONE, numbers unchanged (00:00-07:00/28)
+ASIAN_SESSION_V2  = RESEARCH, canonical (00:00-06:00/24), execution authority NONE, ledger id c0765fca04f80794
+SMC_3R_V1         = research, fully canonical (Asian + London AM + NY AM all from session_clock.py), no successor needed
+
+READY_FOR_ONE_DEMO_ORDER_SEND = NO
+READY_FOR_LIVE_ORDER_SEND     = NO
+```
+
+See `CANONICAL_SESSION_CONSUMER_MAP.md`, `CANONICAL_STRATEGY_VERSION_MAP.md`, and
+`LONDON_CANONICAL_DELTA_REPORT.md` for the full detail behind these numbers.
