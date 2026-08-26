@@ -302,6 +302,71 @@ No trades, no hypotheses, no results recorded — nothing to promote yet.
 
 ---
 
+## `9bd4c67a8404c8f9` · SMC_3R_V1
+
+**Registered** 2026-08-26 · stage `research` · **not a successor to any existing entry.**
+
+An externally-authored, complete SMC (Smart Money Concepts) implementation supplied ready-made:
+Asian-session/PDH/PDL liquidity sweep → displacement + CHoCH (change of character) confirmed
+against a causal 3-bar fractal → immediate next-bar FVG (fair value gap) → limit entry, stop
+beyond the sweep extreme, fixed 3R target. M5 signal detection, M1 fill/exit simulation with
+spread, data-gap detection, and a same-bar-SL/TP-touch tie-break. Full detail: `SMC_3R_V1_SPEC.md`.
+Code: `smc_3r_v1/` (`reference_levels.py`, `smc_features.py`, `smc_state_machine.py`, `matcher.py`).
+
+Placed in its own package and two internal imports adjusted to package-relative
+(`from .reference_levels import ...`) so the four modules work as supplied — no rule, threshold,
+or geometry was changed from what was given.
+
+**Known gap at registration:** the test suite this was written against
+(`tests/test_smc_3r_v1_complete.py`) was referenced in the handoff but never supplied, and did
+not exist in this repository. Only a local import/execution smoke test on synthetic OHLC data had
+been run.
+
+### Stage 0 — 2026-08-26
+
+Wrote `tests/test_smc_3r_v1_complete.py` from scratch against the registered package (no prior
+artifact existed to recover, despite the module docstrings referencing this exact filename) — 20
+hand-built deterministic fixtures, no randomness, covering `reference_levels.py` (4),
+`smc_features.py` (4), `PendingOrder` geometry (2), session-window gating (2), and
+`smc_state_machine.py` integration via `scan_dataset()` (5: BUY order construction, SELL order
+construction, sweep invalidation past `max_sweep_bars`, setup abandonment when the immediate-FVG
+bar fails with no retry, zero orders outside the session window), plus `matcher.py` (3: limit
+fill detection, same-bar SL/TP touch marked as loss with `intrabar_ambiguity`, data-gap
+detection).
+
+```
+collected = 20
+passed    = 20
+failed    = 0
+errors    = 0
+relevant warnings = 0
+```
+
+**One real finding, left unfixed by design:** `smc_state_machine.py` divides `bar['body'] /
+bar['median_body_20']` when building `disp_body_ratio` (lines ~129, ~144) with no zero-guard —
+a `RuntimeWarning: divide by zero` (→ `inf` in that meta field) whenever the trailing 20-bar
+median body is exactly zero, which a flat/no-movement market can produce. Worked around at the
+test-fixture level (tiny nonzero baseline body) rather than patched in the frozen module — fixing
+it is a V2 concern, not a silent V1 mutation.
+
+```
+stage        = research
+stage0       = passed
+verification = deterministic_unit_and_integration (20/20)
+execution_authority = none
+```
+
+No hypotheses, no backtest result, no MT5 wiring, no magic number. Not authorized for demo or
+live execution. Nothing about this entry supersedes `ASIAN_SESSION_V1` / `SESSION_SIMPLE_V1`,
+`SESSION_FLOW_V1`, `R8_OBM_V1`, or `ST04_07_EXECUTION_ATTRIBUTION_V1` — it runs alongside them,
+untouched by this registration.
+
+Frozen at Stage 0 pass: `1.5x` displacement multiple, `0.60` body efficiency, `8`-bar sweep
+window, `2`-pip SL buffer, `5`-minute activation delay, `25`-minute expiry, `3R` target. Any
+change to these is `SMC_3R_V2`, not a revision of this entry.
+
+---
+
 ## Out-of-sample reserve
 
 `data/sealed/` — May–Aug 2026, four symbols, 4 datasets, **unopened**. Every number

@@ -277,6 +277,29 @@
       "hypotheses": [],
       "results": [],
       "transitions": []
+    },
+    {
+      "id": "9bd4c67a8404c8f9",
+      "name": "SMC_3R_V1",
+      "registered": "2026-08-26T08:32:01.965596Z",
+      "parent": null,
+      "stage": "research",
+      "supersedes": null,
+      "note": "Externally-supplied SMC sweep+displacement+CHoCH+FVG state machine, 3R fixed target. Registered as research; not a successor to any existing entry. Test suite referenced (tests/test_smc_3r_v1_complete.py) but not supplied.",
+      "artifacts": {
+        "spec": {
+          "file": "SMC_3R_V1_SPEC.md",
+          "sha256": "321c259bfe32952fac0db48183baed958b3a9607a9df677d83079e1d87a7f6b8"
+        },
+        "engine": {
+          "file": "smc_3r_v1\\smc_state_machine.py",
+          "sha256": "4cfee5f0b2b61f653f9e532d5a1fb6e2b6ebd38a0589069158f76827ea8881d8"
+        }
+      },
+      "code": "d188319-DIRTY",
+      "hypotheses": [],
+      "results": [],
+      "transitions": []
     }
   ]
 }
